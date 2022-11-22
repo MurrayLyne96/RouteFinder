@@ -24,7 +24,7 @@ Access and features available in the app will depend if the user has an account 
 
 ## Searching for a route
 - The user goes to the root homepage.
-- The user types into a search bar an location, which can also be an address.
+- The user types into a search bar a location, which can also be an address.
 - The user can optionally apply filters, such as a minimum length, maximum total elevation, running route or cycling route etc.
 - The user will get a selection of routes based on their search criteria. 
   - The user can view these routes by clicking on them, which will bring them to the view route page.
