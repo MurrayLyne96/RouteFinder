@@ -50,7 +50,20 @@ Access and features available in the app will depend if the user has an account 
 - Allow users to report on routes upon completion using a review system.
 - Allow users to upload custom routes using GPX files.
 - Export routes from 3rd party services, such as strava.
+# Dictionary
+**User:** The user represents a person who has a registered account in the system. The user will have a role assigned which will grant them different access levels on the site. 
 
+**Role:** The Role is a User's role, which grants users different permissions. To begin with, there will be only two tracked roles in the system.
+
+**Route:** The Route represents information about a generated route in the system, which will be done procedurally. 
+
+**Review:** The Review represent a user-submitted review of a particular route. The route can optionally be associated with a rating, but it is not required to submit a review.
+
+**PlotPoint:** A plot-point is a coordinate that is associated with a route that when combined together will create a route. Plot-points will contstruct the route based on their order. 
+
+**Rating:** A rating is an review aggregator that allows users to rate the quality of a route. A route will have many ratings.
+
+**Tag:** A tag is a label that can be applied to many different routes. Tags are used to label routes and can be used to search for specific types of routes in the system. 
 # Domain Model
 ```mermaid
 erDiagram
@@ -64,6 +77,7 @@ erDiagram
     USER }o..o{ TAG: creates
     ROUTE }o..o{ TAG: has
 ```
+
 # Entity Relationship Diagram
 ```mermaid
 erDiagram
@@ -83,6 +97,8 @@ erDiagram
         string EmailAddress
         string Firstname
         string Lastname
+        string password
+        string salt
         date DateOfBirth
         date Created
         date LastModified
@@ -127,6 +143,7 @@ erDiagram
         guid RouteId
         float XCoordinate
         float YCoordinate
+        integer Order
         date Created
         date LastModified
         boolean Deleted
