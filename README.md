@@ -50,3 +50,112 @@ Access and features available in the app will depend if the user has an account 
 - Allow users to report on routes upon completion using a review system.
 - Allow users to upload custom routes using GPX files.
 - Export routes from 3rd party services, such as strava.
+
+# Domain Model
+```mermaid
+erDiagram
+    USER ||--o{ ROLE : has
+    USER ||--o{ ROUTE : creates
+    USER ||..o{ REVIEW : posts
+    USER ||..o{ RATING : posts
+    ROUTE ||..o{ RATING : holds
+    ROUTE ||..o{ REVIEW : has
+    ROUTE ||--o{ PLOTPOINT: has
+    USER }o..o{ TAG: creates
+    ROUTE }o..o{ TAG: has
+```
+# Entity Relationship Diagram
+```mermaid
+erDiagram
+    USER ||--o{ ROLE : has
+    USER ||--o{ ROUTE : creates
+    USER ||..o{ REVIEW : posts
+    USER ||..o{ RATING : posts
+    ROUTE ||..o{ RATING : holds
+    ROUTE ||..o{ REVIEW : has
+    ROUTE ||--o{ PLOTPOINT: has
+    ROUTE }o..o{ ROUTE_TAG: has
+    TAG }o..o{ ROUTE_TAG: has
+
+    USER {
+        guid UserId
+        guid RoleId
+        string EmailAddress
+        string Firstname
+        string Lastname
+        date DateOfBirth
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    ROLE {
+        guid RoleId
+        string Role
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    ROUTE {
+        guid RouteId
+        guid UserId
+        string RouteName
+        string Type
+        string StartAddress
+        string EndAddress
+        double Length
+        double MinimumElevation
+        double MaximumElevation
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    REVIEW {
+        guid ReviewId
+        guid RouteId
+        guid Userid
+        string Content
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    PLOTPOINT {
+        guid PlotPointId
+        guid RouteId
+        float XCoordinate
+        float YCoordinate
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    RATING {
+        guid RatingId
+        guid UserId
+        guid RouteId
+        double rating
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    TAG { 
+        guid TagId
+        guid Name
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+
+    ROUTE_TAG {
+        guid RouteTagId
+        guid RouteId
+        guid TagId
+        date Created
+        date LastModified
+        boolean Deleted
+    }
+```
