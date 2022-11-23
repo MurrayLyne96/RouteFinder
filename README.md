@@ -93,8 +93,8 @@ erDiagram
     TAG }o..o{ ROUTE_TAG: has
 
     USER {
-        guid UserId
-        guid RoleId
+        guid UserId PK
+        guid RoleId FK
         string EmailAddress
         string Firstname
         string Lastname
@@ -107,7 +107,7 @@ erDiagram
     }
 
     ROLE {
-        guid RoleId
+        guid RoleId PK
         string Role
         date Created
         date LastModified
@@ -115,8 +115,8 @@ erDiagram
     }
 
     ROUTE {
-        guid RouteId
-        guid UserId
+        guid RouteId PK
+        guid UserId FK
         string RouteName
         string Type
         string StartAddress
@@ -130,9 +130,9 @@ erDiagram
     }
 
     REVIEW {
-        guid ReviewId
-        guid RouteId
-        guid Userid
+        guid ReviewId PK
+        guid RouteId FK
+        guid Userid FK
         string Content
         date Created
         date LastModified
@@ -140,8 +140,8 @@ erDiagram
     }
 
     PLOTPOINT {
-        guid PlotPointId
-        guid RouteId
+        guid PlotPointId PK
+        guid RouteId FK
         float XCoordinate
         float YCoordinate
         integer Order
@@ -151,9 +151,9 @@ erDiagram
     }
 
     RATING {
-        guid RatingId
-        guid UserId
-        guid RouteId
+        guid RatingId PK
+        guid UserId FK
+        guid RouteId FK
         double rating
         date Created
         date LastModified
@@ -161,7 +161,7 @@ erDiagram
     }
 
     TAG { 
-        guid TagId
+        guid TagId PK
         guid Name
         date Created
         date LastModified
@@ -169,9 +169,9 @@ erDiagram
     }
 
     ROUTE_TAG {
-        guid RouteTagId
-        guid RouteId
-        guid TagId
+        guid RouteTagId PK
+        guid RouteId FK
+        guid TagId FK
         date Created
         date LastModified
         boolean Deleted
