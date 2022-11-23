@@ -50,6 +50,7 @@ Access and features available in the app will depend if the user has an account 
 - Allow users to report on routes upon completion using a review system.
 - Allow users to upload custom routes using GPX files.
 - Export routes from 3rd party services, such as strava.
+
 # Dictionary
 **User:** The user represents a person who has a registered account in the system. The user will have a role assigned which will grant them different access levels on the site. 
 
@@ -59,9 +60,9 @@ Access and features available in the app will depend if the user has an account 
 
 **Review:** The Review represent a user-submitted review of a particular route. The route can optionally be associated with a rating, but it is not required to submit a review.
 
-**PlotPoint:** A plot-point is a coordinate that is associated with a route that when combined together will create a route. Plot-points will contstruct the route based on their order. 
+**PlotPoint:** A plot-point is a coordinate that is associated with a route that when combined together will create a route. Plot-points will contstruct the route based on their order. A route will need many plotpoints to correctly display a route.
 
-**Rating:** A rating is an review aggregator that allows users to rate the quality of a route. A route will have many ratings.
+**Rating:** A rating is an review aggregator that allows users to rate the quality of a route. A route may have many ratings.
 
 **Tag:** A tag is a label that can be applied to many different routes. Tags are used to label routes and can be used to search for specific types of routes in the system. 
 # Domain Model
