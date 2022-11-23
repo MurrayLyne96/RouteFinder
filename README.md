@@ -105,7 +105,7 @@ erDiagram
     }
 
     type {
-        serial id
+        serial id PK
         string name
         timestamp created
         timestamp last_modified
@@ -115,7 +115,7 @@ erDiagram
         guid id PK
         guid user_id FK
         string route_name
-        string type
+        serial type_id
         timestamp created
         timestamp last_modified
     }
@@ -163,5 +163,6 @@ erDiagram
         timestamp created
         timestamp last_modified
     }
+
 
 ```
