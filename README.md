@@ -151,7 +151,7 @@ erDiagram
 
     tag { 
         guid id PK
-        guid name
+        string name
         timestamp created
         timestamp last_modified
     }
