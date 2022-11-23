@@ -68,15 +68,15 @@ Access and features available in the app will depend if the user has an account 
 # Domain Model
 ```mermaid
 erDiagram
-    USER ||--o{ ROLE : has
-    USER ||--o{ ROUTE : creates
-    USER ||..o{ REVIEW : posts
-    USER ||..o{ RATING : posts
-    ROUTE ||..o{ RATING : holds
-    ROUTE ||..o{ REVIEW : has
-    ROUTE ||--o{ PLOTPOINT: has
-    USER }o..o{ TAG: creates
-    ROUTE }o..o{ TAG: has
+    user ||--o{ role : has
+    user ||--o{ route : creates
+    user ||..o{ review : posts
+    user ||..o{ rating : posts
+    route ||..o{ rating : holds
+    route ||..o{ review : has
+    route ||--o{ plotpoint: has
+    user }o..o{ tag: creates
+    route }o..o{ tag: has
 ```
 
 # Entity Relationship Diagram
@@ -113,40 +113,40 @@ erDiagram
 
     route {
         guid id PK
-        guid user_id FK
         string route_name
-        serial type_id
         timestamp created
         timestamp last_modified
+        serial type_id FK
+        guid user_id FK
     }
 
     review {
         guid id PK
-        guid route_id FK
-        guid user_id FK
         string content
         timestamp created
         timestamp last_modified
+        guid route_id FK
+        guid user_id FK
     }
 
     plotpoint {
         guid id PK
-        guid route_id FK
         float x_coordinate
         float y_coordinate
         string description
         integer order
         timestamp created
         timestamp last_modified
+        guid route_id FK
     }
 
     rating {
         guid id PK
-        guid user_id FK
-        guid route_id FK
         double rating
         date created
         date last_modified
+        guid user_id FK
+        guid route_id FK
     }
 
     tag { 
@@ -158,11 +158,10 @@ erDiagram
 
     route_tag {
         serial id PK
-        guid route_id FK
-        guid tag_id FK
         timestamp created
         timestamp last_modified
+        guid route_id FK
+        guid tag_id FK
     }
-
 
 ```
