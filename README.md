@@ -82,98 +82,86 @@ erDiagram
 # Entity Relationship Diagram
 ```mermaid
 erDiagram
-    USER ||--o{ ROLE : has
-    USER ||--o{ ROUTE : creates
-    USER ||..o{ REVIEW : posts
-    USER ||..o{ RATING : posts
-    ROUTE ||..o{ RATING : holds
-    ROUTE ||..o{ REVIEW : has
-    ROUTE ||--o{ PLOTPOINT: has
-    ROUTE }o..o{ ROUTE_TAG: has
-    TAG }o..o{ ROUTE_TAG: has
+    user ||--o{ route : creates
+    user ||..o{ review : posts
+    user ||..o{ rating : posts
+    route ||..o{ rating : holds
+    route ||..o{ review : has
+    route ||--o{ plotpoint: has
+    route ||--o{ type: has
+    route }o..o{ route_tag: has
+    tag }o..o{ route_tag: has
 
-    USER {
-        guid UserId PK
-        guid RoleId FK
-        string EmailAddress
-        string Firstname
-        string Lastname
+    user {
+        guid id PK
+        string email_address
+        string first_name
+        string last_name
         string password
-        string salt
-        date DateOfBirth
-        date Created
-        date LastModified
-        boolean Deleted
+        string role
+        date date_of_birth
+        timestamp created
+        timestamp last_modified
     }
 
-    ROLE {
-        guid RoleId PK
-        string Role
-        date Created
-        date LastModified
-        boolean Deleted
+    type {
+        serial id
+        string name
+        timestamp created
+        timestamp last_modified
     }
 
-    ROUTE {
-        guid RouteId PK
-        guid UserId FK
-        string RouteName
-        string Type
-        string StartAddress
-        string EndAddress
-        double Length
-        double MinimumElevation
-        double MaximumElevation
-        date Created
-        date LastModified
-        boolean Deleted
+    route {
+        guid id PK
+        guid user_id FK
+        string route_name
+        string type
+        timestamp created
+        timestamp last_modified
     }
 
-    REVIEW {
-        guid ReviewId PK
-        guid RouteId FK
-        guid Userid FK
-        string Content
-        date Created
-        date LastModified
-        boolean Deleted
+    review {
+        guid id PK
+        guid route_id FK
+        guid user_id FK
+        string content
+        timestamp created
+        timestamp last_modified
     }
 
-    PLOTPOINT {
-        guid PlotPointId PK
-        guid RouteId FK
-        float XCoordinate
-        float YCoordinate
-        integer Order
-        date Created
-        date LastModified
-        boolean Deleted
+    plotpoint {
+        guid id PK
+        guid route_id FK
+        float x_coordinate
+        float y_coordinate
+        string description
+        integer order
+        timestamp created
+        timestamp last_modified
     }
 
-    RATING {
-        guid RatingId PK
-        guid UserId FK
-        guid RouteId FK
+    rating {
+        guid id PK
+        guid user_id FK
+        guid route_id FK
         double rating
-        date Created
-        date LastModified
-        boolean Deleted
+        date created
+        date last_modified
     }
 
-    TAG { 
-        guid TagId PK
-        guid Name
-        date Created
-        date LastModified
-        boolean Deleted
+    tag { 
+        guid id PK
+        guid name
+        timestamp created
+        timestamp last_modified
     }
 
-    ROUTE_TAG {
-        guid RouteTagId PK
-        guid RouteId FK
-        guid TagId FK
-        date Created
-        date LastModified
-        boolean Deleted
+    route_tag {
+        serial id PK
+        guid route_id FK
+        guid tag_id FK
+        timestamp created
+        timestamp last_modified
     }
+
 ```
