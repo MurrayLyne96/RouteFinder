@@ -165,3 +165,166 @@ erDiagram
     }
 
 ```
+
+# API Specification
+### USERS
+```GET /users``` Returns a list of all user accounts in the system
+Response
+```json
+[
+   {
+      "id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+      "first_name": "Randall",
+      "last_name": "Sand",
+      "email": "randallsand@testemail.com",
+      "role": "USER"
+   },
+   {
+      "id": "a481ea30-9580-4e55-a478-1353682cf0ba",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane_smith@faketest.com",
+      "role": "ADMIN"
+   }
+]
+```
+
+```GET /users/{userId}``` returns the user associated with the guid.
+Response
+```json
+[
+   {
+      "id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+      "first_name": "Randall",
+      "last_name": "Sand",
+      "email": "randallsand@testemail.com",
+      "role": "USER"
+   }
+]
+```
+
+```GET /users/{userId}/routes``` Return a list of routes associated with the user account.
+Response
+```json
+[
+  {
+    "id": "edc229be-832b-4743-8073-255124c7c50b",
+    "route_name": "Glenmore Forest Run",
+    "created": "2022-06-02 12:04:45",
+    "last_modified": "2022-11-24 15:34:01",
+    "user_id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+    "type": {
+      "id": "1",
+      "name": "Running",
+      "created": "2022-06-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    }    
+  },
+  
+  {
+    "id": "dfcf697f-5087-4131-897d-43649acb729c",
+    "route_name": "North 500",
+    "created": "2022-08-02 12:04:45",
+    "last_modified": "2022-10-24 15:34:01",
+    "user_id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+    "type": {
+      "id": "2",
+      "name": "Cycling",
+      "created": "2022-06-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    }    
+  },
+]
+```
+```POST /users``` Adds a user to the system
+Response - ```201 - created```
+```json
+[
+  "id": "2e30455f-306b-43cb-8916-21003a949300"
+]
+```
+### ROUTES
+```GET /routes/ ``` Gets all routes in the system
+Response
+```json
+[
+  {
+    "id": "edc229be-832b-4743-8073-255124c7c50b",
+    "route_name": "Glenmore Forest Run",
+    "created": "2022-06-02 12:04:45",
+    "last_modified": "2022-11-24 15:34:01",
+    "user_id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+    "type": {
+      "id": "1",
+      "name": "Running",
+      "created": "2022-06-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    }    
+  },
+  
+  {
+    "id": "dfcf697f-5087-4131-897d-43649acb729c",
+    "route_name": "North 500",
+    "created": "2022-08-02 12:04:45",
+    "last_modified": "2022-10-24 15:34:01",
+    "user_id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+    "type": {
+      "id": "2",
+      "name": "Cycling",
+      "created": "2022-06-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    }    
+  },
+  {
+    "id": "78b6e504-0d47-46c2-a070-ae928cbc09f0",
+    "route_name": "Town run",
+    "created": "2022-08-02 12:04:45",
+    "last_modified": "2022-10-24 15:34:01",
+    "user_id": "6de5ff17-8162-4a44-be51-4c3576871952",
+    "type": {
+      "id": "2",
+      "name": "Running",
+      "created": "2022-07-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    }    
+  }
+]
+```
+
+```GET routes/{routeId}``` Gets a single route in the system. This will also include the plotpoints, if any.
+Response
+```json
+  {
+    "id": "78b6e504-0d47-46c2-a070-ae928cbc09f0",
+    "route_name": "Town run",
+    "created": "2022-08-02 12:04:45",
+    "last_modified": "2022-10-24 15:34:01",
+    "user_id": "6de5ff17-8162-4a44-be51-4c3576871952",
+    "type": {
+      "id": "2",
+      "name": "Running",
+      "created": "2022-07-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    },
+    "plotpoints": [
+      {
+        "id": "aa13de12-b627-4479-b186-028be7ff938b",
+        "x_coordinate": "354.32324",
+        "y_coordinate": "643.23424",
+        "description": "Start location at townsville square",
+        "order": 1,
+        "created": "2022-07-02 13:35:00",
+        "last_modified": "2022-10-12 16:30:00"
+      },
+      {
+        "id": "30587dcd-5a60-48a1-8564-b6e7691d6663",
+        "x_coordinate": "356.38327",
+        "y_coordinate": "647.10124",
+        "description": "End location at townie bridge",
+        "order": 1,
+        "created": "2022-07-02 13:35:00",
+        "last_modified": "2022-10-12 16:30:00"
+      },
+    ]
+  }
+```
