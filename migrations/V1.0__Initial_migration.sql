@@ -77,3 +77,15 @@ CREATE TABLE ratings (
     CONSTRAINT fk_user FOREIGN KEY (user_id)
         REFERENCES users(id)
 );
+
+CREATE TABLE route_tags (
+    id serial PRIMARY KEY,
+    created timestamp DEFAULT CURRENT_TIMESTAMP,
+    last_modified timestamp DEFAULT CURRENT_TIMESTAMP,
+    route_id uuid,
+    tag_id uuid,
+    CONSTRAINT fk_route FOREIGN KEY (route_id)
+        REFERENCES routes(id),
+    CONSTRAINT fk_tag FOREIGN KEY (tag_id)
+        REFERENCES tags(id)
+);
