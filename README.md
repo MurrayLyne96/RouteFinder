@@ -168,7 +168,9 @@ erDiagram
 
 # API Specification
 ### USERS
+
 ```GET /users``` Returns a list of all user accounts in the system
+
 Response
 ```json
 [
@@ -190,7 +192,9 @@ Response
 ```
 
 ```GET /users/{userId}``` returns the user associated with the guid.
+
 Response
+
 ```json
 [
    {
@@ -204,7 +208,9 @@ Response
 ```
 
 ```GET /users/{userId}/routes``` Return a list of routes associated with the user account.
+
 Response
+
 ```json
 [
   {
@@ -237,7 +243,9 @@ Response
 ]
 ```
 ```POST /users``` Adds a user to the system
+
 Response - ```201 - created```
+
 ```json
 [
   "id": "2e30455f-306b-43cb-8916-21003a949300"
@@ -245,11 +253,28 @@ Response - ```201 - created```
 ```
 
 ```DELETE /user/{userId}``` Deletes a user given a valid user id.
-Response - 204 No Content/Deleted
+
+Response - ```204 No Content/Deleted```
+
+```PUT /user/{userId}``` Updates a user with a given id
+
+Response - ```204 No Content/Updated```
+
+Request
+```json
+{
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@testemail.com",
+      "role": "ADMIN"
+}
+```
 
 ### ROUTES
 ```GET /routes/ ``` Gets all routes in the system
+
 Response
+
 ```json
 [
   {
@@ -296,7 +321,9 @@ Response
 ```
 
 ```GET routes/{routeId}``` Gets a single route in the system. This will also include the plotpoints, if any.
+
 Response
+
 ```json
   {
     "id": "78b6e504-0d47-46c2-a070-ae928cbc09f0",
@@ -333,43 +360,17 @@ Response
   }
 ```
 ```PUT /routes/{routeId}``` Updates a single route with a valid id.
+
 Response - ```204 - Updated```
+
 Request
 ```json
 {
-  "name": "new route name"
+  "name": "new route name",
   "type_id": 2
-  "plotpoints": [
-    {
-        "id": "aa13de12-b627-4479-b186-028be7ff938b",
-        "x_coordinate": "354.32324",
-        "y_coordinate": "643.23424",
-        "description": "Start location at townsville square",
-        "order": 1,
-        "created": "2022-07-02 13:35:00",
-        "last_modified": "2022-10-12 16:30:00"
-      },
-      {
-        "id": "30587dcd-5a60-48a1-8564-b6e7691d6663",
-        "x_coordinate": "356.38327",
-        "y_coordinate": "647.10124",
-        "description": "End location at townie bridge",
-        "order": 2,
-        "created": "2022-07-02 13:35:00",
-        "last_modified": "2022-10-12 16:30:00"
-      },
-      {
-        "id": "2fce4d27-c627-4db3-89e2-ddb3944a1d23",
-        "x_coordinate": "359.38327",
-        "y_coordinate": "610.10124",
-        "description": "Top of the forest",
-        "order": 2,
-        "created": "2022-07-02 13:35:00",
-        "last_modified": "2022-10-12 16:30:00"
-      },
-  ]
 }
 ```
 
 ```DELETE /routes/{routeId}``` Deletes a route given a valid route id.
-Response - 204 No Content/Deleted
+
+Response - ```204 No Content/Deleted```
