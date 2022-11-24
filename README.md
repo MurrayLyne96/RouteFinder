@@ -340,8 +340,8 @@ Response
     "plotpoints": [
       {
         "id": "aa13de12-b627-4479-b186-028be7ff938b",
-        "x_coordinate": "354.32324",
-        "y_coordinate": "643.23424",
+        "x_coordinate": 354.32324,
+        "y_coordinate": 643.23424,
         "description": "Start location at townsville square",
         "order": 1,
         "created": "2022-07-02 13:35:00",
@@ -349,8 +349,8 @@ Response
       },
       {
         "id": "30587dcd-5a60-48a1-8564-b6e7691d6663",
-        "x_coordinate": "356.38327",
-        "y_coordinate": "647.10124",
+        "x_coordinate": 356.38327,
+        "y_coordinate": 647.10124,
         "description": "End location at townie bridge",
         "order": 2,
         "created": "2022-07-02 13:35:00",
@@ -359,6 +359,7 @@ Response
     ]
   }
 ```
+
 ```PUT /routes/{routeId}``` Updates a single route with a valid id.
 
 Response - ```204 - Updated```
@@ -374,3 +375,41 @@ Request
 ```DELETE /routes/{routeId}``` Deletes a route given a valid route id.
 
 Response - ```204 No Content/Deleted```
+
+```POST /routes/{routeId}/plotpoints``` Adds a new plotpoint to an existing route
+
+Response - ```202 Created```
+```json
+{
+  "id": "342"
+}
+```
+
+Request
+
+```json
+{
+  "x_coordinate": 65.2343,
+  "y_coordinate": 20.3421,
+  "description": "Woodland",
+}
+```
+
+```UPDATE /routes/{routeId}/plotpoints/{plotPointId}``` Updates a given plotpoint
+
+Response - ```204 - No Content```
+
+Request
+
+```json
+{
+  "id": "342",
+  "x_coordinate": 65.2343,
+  "y_coordinate": 20.3421,
+  "description": "Forestland",
+}
+```
+
+```DELETE /routes/{routeId}/plotpoints/{plotPointId}``` Deletes a given plotpoint. The ordering of all remaining plotpoints will be updated.
+
+Response - ```204 - No Content```
