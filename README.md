@@ -167,6 +167,19 @@ erDiagram
 ```
 
 # API Specification
+### Auth
+```POST /auth``` Authenticates a given user
+
+Response ```200 OK```
+
+Request
+```json
+{
+  "email": "testuser@testco.com",
+  "password": "password"
+}
+```
+
 ### USERS
 
 ```GET /users``` Returns a list of all user accounts in the system
@@ -196,15 +209,13 @@ Response
 Response
 
 ```json
-[
-   {
-      "id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
-      "first_name": "Randall",
-      "last_name": "Sand",
-      "email": "randallsand@testemail.com",
-      "role": "USER"
-   }
-]
+ {
+    "id": "fccc2225-e05e-45dd-b1ad-27424c8be9e0",
+    "first_name": "Randall",
+    "last_name": "Sand",
+    "email": "randallsand@testemail.com",
+    "role": "USER"
+ }
 ```
 
 ```GET /users/{userId}/routes``` Return a list of routes associated with the user account.
@@ -247,9 +258,9 @@ Response
 Response - ```201 - created```
 
 ```json
-[
+{
   "id": "2e30455f-306b-43cb-8916-21003a949300"
-]
+}
 ```
 
 ```DELETE /user/{userId}``` Deletes a user given a valid user id.
@@ -263,10 +274,10 @@ Response - ```204 No Content/Updated```
 Request
 ```json
 {
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "john.doe@testemail.com",
-      "role": "ADMIN"
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@testemail.com",
+    "role": "ADMIN"
 }
 ```
 
