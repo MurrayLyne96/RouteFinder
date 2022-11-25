@@ -385,6 +385,46 @@ Response
   }
 ```
 
+```POST /routes``` Creates a single route. In the example below, plotpoints are included but are not required to create the route.
+Response - ```200 OK```
+
+Request
+
+```json
+  {
+    "route_name": "Country run",
+    "created": "2022-09-02 12:04:45",
+    "last_modified": "2022-10-24 15:34:01",
+    "user_id": "6de5ff17-8162-4a44-be51-4c3576871952",
+    "type": {
+      "id": "2",
+      "name": "Running",
+      "created": "2022-07-02 13:35:00",
+      "last_modified": "2022-10-12 16:30:00"
+    },
+    "plotpoints": [
+      {
+        "id": "aa13de12-b627-4479-b186-028be7ff938b",
+        "x_coordinate": 354.32324,
+        "y_coordinate": 643.23424,
+        "description": "Start location at townsville forest",
+        "order": 1,
+        "created": "2022-07-02 13:35:00",
+        "last_modified": "2022-10-12 16:30:00"
+      },
+      {
+        "id": "30587dcd-5a60-48a1-8564-b6e7691d6663",
+        "x_coordinate": 356.38327,
+        "y_coordinate": 647.10124,
+        "description": "End location at townie hill",
+        "order": 2,
+        "created": "2022-07-02 13:35:00",
+        "last_modified": "2022-10-12 16:30:00"
+      },
+    ]
+  }
+```
+
 ```PUT /routes/{routeId}``` Updates a single route with a valid id.
 
 Response - ```204 - Updated```
@@ -401,7 +441,7 @@ Request
 
 Response - ```204 No Content/Deleted```
 
-```POST /routes/{routeId}/plotpoints``` Adds a new plotpoint to an existing route
+```POST /routes/{routeId}/plotpoints``` Adds a new plotpoint to an existing route. Multiple plotpoints can be added in one request.
 
 Response - ```202 Created```
 ```json
@@ -413,11 +453,13 @@ Response - ```202 Created```
 Request
 
 ```json
-{
-  "x_coordinate": 65.2343,
-  "y_coordinate": 20.3421,
-  "description": "Woodland",
-}
+[
+  {
+    "x_coordinate": 65.2343,
+    "y_coordinate": 20.3421,
+    "description": "Woodland",
+  }
+]
 ```
 
 ```UPDATE /routes/{routeId}/plotpoints/{plotPointId}``` Updates a given plotpoint
