@@ -253,9 +253,22 @@ Response
   },
 ]
 ```
+
 ```POST /users``` Adds a user to the system
 
 Response - ```201 - created```
+
+Request
+
+```json
+{
+    "first_name": "Randall",
+    "last_name": "Sand",
+    "date_of_birth": "12/12/1994",
+    "email": "randallsand@testemail.com",
+    "role": "USER"
+}
+```
 
 ```json
 {
