@@ -289,6 +289,7 @@ Request
 {
     "first_name": "John",
     "last_name": "Doe",
+    "date_of_birth": "12/12/1994",
     "email": "john.doe@testemail.com",
     "role": "ADMIN"
 }
