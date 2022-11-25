@@ -229,11 +229,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/murray.lyne/Documents/projects/RouteFinder/src/RouteFinder/RouteFinder/RouteFinder.csproj",
-      "projectName": "RouteFinder",
-      "projectPath": "/Users/murray.lyne/Documents/projects/RouteFinder/src/RouteFinder/RouteFinder/RouteFinder.csproj",
+      "projectUniqueName": "/Users/murray.lyne/Documents/projects/RouteFinder/RouteFinderAPI/RouteFinderAPI.csproj",
+      "projectName": "RouteFinderAPI",
+      "projectPath": "/Users/murray.lyne/Documents/projects/RouteFinder/RouteFinderAPI/RouteFinderAPI.csproj",
       "packagesPath": "/Users/murray.lyne/.nuget/packages/",
-      "outputPath": "/Users/murray.lyne/Documents/projects/RouteFinder/src/RouteFinder/RouteFinder/obj/",
+      "outputPath": "/Users/murray.lyne/Documents/projects/RouteFinder/RouteFinderAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/murray.lyne/.nuget/NuGet/NuGet.Config"

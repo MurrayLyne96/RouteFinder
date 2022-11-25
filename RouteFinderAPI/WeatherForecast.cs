@@ -1,4 +1,4 @@
-namespace RouteFinder;
+namespace RouteFinderAPI;
 
 public class WeatherForecast
 {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "85uGuPm7jpt7/8mlyb2ws9DK27xySVu0Avn9fpAIowX9LASheCtQ9RY02GwW1cU7tm+VPhhlvdU6Ogc975+tgw==",
+  "dgSpecHash": "N9/k/jqFXUXUyu1AjGWSDg7RrH+l0rAEkQlvr+HJaRmfkBdDOn6xbWoM08c1Y5YTPGs9GecnRy8wO7BgdELa6Q==",
   "success": true,
-  "projectFilePath": "/Users/murray.lyne/Documents/projects/RouteFinder/src/RouteFinder/RouteFinder/RouteFinder.csproj",
+  "projectFilePath": "/Users/murray.lyne/Documents/projects/RouteFinder/RouteFinderAPI/RouteFinderAPI.csproj",
   "expectedPackageFiles": [
     "/Users/murray.lyne/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "/Users/murray.lyne/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",

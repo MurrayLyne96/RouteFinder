@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace RouteFinder.Controllers;
+namespace RouteFinderAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
