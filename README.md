@@ -389,7 +389,7 @@ Response
 
 ```POST /routes``` Creates a single route. In the example below, plotpoints are included but are not required to create the route.
 
-Response - ```200 OK```
+Response - ```202 OK```
 
 Request
 
