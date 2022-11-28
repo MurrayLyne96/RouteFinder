@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI", "RouteFinderAPI.csproj", "{0E41A252-015E-4685-8527-A37268438579}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI", "RouteFinderAPI\RouteFinderAPI.csproj", "{643EE10B-AF89-41FF-8CA4-92C911159E75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Models", "RouteFinderAPI.Models\RouteFinderAPI.Models.csproj", "{C07A2A05-14A6-4CA2-9B7C-BAD8B0180CDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E41A252-015E-4685-8527-A37268438579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E41A252-015E-4685-8527-A37268438579}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E41A252-015E-4685-8527-A37268438579}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E41A252-015E-4685-8527-A37268438579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{643EE10B-AF89-41FF-8CA4-92C911159E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{643EE10B-AF89-41FF-8CA4-92C911159E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{643EE10B-AF89-41FF-8CA4-92C911159E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{643EE10B-AF89-41FF-8CA4-92C911159E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C07A2A05-14A6-4CA2-9B7C-BAD8B0180CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C07A2A05-14A6-4CA2-9B7C-BAD8B0180CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C07A2A05-14A6-4CA2-9B7C-BAD8B0180CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C07A2A05-14A6-4CA2-9B7C-BAD8B0180CDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
