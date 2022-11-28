@@ -363,7 +363,7 @@ Response
     "created": "2022-08-02 12:04:45",
     "last_modified": "2022-10-24 15:34:01",
     "user_id": "6de5ff17-8162-4a44-be51-4c3576871952",
-    "type_id": "34fgfdd3-3245-58f3-ba12-4b3685436782",
+    "type_id": 2,
     "plotpoints": [
       {
         "id": "aa13de12-b627-4479-b186-028be7ff938b",
