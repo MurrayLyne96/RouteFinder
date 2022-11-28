@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -6,10 +8,10 @@ namespace RouteFinderAPI.Controllers
     {
         [HttpPost]
         [Route("/auth")]
-        [ProducesResponseType(200)]
-        public void Authenticate()
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TokenModel))]
+        public ActionResult<TokenModel> Authenticate(UserAuthModel model)
         {
-            
+            return Ok();
         }
     }
 }

@@ -4,3 +4,4 @@ global using System.Linq;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
+global using RouteFinderAPI.Models.API;
