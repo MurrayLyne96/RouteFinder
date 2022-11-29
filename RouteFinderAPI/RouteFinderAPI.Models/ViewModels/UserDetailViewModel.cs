@@ -1,8 +1,6 @@
-using RouteFinderAPI.Models.ViewModels.Base;
-
 namespace RouteFinderAPI.Models.ViewModels;
 
-public class UserViewModel : BaseViewModel
+public class UserDetailViewModel
 {
     public Guid Id { get; set; } = Guid.Empty;
     public string FirstName { get; set; } = string.Empty;
@@ -10,12 +8,13 @@ public class UserViewModel : BaseViewModel
     public DateTime DateOfBirth { get; set; } = DateTime.Now;
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
+    
+    public List<RouteViewModel> Routes { get; set; } = new();
 }
 
-
-public class UserViewValidator : AbstractValidator<UserViewModel>
+public class UserDetailViewValidator : AbstractValidator<UserDetailViewModel>
 {
-    public UserViewValidator()
+    public UserDetailViewValidator()
     {
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress();
