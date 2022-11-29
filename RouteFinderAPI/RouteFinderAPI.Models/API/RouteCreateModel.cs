@@ -17,5 +17,7 @@ public class RouteCreateValidator : AbstractValidator<RouteCreateModel>
         RuleFor(x => x.Name).NotEmpty().NotNull();
         RuleFor(x => x.TypeId).NotEmpty().NotNull();
         RuleFor(x => x.UserId).NotEmpty().NotNull();
+        RuleForEach(x => x.PlotPoints).NotEmpty().NotNull();
+
     }
 }

@@ -22,5 +22,7 @@ public class UserDetailViewValidator : AbstractValidator<UserDetailViewModel>
         RuleFor(x => x.FirstName).NotNull().NotEmpty();
         RuleFor(x => x.LastName).NotNull().NotEmpty();
         RuleFor(x => x.DateOfBirth).NotNull().NotEmpty().GreaterThanOrEqualTo(DateTime.Parse("01/01/1900"));
+        RuleForEach(x => x.Routes).NotEmpty().NotNull();
+
     }
 }
