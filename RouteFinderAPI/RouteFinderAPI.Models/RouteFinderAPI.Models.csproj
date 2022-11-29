@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validation" />
+      <ProjectReference Include="..\RouteFinderAPI.Common\RouteFinderAPI.Common.csproj" />
     </ItemGroup>
 
 </Project>

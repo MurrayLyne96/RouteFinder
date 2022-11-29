@@ -10,3 +10,15 @@ public class RouteViewModel : BaseViewModel
     public Guid TypeId { get; set; } = Guid.Empty;
     public TypeViewModel Type { get; set; } = new();
 }
+
+public class RouteViewValidator : AbstractValidator<RouteViewModel>
+{
+    public RouteViewValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.RouteName).NotNull().NotEmpty();
+        RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.TypeId).NotEmpty();
+        RuleFor(x => x.Type).NotNull().NotEmpty();
+    }
+}
