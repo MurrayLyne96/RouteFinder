@@ -16,7 +16,7 @@ namespace RouteFinderAPI.Controllers
 
         [HttpGet]
         [Route("{userId:guid}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserViewModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserDetailViewModel))]
         public ActionResult<UserViewModel> GetUser(Guid userId)
         {
             return Ok();
