@@ -5,7 +5,7 @@ namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RouteController : ControllerBase
+    public class RoutesController : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
