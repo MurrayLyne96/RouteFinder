@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Models", "Ro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Common", "RouteFinderAPI.Common\RouteFinderAPI.Common.csproj", "{F3EC34CE-44AC-4A0A-BEC3-1CB13F661405}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.DAL", "RouteFinderAPI.DAL\RouteFinderAPI.DAL.csproj", "{C5517511-309B-42B5-B232-C20D3FCD16D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{F3EC34CE-44AC-4A0A-BEC3-1CB13F661405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3EC34CE-44AC-4A0A-BEC3-1CB13F661405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3EC34CE-44AC-4A0A-BEC3-1CB13F661405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5517511-309B-42B5-B232-C20D3FCD16D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5517511-309B-42B5-B232-C20D3FCD16D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5517511-309B-42B5-B232-C20D3FCD16D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5517511-309B-42B5-B232-C20D3FCD16D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

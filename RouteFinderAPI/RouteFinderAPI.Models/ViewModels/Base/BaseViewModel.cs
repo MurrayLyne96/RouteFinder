@@ -2,8 +2,8 @@ namespace RouteFinderAPI.Models.ViewModels.Base;
 
 public class BaseViewModel
 {
-    public DateTime Created { get; set; } = DateTime.Now;
-    public DateTime LastModified { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime LastModified { get; set; } = DateTime.UtcNow;
 }
 
 public class BaseValidator : AbstractValidator<BaseViewModel>

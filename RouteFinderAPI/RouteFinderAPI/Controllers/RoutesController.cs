@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
+using RouteFinderAPI.Data.Interfaces;
 using RouteFinderAPI.Models.ViewModels;
 
 namespace RouteFinderAPI.Controllers
@@ -7,41 +9,76 @@ namespace RouteFinderAPI.Controllers
     [ApiController]
     public class RoutesController : ControllerBase
     {
+        private IRouteFinderDatabase _database;
+        public RoutesController(IRouteFinderDatabase database) => _database = database;
+        
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        public ActionResult<List<RouteViewModel>> GetAllRoutes()
+        public async Task<ActionResult<List<RouteViewModel>>> GetAllRoutes()
         {
-            return Ok();
+            var routes = await _database.Get<Route>().ToListAsync();
+            return Ok(routes);
         }
 
         [HttpGet]
         [Route("{routeId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RouteDetailViewModel))]
-        public ActionResult<RouteViewModel> GetRouteById(Guid routeId)
+        public async Task<ActionResult<Route>> GetRouteById(Guid routeId)
         {
-            return Ok();
+            var route = await _database.Get<Data.Entities.Route>().Where(x => x.Id == routeId).SingleOrDefaultAsync();
+            return Ok(route);
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public ActionResult CreateRoute(RouteCreateModel model)
+        public async Task<ActionResult> CreateRoute(RouteCreateViewModel model)
         {
-            return Created(this.Url.ToString(), new RouteViewModel());
+            var routeEntity = new Data.Entities.Route()
+            {
+                Id = Guid.NewGuid(),
+                RouteName = model.Name,
+                Created = DateTime.UtcNow,
+                LastModified = DateTime.UtcNow,
+                TypeId = model.TypeId,
+                UserId = model.UserId
+            };
+            await _database.AddAsync(routeEntity);
+            return Created(this.Url.ToString(), routeEntity);
         }
 
         [HttpPut]
         [Route("{routeId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public ActionResult UpdateRouteById(Guid routeId, RouteUpdateModel model)
+        public async Task<ActionResult> UpdateRouteById(Guid routeId, RouteUpdateViewModel model)
         {
+            var routeEntity = await _database.Get<Data.Entities.Route>().Where(x => x.Id == routeId).SingleOrDefaultAsync();
+            
+            if (routeEntity is null)
+            {
+                return NotFound();
+            }
+            
+            routeEntity.RouteName = model.Name;
+            routeEntity.TypeId = model.TypeId;
+
+            await _database.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpDelete]
         [Route("{routeId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public ActionResult DeleteRouteById(Guid routeId)
+        public async Task<ActionResult> DeleteRouteById(Guid routeId)
         {
+            var routeEntity = await _database.Get<Data.Entities.Route>().Where(x => x.Id == routeId).SingleOrDefaultAsync();
+            
+            if (routeEntity is null)
+            {
+                return NotFound();
+            }
+            
+            _database.Delete(routeEntity);
+            _database.SaveChangesAsync();
             return NoContent();
         }
 
@@ -56,7 +93,7 @@ namespace RouteFinderAPI.Controllers
         [HttpPut]
         [Route("{routeId:guid}/plotpoints/{plotPointId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public ActionResult UpdatePlotPoint(Guid routeId, Guid plotPointId, RouteUpdateModel model)
+        public ActionResult UpdatePlotPoint(Guid routeId, Guid plotPointId, PlotPointCreateModel model)
         {
             return NoContent();
         }

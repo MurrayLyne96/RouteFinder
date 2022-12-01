@@ -2,7 +2,7 @@ using RouteFinderAPI.Models.ViewModels;
 
 namespace RouteFinderAPI.Models.API;
 
-public class RouteCreateModel
+public class RouteCreateViewModel
 {
     public string Name { get; set; } = string.Empty;
     public int TypeId { get; set; } = default;
@@ -10,9 +10,9 @@ public class RouteCreateModel
     public List<PlotPointViewModel> PlotPoints { get; set; } = new();
 }
 
-public class RouteCreateValidator : AbstractValidator<RouteCreateModel>
+public class RouteCreateViewValidator : AbstractValidator<RouteCreateViewModel>
 {
-    public RouteCreateValidator()
+    public RouteCreateViewValidator()
     {
         RuleFor(x => x.Name).NotEmpty().NotNull();
         RuleFor(x => x.TypeId).NotEmpty().NotNull();

@@ -1,14 +1,14 @@
 namespace RouteFinderAPI.Models.API;
 
-public class RouteUpdateModel
+public class RouteUpdateViewModel
 {
     public string Name { get; set; } = string.Empty;
     public int TypeId { get; set; } = default;
 }
 
-public class RouteUpdateValidator : AbstractValidator<RouteUpdateModel>
+public class RouteUpdateViewValidator : AbstractValidator<RouteUpdateViewModel>
 {
-    public RouteUpdateValidator()
+    public RouteUpdateViewValidator()
     {
         RuleFor(x => x.Name).NotEmpty().NotNull();
         RuleFor(x => x.TypeId).NotEmpty().NotNull();

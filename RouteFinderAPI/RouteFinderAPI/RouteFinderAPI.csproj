@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RouteFinderAPI.DAL\RouteFinderAPI.DAL.csproj" />
       <ProjectReference Include="..\RouteFinderAPI.Models\RouteFinderAPI.Models.csproj" />
     </ItemGroup>
 
