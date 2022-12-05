@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RouteFinderAPI.Data.Entities;
 
+[Table("routes")]
 public class Route
 {
     [Key] 
@@ -19,12 +20,14 @@ public class Route
     public DateTime? LastModified { get; set; }
     
     [Column("user_id")]
+    [ForeignKey("users")]
     public Guid UserId { get; set; }
     
     public User User { get; set; }
     
     [Column("type_id")]
+    [ForeignKey("types")]
     public int TypeId { get; set; }
     
-    public Type Type { get; set; }
+    public RouteType RouteType { get; set; }
 }
