@@ -1,6 +1,6 @@
 namespace RouteFinderAPI.Services;
 
-public interface IPlotpointService
+public interface IPlotpointService : IService
 {
     
 }

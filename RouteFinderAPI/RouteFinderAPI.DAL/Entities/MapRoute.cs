@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RouteFinderAPI.Data.Entities;
 
 [Table("routes")]
-public class Route
+public class MapRoute
 {
     [Key] 
     [Column("id")] 
@@ -29,5 +29,5 @@ public class Route
     [ForeignKey("types")]
     public int TypeId { get; set; }
     
-    public RouteType RouteType { get; set; }
+    public RouteType Type { get; set; }
 }

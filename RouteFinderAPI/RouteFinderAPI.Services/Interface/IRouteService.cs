@@ -1,6 +1,6 @@
 namespace RouteFinderAPI.Services;
 
-public class IRouteService
+public interface IRouteService : IService
 {
     
 }

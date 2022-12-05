@@ -8,7 +8,7 @@ public class TypeViewModel : BaseViewModel
     public string Name { get; set; } = string.Empty;
 }
 
-public class TypeViewValidator : AbstractValidator<TypeViewModel>
+public class TypeViewValidator : AbstractValidator<TypeViewModel>, IValidator
 {
     public TypeViewValidator()
     {

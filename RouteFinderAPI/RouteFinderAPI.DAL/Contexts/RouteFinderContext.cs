@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RouteFinderAPI.Data.Entities;
 using RouteFinderAPI.Data.Interfaces;
-using Type = System.Type;
-
 namespace RouteFinderAPI.Data.Contexts;
 
 public class RouteFinderContext : BaseContext, IRouteFinderDatabase
@@ -12,7 +10,9 @@ public class RouteFinderContext : BaseContext, IRouteFinderDatabase
         
     public virtual DbSet<User> Users { get; set; }
     
-    public virtual DbSet<Route> Routes { get; set; }
+    public virtual DbSet<MapRoute> Routes { get; set; }
     
-    public virtual DbSet<Type> Types { get; set; }
+    public virtual DbSet<RouteType> Types { get; set; }
+    
+    public virtual DbSet<Plotpoint> Plotpoints { get; set; }
 }

@@ -23,5 +23,5 @@ public class User
     [Column("created")]
     public DateTime Created { get; set; }
     [Column("last_modified")]
-    public DateTime? LastModified { get; set; }
+    public DateTime LastModified { get; set; }
 }

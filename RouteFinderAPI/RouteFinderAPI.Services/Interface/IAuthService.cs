@@ -1,6 +1,6 @@
 namespace RouteFinderAPI.Services;
 
-public class IAuthService
+public interface IAuthService : IService
 {
     
 }

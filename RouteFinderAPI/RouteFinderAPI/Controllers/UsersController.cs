@@ -12,18 +12,10 @@ namespace RouteFinderAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IRouteFinderDatabase _database;
-        private UserDetailViewValidator _userDetailViewValidator;
-        private UserViewValidator _userViewValidator;
-        private UserCreateViewValidator _userCreateViewValidator;
-        private UserUpdateViewValidator _userUpdateViewValidator;
 
         public UsersController(IRouteFinderDatabase database)
         {
             _database = database;
-            _userViewValidator = new();
-            _userCreateViewValidator = new();
-            _userDetailViewValidator = new();
-            _userUpdateViewValidator = new();
         }
 
         [HttpGet]
@@ -55,13 +47,6 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(Guid))]
         public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
         {
-            var result = await _userCreateViewValidator.ValidateAsync(user);
-            
-            if (!result.IsValid)
-            {
-                return BadRequest(result.Errors);
-            }
-            
             var userEntity = new User()
             {
                 Id = Guid.NewGuid(),
@@ -78,7 +63,7 @@ namespace RouteFinderAPI.Controllers
             await _database.AddAsync(userEntity);
             await _database.SaveChangesAsync();
             
-            return Created("test", userEntity);
+            return Created(this.Url.ToString(), userEntity);
         }
 
         [HttpPut]
@@ -86,12 +71,6 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdateUser(Guid userId, UserUpdateViewModel user)
         {
-            var result = await _userUpdateViewValidator.ValidateAsync(user);
-            
-            if (!result.IsValid)
-            {
-                return BadRequest(result.Errors);
-            }
             var userEntity = await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
             
             if (userEntity is null)
