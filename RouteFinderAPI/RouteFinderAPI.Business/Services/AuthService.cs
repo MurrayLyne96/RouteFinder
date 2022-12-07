@@ -1,6 +1,6 @@
 namespace RouteFinderAPI.Services;
 
-public class usings
+public class AuthService : IAuthService
 {
     
 }

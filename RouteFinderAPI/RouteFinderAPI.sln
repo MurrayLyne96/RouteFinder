@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Common", "Ro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.DAL", "RouteFinderAPI.DAL\RouteFinderAPI.DAL.csproj", "{C5517511-309B-42B5-B232-C20D3FCD16D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Service", "RouteFinderAPI.Service\RouteFinderAPI.Service.csproj", "{2EE6C896-6C21-4F27-9547-D81D13B46CB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Business", "RouteFinderAPI.Business\RouteFinderAPI.Business.csproj", "{2EE6C896-6C21-4F27-9547-D81D13B46CB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

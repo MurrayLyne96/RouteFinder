@@ -4,6 +4,7 @@ using RouteFinderAPI.Models.ViewModels;
 using RouteFinderAPI.Data.Contexts;
 using RouteFinderAPI.Data.Entities;
 using RouteFinderAPI.Data.Interfaces;
+using RouteFinderAPI.Services;
 
 namespace RouteFinderAPI.Controllers
 {
@@ -12,17 +13,18 @@ namespace RouteFinderAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IRouteFinderDatabase _database;
-
-        public UsersController(IRouteFinderDatabase database)
+        private readonly IUserService _userService;
+        public UsersController(IRouteFinderDatabase database, IUserService userService)
         {
             _database = database;
+            _userService = userService;
         }
 
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<UserViewModel>))]
         public async Task<ActionResult<IList<UserViewModel>>> GetAllUsers()
         {
-            var users = await _database.Get<User>().ToListAsync();
+            var users = await _userService.GetAllUsers();
             return Ok(users);
         }
 
