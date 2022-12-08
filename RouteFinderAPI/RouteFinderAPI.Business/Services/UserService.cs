@@ -1,8 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using RouteFinderAPI.DAL.Specifications.MapRoutes;
+using RouteFinderAPI.DAL.Specifications.Users;
 using RouteFinderAPI.Data.Entities;
 using RouteFinderAPI.Data.Interfaces;
 using RouteFinderAPI.Models.ViewModels;
+using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace RouteFinderAPI.Services;
 
@@ -31,28 +34,39 @@ public class UserService : IUserService
 
     public async Task CreateUser(UserCreateViewModel userModel)
     {
-        var user = new User();
-        _mapper.Map(userModel, user);
-        user.Id = Guid.NewGuid();
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = userModel.FirstName,
+            LastName = userModel.LastName,
+            Created = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
+            DateOfBirth = userModel.DateOfBirth,
+            Email = userModel.Email,
+            Password = userModel.Email,
+            Role = userModel.Role
+        };
+        await _database.AddAsync(user);
         await _database.SaveChangesAsync();
     }
 
     public async Task<List<RouteViewModel>> GetRoutesFromUser(Guid userId)
     {
-        var routes = await _database.Get<MapRoute>().Where(x => x.UserId == userId).ToListAsync();
+        var routes = await _database.Get<MapRoute>().Where(new MapRouteByUserIdSpec(userId)).ToListAsync();
         return _mapper.Map<List<RouteViewModel>>(routes);
     }
 
-    public async Task<bool> UpdateUser(Guid userId, UserUpdateViewModel user)
+    public async Task<bool> UpdateUser(Guid userId, UserUpdateViewModel userModel)
     {
-        var userEntity = await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
-            
+        var userEntity = await GetSingleUser(userId);
+        
         if (userEntity is null)
         {
             return false;
         }
         
-        _mapper.Map(user, userEntity);
+        _mapper.Map(userModel, userEntity);
+
         await _database.SaveChangesAsync();
         return true;
     }
@@ -73,6 +87,6 @@ public class UserService : IUserService
 
     private async Task<User> GetSingleUser(Guid userId)
     {
-        return await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
+        return await _database.Get<User>().Where(new UserByIdSpec(userId)).SingleOrDefaultAsync();
     }
 }

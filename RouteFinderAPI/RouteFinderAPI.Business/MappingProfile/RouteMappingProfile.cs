@@ -6,8 +6,8 @@ public class RouteMappingProfile : AutoMapper.Profile
 {
     public RouteMappingProfile()
     {
-        CreateMap<MapRoute, RouteViewModel>();
-        CreateMap<MapRoute, RouteCreateViewModel>();
-        CreateMap<MapRoute, RouteUpdateViewModel>();
+        CreateMap<MapRoute, RouteViewModel>().ReverseMap();
+        CreateMap<MapRoute, RouteCreateViewModel>().ReverseMap();
+        CreateMap<MapRoute, RouteUpdateViewModel>().ReverseMap();
     }
 }

@@ -17,8 +17,8 @@ public class UserUpdateViewValidator : AbstractValidator<UserUpdateViewModel>
     {
         RuleFor(x => x.FirstName).NotNull().NotEmpty();
         RuleFor(x => x.LastName).NotNull().NotEmpty();
-        RuleFor(x => x.Role).NotNull().NotEmpty().Must(x => RoleConstants.ContainsRole(x));
-        RuleFor(x => x.Role).NotNull().NotEmpty().Must(x => RoleConstants.ContainsRole(x));
+        RuleFor(x => x.Email).NotEmpty().NotNull().EmailAddress();
+        RuleFor(x => x.Role).NotNull().NotEmpty().Must(x => RoleConstants.ContainsRole(x)).WithMessage("Please specify a valid role.");
         RuleFor(x => x.DateOfBirth).NotNull().NotEmpty().GreaterThanOrEqualTo(DateTime.Parse("01/01/1900"));
     }
 }

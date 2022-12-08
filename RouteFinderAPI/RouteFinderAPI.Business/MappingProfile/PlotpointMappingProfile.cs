@@ -6,7 +6,7 @@ public class PlotpointMappingProfile : AutoMapper.Profile
 {
     public PlotpointMappingProfile()
     {
-        CreateMap<Plotpoint, PlotPointViewModel>();
-        CreateMap<Plotpoint, PlotPointCreateModel>();
+        CreateMap<Plotpoint, PlotPointViewModel>().ReverseMap();
+        CreateMap<Plotpoint, PlotPointCreateModel>().ReverseMap();
     }
 }

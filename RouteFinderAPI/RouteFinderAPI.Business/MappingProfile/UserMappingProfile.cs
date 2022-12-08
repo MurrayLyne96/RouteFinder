@@ -4,8 +4,9 @@ public class UserMappingProfile : AutoMapper.Profile
 {
     public UserMappingProfile()
     {
-        CreateMap<User, UserViewModel>();
-        CreateMap<User, UserCreateViewModel>();
-        CreateMap<User, UserUpdateViewModel>();
+        CreateMap<User, UserViewModel>().ReverseMap();
+        CreateMap<User, UserCreateViewModel>().ReverseMap();
+        CreateMap<User, UserDetailViewModel>().ReverseMap();
+        CreateMap<User, UserUpdateViewModel>().ReverseMap();
     }
 }

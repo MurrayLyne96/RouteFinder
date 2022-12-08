@@ -12,11 +12,9 @@ namespace RouteFinderAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IRouteFinderDatabase _database;
         private readonly IUserService _userService;
-        public UsersController(IRouteFinderDatabase database, IUserService userService)
+        public UsersController(IUserService userService)
         {
-            _database = database;
             _userService = userService;
         }
 
@@ -33,39 +31,26 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserDetailViewModel))]
         public async Task<ActionResult<UserViewModel>> GetUser(Guid userId)
         {
-            var user = await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
+            var user = await _userService.GetUserById(userId);
             return Ok(user);
         }
         
         [HttpGet]
         [Route("{userId:guid}/routes")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        public ActionResult<List<RouteViewModel>> GetRoutesFromUser(Guid userId)
+        public async Task<ActionResult<List<RouteViewModel>>> GetRoutesFromUser(Guid userId)
         {
-            return Ok();
+            var routes = await _userService.GetRoutesFromUser(userId);
+            return Ok(routes);
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(Guid))]
         public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
         {
-            var userEntity = new User()
-            {
-                Id = Guid.NewGuid(),
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                Email = user.Email,
-                Password = user.Password,
-                Role = user.Role,
-                Created = DateTime.UtcNow,
-                LastModified = DateTime.UtcNow
-            };
-
-            await _database.AddAsync(userEntity);
-            await _database.SaveChangesAsync();
+            await _userService.CreateUser(user);
             
-            return Created(this.Url.ToString(), userEntity);
+            return Created(this.Url.ToString(), user);
         }
 
         [HttpPut]
@@ -73,19 +58,11 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdateUser(Guid userId, UserUpdateViewModel user)
         {
-            var userEntity = await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
-            
-            if (userEntity is null)
+            var result = await _userService.UpdateUser(userId, user);
+            if (!result)
             {
-                return NotFound("User was not found");
+                return NotFound();
             }
-            
-            userEntity.FirstName = user.FirstName;
-            userEntity.LastName = user.LastName;
-            userEntity.Email = user.Email;
-            userEntity.DateOfBirth = user.DateOfBirth;
-
-            await _database.SaveChangesAsync();
             return NoContent();
         }
 
@@ -94,13 +71,13 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> DeleteUser(Guid userId)
         {
-            var userEntity = await _database.Get<User>().Where(x => x.Id == userId).SingleOrDefaultAsync();
-            if (userEntity is null)
+            var result = await _userService.DeleteUser(userId);
+            
+            if (!result)
             {
-                return NotFound("User was not found");
+                return NotFound();
             }
             
-            _database.Delete(userEntity);
             return NoContent();
         }
 

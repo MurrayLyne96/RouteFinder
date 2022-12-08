@@ -5,10 +5,10 @@ namespace RouteFinderAPI.Models.ViewModels;
 public class PlotPointViewModel : BaseViewModel
 {
     public Guid Id { get; set; } = Guid.Empty;
-    public float XCoordinate { get; set; } = default;
-    public float YCoordinate { get; set; } = default;
+    public float XCoordinate { get; set; }
+    public float YCoordinate { get; set; }
     public string Description { get; set; } = string.Empty;
-    public int Order { get; set; } = default;
+    public int Order { get; set; }
 }
 
 public class PlotPointViewValidator : AbstractValidator<PlotPointViewModel>

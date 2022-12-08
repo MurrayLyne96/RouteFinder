@@ -10,7 +10,12 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
+      <PackageReference Include="Unosquare.EntityFramework.Specification.EFCore" Version="1.0.7" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RouteFinderAPI.Models\RouteFinderAPI.Models.csproj" />
     </ItemGroup>
 
 </Project>
