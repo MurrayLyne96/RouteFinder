@@ -7,7 +7,7 @@ public class RouteViewModel : BaseViewModel
     public Guid Id { get; set; } = Guid.Empty;
     public string RouteName { get; set; } = string.Empty;
     public Guid UserId { get; set; } = Guid.Empty;
-    public Guid TypeId { get; set; } = Guid.Empty;
+    public int TypeId { get; set; }
     public TypeViewModel Type { get; set; } = new();
 }
 

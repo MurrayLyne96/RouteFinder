@@ -30,5 +30,5 @@ public class Plotpoint
     
     [ForeignKey("routes")]
     [Column("route_id")]
-    public int RouteId { get; set; }
+    public Guid RouteId { get; set; }
 }

@@ -1,3 +1,5 @@
+using RouteFinderAPI.DAL.Specifications.MapRoutes;
+
 namespace RouteFinderAPI.Services;
 
 public class RouteService : IRouteService
@@ -9,29 +11,32 @@ public class RouteService : IRouteService
         _database = database;
         _mapper = mapper;
     }
-    public async Task<List<RouteViewModel>> GetAllRoutes()
-    {
-        var routes = await _database.Get<MapRoute>().ToListAsync();
-        return _mapper.Map<List<RouteViewModel>>(routes);
-    }
+    public async Task<RouteDto[]> GetAllRoutes() => 
+        await _mapper.ProjectTo<RouteDto>(
+            _database.Get<MapRoute>()
+                .OrderBy(x => x.LastModified))
+            .ToArrayAsync();
 
-    public async Task<RouteViewModel> GetRouteById(Guid routeId)
-    {
-        var route = await GetSingleRoute(routeId);
-        return _mapper.Map<RouteViewModel>(route);
-    }
+    public async Task<RouteDetailDto> GetRouteById(Guid routeId) =>
+        await _mapper.ProjectTo<RouteDetailDto>(
+            _database.Get<MapRoute>()
+                .Where(new RouteByIdSpec(routeId))).SingleOrDefaultAsync();
 
-    public async Task CreateRoute(RouteCreateViewModel model)
+    public async Task<Guid> CreateRoute(RouteUpdateDto model)
     {
         var routeEntity = new MapRoute();
         _mapper.Map(model, routeEntity);
+        routeEntity.Created = DateTime.UtcNow;
+        routeEntity.LastModified = DateTime.UtcNow;
         await _database.AddAsync(routeEntity);
         await _database.SaveChangesAsync();
+        return routeEntity.Id;
     }
 
-    public async Task<bool> UpdateRouteById(Guid routeId, RouteUpdateViewModel model)
+    public async Task<bool> UpdateRouteById(Guid routeId, RouteUpdateDto model)
     {
         var routeEntity = await GetSingleRoute(routeId);
+        
         if (routeEntity is null)
         {
             return false;
@@ -61,6 +66,11 @@ public class RouteService : IRouteService
 
     private async Task<MapRoute> GetSingleRoute(Guid routeId)
     {
-        return await _database.Get<MapRoute>().Where(x => x.Id == routeId).SingleOrDefaultAsync();
+        return await _database.Get<MapRoute>().Where(new RouteByIdSpec(routeId)).SingleOrDefaultAsync();
+    }
+
+    private async Task<MapRoute> GetSingleRouteWithType(Guid routeId)
+    {
+        return await _database.Get<MapRoute>().Where(new RouteByIdSpec(routeId)).Include(x => x.Type).SingleOrDefaultAsync();
     }
 }

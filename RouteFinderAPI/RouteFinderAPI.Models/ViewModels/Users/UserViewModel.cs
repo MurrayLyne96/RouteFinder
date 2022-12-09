@@ -12,7 +12,6 @@ public class UserViewModel : BaseViewModel
     public string Role { get; set; } = string.Empty;
 }
 
-
 public class UserViewValidator : AbstractValidator<UserViewModel>
 {
     public UserViewValidator()

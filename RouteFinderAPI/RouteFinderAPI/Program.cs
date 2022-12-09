@@ -27,10 +27,14 @@ builder.Services.AddScoped<IPlotpointService, PlotpointService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAutoMapper(
+    typeof(TypeMappingProfile),
     typeof(PlotpointMappingProfile),
     typeof(RouteMappingProfile),
-    typeof(TypeMappingProfile),
-    typeof(UserMappingProfile)
+    typeof(UserMappingProfile),
+    typeof(RouteDtoMappingProfile),
+    typeof(PlotpointDtoMappingProfile),
+    typeof(TypeMappingDtoProfile),
+    typeof(UserDtoMappingProfile)
 );
 
 var app = builder.Build();

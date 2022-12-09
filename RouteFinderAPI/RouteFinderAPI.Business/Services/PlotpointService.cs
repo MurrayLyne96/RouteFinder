@@ -1,3 +1,5 @@
+using RouteFinderAPI.DAL.Specifications.Plotpoints;
+
 namespace RouteFinderAPI.Services;
 
 public class PlotpointService : IPlotpointService
@@ -44,6 +46,6 @@ public class PlotpointService : IPlotpointService
 
     private async Task<Plotpoint> GetSinglePlotpoint(Guid plotPointId)
     {
-        return await _database.Get<Plotpoint>().Where(x => x.Id == plotPointId).SingleOrDefaultAsync();
+        return await _database.Get<Plotpoint>().Where(new PlotpointByIdSpec(plotPointId)).SingleOrDefaultAsync();
     }
 }

@@ -30,7 +30,7 @@ namespace RouteFinderAPI.Controllers
         [HttpGet]
         [Route("{routeId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RouteDetailViewModel))]
-        public async Task<ActionResult<Route>> GetRouteById(Guid routeId)
+        public async Task<ActionResult<RouteDetailViewModel>> GetRouteById(Guid routeId)
         {
             var route = await _routeService.GetRouteById(routeId);
             return Ok(route);
@@ -40,7 +40,16 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult> CreateRoute(RouteCreateViewModel model)
         {
-            await _routeService.CreateRoute(model);
+            var routeId = await _routeService.CreateRoute(model);
+            
+            if (model.PlotPoints?.Any() is true)
+            {
+                foreach (var point in model.PlotPoints)
+                {
+                    await _plotpointService.CreatePlotPoint(routeId, point);
+                }
+            }
+            
             return Created(this.Url.ToString(), model);
         }
 

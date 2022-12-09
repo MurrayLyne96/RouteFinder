@@ -2,9 +2,9 @@ namespace RouteFinderAPI.Services;
 
 public interface IRouteService
 {
-    public Task<List<RouteViewModel>> GetAllRoutes();
-    public Task<RouteViewModel> GetRouteById(Guid routeId);
-    public Task CreateRoute(RouteCreateViewModel model);
-    public Task<bool> UpdateRouteById(Guid routeId, RouteUpdateViewModel model);
+    public Task<RouteDto[]> GetAllRoutes();
+    public Task<RouteDetailDto> GetRouteById(Guid routeId);
+    public Task<Guid> CreateRoute(RouteUpdateDto model);
+    public Task<bool> UpdateRouteById(Guid routeId, RouteUpdateDto model);
     public Task<bool> DeleteRouteById(Guid routeId);
 }
