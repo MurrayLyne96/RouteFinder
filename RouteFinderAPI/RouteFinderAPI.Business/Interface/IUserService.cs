@@ -4,11 +4,11 @@ namespace RouteFinderAPI.Services;
 
 public interface IUserService
 {
-    public Task<IEnumerable<UserViewModel>> GetAllUsers();
-    public Task<UserViewModel> GetUserById(Guid userId);
-    public Task CreateUser(UserCreateViewModel user);
-    public Task<List<RouteViewModel>> GetRoutesFromUser(Guid userId);
-    public Task<bool> UpdateUser(Guid userId, UserUpdateViewModel userModel);
+    public Task<UserDto[]> GetAllUsers();
+    public Task<UserDto> GetUserById(Guid userId);
+    public Task CreateUser(UserCreateDto user);
+    public Task<RouteDto[]> GetRoutesFromUser(Guid userId);
+    public Task<bool> UpdateUser(Guid userId, UserUpdateDto userModel);
     public Task<bool> DeleteUser(Guid userId);
 
 }
