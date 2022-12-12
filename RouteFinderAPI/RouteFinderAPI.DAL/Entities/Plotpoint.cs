@@ -11,13 +11,13 @@ public class Plotpoint
     public Guid Id { get; set; }
     
     [Column("x_coordinate")]
-    public float XCoordinate { get; set; }
+    public double XCoordinate { get; set; }
     
     [Column("y_coordinate")]
-    public float YCoordinate { get; set; }
+    public double YCoordinate { get; set; }
     
     [Column("point_description")]
-    public string PointDescription { get; set; }
+    public string Description { get; set; }
     
     [Column("plot_order")]
     public int PlotOrder { get; set; }
@@ -30,5 +30,7 @@ public class Plotpoint
     
     [ForeignKey("routes")]
     [Column("route_id")]
-    public Guid RouteId { get; set; }
+    public Guid MapRouteId { get; set; }
+    
+    public MapRoute MapRoute { get; set; }
 }

@@ -1,22 +1,17 @@
-using System.Net;
-using Microsoft.EntityFrameworkCore;
-using RouteFinderAPI.Data.Entities;
-using RouteFinderAPI.Data.Interfaces;
-using RouteFinderAPI.Models.ViewModels;
-using RouteFinderAPI.Services;
-
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class RoutesController : ControllerBase
     {
-        private IRouteService _routeService;
-        private IPlotpointService _plotpointService;
-        public RoutesController(IRouteService routeService, IPlotpointService plotpointService)
+        private readonly IRouteService _routeService;
+        private readonly IPlotpointService _plotpointService;
+        private readonly IMapper _mapper;
+        public RoutesController(IRouteService routeService, IPlotpointService plotpointService, IMapper mapper)
         {
             _routeService = routeService;
             _plotpointService = plotpointService;
+            _mapper = mapper;
         }
         
         [HttpGet]
@@ -24,7 +19,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<List<RouteViewModel>>> GetAllRoutes()
         {
             var routes = await _routeService.GetAllRoutes();
-            return Ok(routes);
+            return Ok(_mapper.Map<List<RouteViewModel>>(routes));
         }
 
         [HttpGet]
@@ -38,19 +33,11 @@ namespace RouteFinderAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult> CreateRoute(RouteCreateViewModel model)
+        public async Task<ActionResult<Guid>> CreateRoute(RouteCreateViewModel model)
         {
-            var routeId = await _routeService.CreateRoute(model);
-            
-            if (model.PlotPoints?.Any() is true)
-            {
-                foreach (var point in model.PlotPoints)
-                {
-                    await _plotpointService.CreatePlotPoint(routeId, point);
-                }
-            }
-            
-            return Created(this.Url.ToString(), model);
+            var routeCreateDto = _mapper.Map<RouteCreateDto>(model);
+            var routeId = await _routeService.CreateRoute(routeCreateDto);
+            return Created(this.Url.ToString(), routeId.ToString());
         }
 
         [HttpPut]
@@ -58,7 +45,8 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdateRouteById(Guid routeId, RouteUpdateViewModel model)
         {
-            await _routeService.UpdateRouteById(routeId, model);
+            var routeUpdateDto = _mapper.Map<RouteUpdateDto>(model);
+            await _routeService.UpdateRouteById(routeId, routeUpdateDto);
             return NoContent();
         }
 
@@ -76,7 +64,8 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(PlotPointCreateModel))]
         public async Task<ActionResult> CreatePlotPoint(Guid routeId, PlotPointCreateModel model)
         {
-            await _plotpointService.CreatePlotPoint(routeId, model);
+            var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
+            await _plotpointService.CreatePlotPoint(plotpointCreateDto);
             return Created(this.Url.ToString(), model);
         }
 
@@ -85,7 +74,9 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdatePlotPoint(Guid routeId, Guid plotPointId, PlotPointCreateModel model)
         {
-            await _plotpointService.UpdatePlotPoint(plotPointId, model);
+            var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
+            plotpointCreateDto.MapRouteId = routeId;
+            await _plotpointService.UpdatePlotPoint(plotPointId, plotpointCreateDto);
             return NoContent();
         }
 

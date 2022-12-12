@@ -1,11 +1,3 @@
-using System.Net;
-using Microsoft.EntityFrameworkCore;
-using RouteFinderAPI.Models.ViewModels;
-using RouteFinderAPI.Data.Contexts;
-using RouteFinderAPI.Data.Entities;
-using RouteFinderAPI.Data.Interfaces;
-using RouteFinderAPI.Services;
-
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -13,17 +5,19 @@ namespace RouteFinderAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IMapper _mapper;
+        public UsersController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<UserViewModel>))]
-        public async Task<ActionResult<IList<UserViewModel>>> GetAllUsers()
+        public async Task<ActionResult<UserViewModel[]>> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
-            return Ok(users);
+            return Ok(_mapper.Map<UserDto[]>(users));
         }
 
         [HttpGet]
@@ -32,23 +26,24 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<UserViewModel>> GetUser(Guid userId)
         {
             var user = await _userService.GetUserById(userId);
-            return Ok(user);
+            return Ok(_mapper.Map<UserViewModel>(user));
         }
         
         [HttpGet]
         [Route("{userId:guid}/routes")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        public async Task<ActionResult<List<RouteViewModel>>> GetRoutesFromUser(Guid userId)
+        public async Task<ActionResult<RouteViewModel[]>> GetRoutesFromUser(Guid userId)
         {
             var routes = await _userService.GetRoutesFromUser(userId);
-            return Ok(routes);
+            return Ok(_mapper.Map<RouteViewModel[]>(routes));
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(Guid))]
         public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
         {
-            await _userService.CreateUser(user);
+            var userCreateDto = _mapper.Map<UserCreateDto>(user);
+            await _userService.CreateUser(userCreateDto);
             
             return Created(this.Url.ToString(), user);
         }
@@ -58,11 +53,14 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdateUser(Guid userId, UserUpdateViewModel user)
         {
-            var result = await _userService.UpdateUser(userId, user);
+            var userUpdateDto = _mapper.Map<UserUpdateDto>(user);
+            var result = await _userService.UpdateUser(userId, userUpdateDto);
+            
             if (!result)
             {
                 return NotFound();
             }
+            
             return NoContent();
         }
 

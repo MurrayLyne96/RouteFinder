@@ -17,18 +17,20 @@ public class RouteService : IRouteService
                 .OrderBy(x => x.LastModified))
             .ToArrayAsync();
 
-    public async Task<RouteDetailDto> GetRouteById(Guid routeId) =>
-        await _mapper.ProjectTo<RouteDetailDto>(
+    public async Task<RouteDetailDto?> GetRouteById(Guid routeId) =>
+        await _mapper.ProjectTo<RouteDetailDto?>(
             _database.Get<MapRoute>()
-                .Where(new RouteByIdSpec(routeId))).SingleOrDefaultAsync();
+                .Where(new RouteByIdSpec(routeId))
+                .Include(x => x.Type)
+                .Include(x => x.Plotpoints)).SingleOrDefaultAsync();
 
-    public async Task<Guid> CreateRoute(RouteUpdateDto model)
+    public async Task<Guid> CreateRoute(RouteCreateDto model)
     {
         var routeEntity = new MapRoute();
         _mapper.Map(model, routeEntity);
-        routeEntity.Created = DateTime.UtcNow;
-        routeEntity.LastModified = DateTime.UtcNow;
+
         await _database.AddAsync(routeEntity);
+
         await _database.SaveChangesAsync();
         return routeEntity.Id;
     }
@@ -67,10 +69,5 @@ public class RouteService : IRouteService
     private async Task<MapRoute> GetSingleRoute(Guid routeId)
     {
         return await _database.Get<MapRoute>().Where(new RouteByIdSpec(routeId)).SingleOrDefaultAsync();
-    }
-
-    private async Task<MapRoute> GetSingleRouteWithType(Guid routeId)
-    {
-        return await _database.Get<MapRoute>().Where(new RouteByIdSpec(routeId)).Include(x => x.Type).SingleOrDefaultAsync();
     }
 }

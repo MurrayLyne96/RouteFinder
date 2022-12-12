@@ -9,3 +9,5 @@ global using RouteFinderAPI.DAL.Specifications.MapRoutes;
 global using RouteFinderAPI.DAL.Specifications.Users;
 global using RouteFinderAPI.Services.Dto.Users;
 global using RouteFinderAPI.Services.Dto.Routes;
+global using RouteFinderAPI.Services.Dto.Types;
+global using RouteFinderAPI.Services.Dto.Plotpoints;

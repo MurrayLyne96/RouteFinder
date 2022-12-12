@@ -5,8 +5,8 @@ namespace RouteFinderAPI.Models.ViewModels;
 public class PlotPointViewModel : BaseViewModel
 {
     public Guid Id { get; set; } = Guid.Empty;
-    public float XCoordinate { get; set; }
-    public float YCoordinate { get; set; }
+    public double XCoordinate { get; set; }
+    public double YCoordinate { get; set; }
     public string Description { get; set; } = string.Empty;
     public int Order { get; set; }
 }

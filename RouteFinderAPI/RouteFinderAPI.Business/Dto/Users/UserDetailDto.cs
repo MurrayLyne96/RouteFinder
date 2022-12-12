@@ -8,5 +8,5 @@ public class UserDetailDto
     public DateTime DateOfBirth { get; set; }
     public string Email { get; set; }
     public string Role { get; set; }
-    public List<RouteViewModel> Routes { get; set; } = new();
+    public List<RouteDto> Routes { get; set; } = new();
 }

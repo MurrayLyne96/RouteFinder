@@ -6,6 +6,6 @@ public class RouteDetailDto
     public string RouteName { get; set; }
     public Guid UserId { get; set; }
     public int TypeId { get; set; }
-    public TypeViewModel Type { get; set; }
-    public List<PlotPointViewModel> PlotPoints { get; set; } = new();
+    public TypeDto Type { get; set; }
+    public List<PlotpointDto> PlotPoints { get; set; } = new();
 }

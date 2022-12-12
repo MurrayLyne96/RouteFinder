@@ -30,4 +30,6 @@ public class MapRoute
     public int TypeId { get; set; }
     
     public RouteType Type { get; set; }
+    
+    public List<Plotpoint> Plotpoints { get; set; }
 }

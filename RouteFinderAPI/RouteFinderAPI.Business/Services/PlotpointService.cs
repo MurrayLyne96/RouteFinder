@@ -1,4 +1,5 @@
 using RouteFinderAPI.DAL.Specifications.Plotpoints;
+using RouteFinderAPI.Services.Dto.Plotpoints;
 
 namespace RouteFinderAPI.Services;
 
@@ -13,21 +14,16 @@ public class PlotpointService : IPlotpointService
         _mapper = mapper;
     }
     
-    public async Task CreatePlotPoint(Guid routeId, PlotPointCreateModel model)
+    public async Task CreatePlotPoint(params PlotpointCreateDto[] model)
     {
-        var plotPointEntity = new Plotpoint()
-        {
-            Id = Guid.NewGuid(),
-            Created = DateTime.UtcNow,
-            LastModified = DateTime.UtcNow
-        };
+        var plotPointEntites = _mapper.Map<Plotpoint[]>(model);
 
-        _mapper.Map(model, plotPointEntity);
+        await _database.AddAsync(plotPointEntites);
 
-        await _database.AddAsync(plotPointEntity);
+        await _database.SaveChangesAsync();
     }
 
-    public async Task UpdatePlotPoint(Guid plotPointId, PlotPointCreateModel model)
+    public async Task UpdatePlotPoint(Guid plotPointId, PlotpointCreateDto model)
     {
         var plotPointEntity = await GetSinglePlotpoint(plotPointId);
 

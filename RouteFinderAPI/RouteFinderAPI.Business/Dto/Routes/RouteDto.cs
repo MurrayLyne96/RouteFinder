@@ -6,5 +6,5 @@ public class RouteDto
     public string RouteName { get; set; }
     public Guid UserId { get; set; }
     public int TypeId { get; set; }
-    public TypeViewModel Type { get; set; } = new();
+    public TypeDto Type { get; set; } = new();
 }

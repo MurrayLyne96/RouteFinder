@@ -2,8 +2,9 @@ namespace RouteFinderAPI.Services.Dto.Plotpoints;
 
 public class PlotpointCreateDto
 {
-    public float XCoordinate { get; set; } = default;
-    public float YCoordinate { get; set; } = default;
+    public double XCoordinate { get; set; }
+    public double YCoordinate { get; set; }
     public string Description { get; set; } = string.Empty;
-    public int PlotOrder { get; set; } = 0;
+    public int PlotOrder { get; set; }
+    public Guid MapRouteId { get; set; }
 }

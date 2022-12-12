@@ -18,8 +18,8 @@ public class UserService : IUserService
                     .OrderBy(x => x.LastModified))
                 .ToArrayAsync();
 
-    public async Task<UserDto> GetUserById(Guid userId) =>
-        await _mapper.ProjectTo<UserDto>(
+    public async Task<UserDto?> GetUserById(Guid userId) =>
+        await _mapper.ProjectTo<UserDto?>(
                 _database
                     .Get<User>()
                     .Where(new UserByIdSpec(userId))

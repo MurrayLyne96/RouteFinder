@@ -24,4 +24,6 @@ public class User
     public DateTime Created { get; set; }
     [Column("last_modified")]
     public DateTime LastModified { get; set; }
+    
+    public List<MapRoute> Routes { get; set; }
 }
