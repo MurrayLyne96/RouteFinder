@@ -1,7 +1,5 @@
-using RouteFinderAPI.Models.ViewModels.Base;
-
 namespace RouteFinderAPI.Models.ViewModels;
-public class UserUpdateViewModel : BaseViewModel
+public class UserUpdateViewModel
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

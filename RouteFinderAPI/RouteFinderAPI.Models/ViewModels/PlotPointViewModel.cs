@@ -1,8 +1,6 @@
-using RouteFinderAPI.Models.ViewModels.Base;
-
 namespace RouteFinderAPI.Models.ViewModels;
 
-public class PlotPointViewModel : BaseViewModel
+public class PlotPointViewModel
 {
     public Guid Id { get; set; } = Guid.Empty;
     public double XCoordinate { get; set; }

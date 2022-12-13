@@ -8,6 +8,8 @@ public class UserDetailViewModel
     public DateTime DateOfBirth { get; set; } = DateTime.Now;
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
+    public DateTime Lastmodified { get; set; }
+    public DateTime Created { get; set; }
     
     public List<RouteViewModel> Routes { get; set; } = new();
 }

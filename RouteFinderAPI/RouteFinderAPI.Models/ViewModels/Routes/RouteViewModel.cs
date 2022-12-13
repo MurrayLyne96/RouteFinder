@@ -1,8 +1,6 @@
-using RouteFinderAPI.Models.ViewModels.Base;
-
 namespace RouteFinderAPI.Models.ViewModels;
 
-public class RouteViewModel : BaseViewModel
+public class RouteViewModel
 {
     public Guid Id { get; set; } = Guid.Empty;
     public string RouteName { get; set; } = string.Empty;
