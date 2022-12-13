@@ -12,5 +12,8 @@ global using RouteFinderAPI.Services.Dto.Users;
 global using System.Net;
 global using AutoMapper;
 global using RouteFinderAPI.Services;
+global using RouteFinderAPI.Controllers.Base;
+global using System.Collections;
+global using System.Diagnostics.CodeAnalysis;
 
 
