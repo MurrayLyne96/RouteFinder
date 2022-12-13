@@ -1,10 +1,9 @@
-using System.Net;
 
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         [HttpPost]
         [Route("/auth")]

@@ -2,7 +2,7 @@ namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoutesController : ControllerBase
+    public class RoutesController : BaseController
     {
         private readonly IRouteService _routeService;
         private readonly IPlotpointService _plotpointService;
@@ -19,7 +19,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<List<RouteViewModel>>> GetAllRoutes()
         {
             var routes = await _routeService.GetAllRoutes();
-            return Ok(_mapper.Map<List<RouteViewModel>>(routes));
+            return OkOrNoListContent(_mapper.Map<List<RouteViewModel>>(routes));
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<RouteDetailViewModel>> GetRouteById(Guid routeId)
         {
             var route = await _routeService.GetRouteById(routeId);
-            return Ok(route);
+            return OkOrNoNotFound(route);
         }
 
         [HttpPost]
@@ -46,8 +46,8 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult> UpdateRouteById(Guid routeId, RouteUpdateViewModel model)
         {
             var routeUpdateDto = _mapper.Map<RouteUpdateDto>(model);
-            await _routeService.UpdateRouteById(routeId, routeUpdateDto);
-            return NoContent();
+            var result = await _routeService.UpdateRouteById(routeId, routeUpdateDto);
+            return NoContentOrNoNotFound(result);
         }
 
         [HttpDelete]
@@ -55,8 +55,8 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> DeleteRouteById(Guid routeId)
         {
-            await _routeService.DeleteRouteById(routeId);
-            return NoContent();
+            var result = await _routeService.DeleteRouteById(routeId);
+            return NoContentOrNoNotFound(result);
         }
 
         [HttpPost]
@@ -76,8 +76,8 @@ namespace RouteFinderAPI.Controllers
         {
             var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
             plotpointCreateDto.MapRouteId = routeId;
-            await _plotpointService.UpdatePlotPoint(plotPointId, plotpointCreateDto);
-            return NoContent();
+            var result = await _plotpointService.UpdatePlotPoint(plotPointId, plotpointCreateDto);
+            return NoContentOrNoNotFound(result);
         }
 
         [HttpDelete]
@@ -85,8 +85,8 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> DeletePlotPoint(Guid routeId, Guid plotPointId)
         {
-            await _plotpointService.DeletePlotPoint(plotPointId);
-            return NoContent();
+            var result = await _plotpointService.DeletePlotPoint(plotPointId);
+            return NoContentOrNoNotFound(result);
         }
         
     }

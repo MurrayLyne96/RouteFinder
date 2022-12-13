@@ -14,6 +14,7 @@ public class RouteDtoMappingProfile : AutoMapper.Profile
             .ForMember(x => x.Created, y => y.MapFrom(z => DateTime.UtcNow))
             .ForMember(x => x.LastModified, y => y.MapFrom(z => DateTime.UtcNow));
         CreateMap<RouteUpdateDto, MapRoute>()
+            .ForMember(x => x.RouteName, y => y.MapFrom(z => z.Name))
             .ForMember(x => x.LastModified, y => y.MapFrom(z => DateTime.UtcNow));
     }
 }

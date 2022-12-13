@@ -29,6 +29,11 @@ public class RouteService : IRouteService
         var routeEntity = new MapRoute();
         _mapper.Map(model, routeEntity);
 
+        if (string.IsNullOrEmpty(model.Name))
+        {
+            throw new Exception();
+        }
+
         await _database.AddAsync(routeEntity);
 
         await _database.SaveChangesAsync();
@@ -43,9 +48,8 @@ public class RouteService : IRouteService
         {
             return false;
         }
-            
-        routeEntity.RouteName = model.Name;
-        routeEntity.TypeId = model.TypeId;
+
+        _mapper.Map(model, routeEntity);
 
         await _database.SaveChangesAsync();
 
@@ -66,8 +70,9 @@ public class RouteService : IRouteService
         return true;
     }
 
-    private async Task<MapRoute> GetSingleRoute(Guid routeId)
-    {
-        return await _database.Get<MapRoute>().Where(new RouteByIdSpec(routeId)).SingleOrDefaultAsync();
-    }
+    private async Task<MapRoute?> GetSingleRoute(Guid routeId) =>
+        await _database
+            .Get<MapRoute>()
+            .Where(new RouteByIdSpec(routeId))
+            .SingleOrDefaultAsync();
 }

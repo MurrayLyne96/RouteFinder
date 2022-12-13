@@ -11,7 +11,7 @@ public class MapRoute
     public Guid Id { get; set; }
     
     [Column("route_name")]
-    public string? RouteName { get; set; }
+    public string RouteName { get; set; }
     
     [Column("created")]
     public DateTime Created { get; set; }

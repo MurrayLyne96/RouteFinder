@@ -23,25 +23,28 @@ public class PlotpointService : IPlotpointService
         await _database.SaveChangesAsync();
     }
 
-    public async Task UpdatePlotPoint(Guid plotPointId, PlotpointCreateDto model)
+    public async Task<bool> UpdatePlotPoint(Guid plotPointId, PlotpointCreateDto model)
     {
         var plotPointEntity = await GetSinglePlotpoint(plotPointId);
-
+        
+        if (plotPointEntity is null) return false;
+        
         _mapper.Map(model, plotPointEntity);
-        plotPointEntity.LastModified = DateTime.UtcNow;
-
-        await _database.SaveChangesAsync();
+        return await _database.SaveChangesAsync() > 0;
     }
 
-    public async Task DeletePlotPoint(Guid plotPointId)
+    public async Task<bool> DeletePlotPoint(Guid plotPointId)
     {
         var plotPointEntity = await GetSinglePlotpoint(plotPointId);
+        
+        if (plotPointEntity is null) return false;
+        
         _database.Delete(plotPointEntity);
-        await _database.SaveChangesAsync();
+        return await _database.SaveChangesAsync() > 0;
     }
 
-    private async Task<Plotpoint> GetSinglePlotpoint(Guid plotPointId)
-    {
-        return await _database.Get<Plotpoint>().Where(new PlotpointByIdSpec(plotPointId)).SingleOrDefaultAsync();
-    }
+    private async Task<Plotpoint?> GetSinglePlotpoint(Guid plotPointId) =>
+        await _database.Get<Plotpoint>()
+            .Where(new PlotpointByIdSpec(plotPointId))
+            .SingleOrDefaultAsync();
 }

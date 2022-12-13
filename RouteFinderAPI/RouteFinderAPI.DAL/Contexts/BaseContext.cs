@@ -60,7 +60,7 @@ namespace RouteFinderAPI.Data.Contexts
                 throw;
             }
         }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

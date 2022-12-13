@@ -2,7 +2,7 @@ namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
@@ -17,16 +17,16 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<UserViewModel[]>> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
-            return Ok(_mapper.Map<UserDto[]>(users));
+            return OkOrNoListContent(_mapper.Map<UserDto[]>(users));
         }
 
         [HttpGet]
         [Route("{userId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserDetailViewModel))]
-        public async Task<ActionResult<UserViewModel>> GetUser(Guid userId)
+        public async Task<ActionResult<UserDetailViewModel>> GetUser(Guid userId)
         {
             var user = await _userService.GetUserById(userId);
-            return Ok(_mapper.Map<UserViewModel>(user));
+            return OkOrNoNotFound(_mapper.Map<UserDetailViewModel>(user));
         }
         
         [HttpGet]
@@ -35,7 +35,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<RouteViewModel[]>> GetRoutesFromUser(Guid userId)
         {
             var routes = await _userService.GetRoutesFromUser(userId);
-            return Ok(_mapper.Map<RouteViewModel[]>(routes));
+            return OkOrNoListContent(_mapper.Map<RouteViewModel[]>(routes));
         }
 
         [HttpPost]
@@ -54,14 +54,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult> UpdateUser(Guid userId, UserUpdateViewModel user)
         {
             var userUpdateDto = _mapper.Map<UserUpdateDto>(user);
-            var result = await _userService.UpdateUser(userId, userUpdateDto);
-            
-            if (!result)
-            {
-                return NotFound();
-            }
-            
-            return NoContent();
+            return NoContentOrNoNotFound(await _userService.UpdateUser(userId, userUpdateDto));
         }
 
         [HttpDelete]
@@ -69,15 +62,10 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> DeleteUser(Guid userId)
         {
-            var result = await _userService.DeleteUser(userId);
-            
-            if (!result)
-            {
-                return NotFound();
-            }
-            
-            return NoContent();
+            return NoContentOrNoNotFound(await _userService.DeleteUser(userId));
         }
+        
+        
 
     }
 }

@@ -18,23 +18,18 @@ public class UserService : IUserService
                     .OrderBy(x => x.LastModified))
                 .ToArrayAsync();
 
-    public async Task<UserDto?> GetUserById(Guid userId) =>
-        await _mapper.ProjectTo<UserDto?>(
+    public async Task<UserDetailDto?> GetUserById(Guid userId) =>
+        await _mapper.ProjectTo<UserDetailDto?>(
                 _database
                     .Get<User>()
                     .Where(new UserByIdSpec(userId))
+                    .Include(x => x.Routes)
                     .OrderBy(x => x.LastModified))
             .SingleOrDefaultAsync();
 
     public async Task CreateUser(UserCreateDto userModel)
     {
-        var user = new User()
-        {
-            Id = Guid.NewGuid(),
-            Created = DateTime.UtcNow,
-            LastModified = DateTime.UtcNow
-        };
-        
+        var user = new User();
         _mapper.Map(userModel, user);
         await _database.AddAsync(user);
         await _database.SaveChangesAsync();
@@ -77,8 +72,9 @@ public class UserService : IUserService
         return true;
     }
 
-    private async Task<User> GetSingleUser(Guid userId)
-    {
-        return await _database.Get<User>().Where(new UserByIdSpec(userId)).SingleOrDefaultAsync();
-    }
+    private async Task<User?> GetSingleUser(Guid userId) => 
+        await _database
+            .Get<User>()
+            .Where(new UserByIdSpec(userId))
+            .SingleOrDefaultAsync();
 }
