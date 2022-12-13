@@ -20,22 +20,13 @@ builder.Services.AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContai
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IPlotpointService, PlotpointService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddAutoMapper(
-    typeof(TypeMappingProfile),
-    typeof(PlotpointMappingProfile),
-    typeof(RouteMappingProfile),
-    typeof(UserMappingProfile),
-    typeof(RouteDtoMappingProfile),
-    typeof(PlotpointDtoMappingProfile),
-    typeof(TypeMappingDtoProfile),
-    typeof(UserDtoMappingProfile)
-);
+builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typeof(Program).Assembly,
+    typeof(RouteService).Assembly);
 
 var app = builder.Build();
 
