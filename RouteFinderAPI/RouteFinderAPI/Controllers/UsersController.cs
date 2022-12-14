@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -40,6 +42,7 @@ namespace RouteFinderAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(Guid))]
+        [AllowAnonymous]
         public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
         {
             var userCreateDto = _mapper.Map<UserCreateDto>(user);

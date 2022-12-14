@@ -31,8 +31,8 @@ public class UserService : IUserService
 
     public async Task CreateUser(UserCreateDto userModel)
     {
-        var user = new User();
-        _mapper.Map(userModel, user);
+        var user = _mapper.Map<User>(userModel);
+        user.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
         await _database.AddAsync(user);
         await _database.SaveChangesAsync();
     }
@@ -56,7 +56,10 @@ public class UserService : IUserService
         }
         
         _mapper.Map(userModel, userEntity);
-
+        if (!string.IsNullOrWhiteSpace(userModel.Password))
+        {
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+        }
         await _database.SaveChangesAsync();
         return true;
     }

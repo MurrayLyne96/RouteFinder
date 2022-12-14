@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
