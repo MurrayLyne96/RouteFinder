@@ -29,11 +29,6 @@ public class RouteService : IRouteService
         var routeEntity = new MapRoute();
         _mapper.Map(model, routeEntity);
 
-        if (string.IsNullOrEmpty(model.Name))
-        {
-            throw new Exception();
-        }
-
         await _database.AddAsync(routeEntity);
 
         await _database.SaveChangesAsync();
