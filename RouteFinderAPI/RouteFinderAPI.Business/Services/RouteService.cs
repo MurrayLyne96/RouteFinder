@@ -14,7 +14,8 @@ public class RouteService : IRouteService
     public async Task<RouteDto[]> GetAllRoutes() => 
         await _mapper.ProjectTo<RouteDto>(
             _database.Get<MapRoute>()
-                .OrderBy(x => x.LastModified))
+                .OrderBy(x => x.LastModified)
+                .AsNoTracking())
             .ToArrayAsync();
 
     public async Task<RouteDetailDto?> GetRouteById(Guid routeId) =>
@@ -22,7 +23,8 @@ public class RouteService : IRouteService
             _database.Get<MapRoute>()
                 .Where(new RouteByIdSpec(routeId))
                 .Include(x => x.Type)
-                .Include(x => x.Plotpoints)).SingleOrDefaultAsync();
+                .Include(x => x.Plotpoints)
+                .AsNoTracking()).SingleOrDefaultAsync();
 
     public async Task<Guid> CreateRoute(RouteCreateDto model)
     {

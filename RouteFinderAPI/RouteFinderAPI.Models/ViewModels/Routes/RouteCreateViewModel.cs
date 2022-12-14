@@ -1,3 +1,5 @@
+using System.Data;
+using RouteFinderAPI.Common.Helpers;
 using RouteFinderAPI.Models.ViewModels;
 
 namespace RouteFinderAPI.Models.API;
@@ -18,6 +20,12 @@ public class RouteCreateViewValidator : AbstractValidator<RouteCreateViewModel>
         RuleFor(x => x.TypeId).NotEmpty().NotNull();
         RuleFor(x => x.UserId).NotEmpty().NotNull();
         RuleForEach(x => x.PlotPoints).NotEmpty().NotNull();
+        RuleFor(x => x.PlotPoints).Must(x => PlotPointValidator
+            .AllPlotPointsUnique(x.Select(y => y.PlotOrder).ToArray()))
+            .WithMessage("Please ensure that all plotpoint order values are unqiue");
+        RuleFor(x => x.PlotPoints).Must(x => PlotPointValidator
+            .AllPlotPointsinOrder(x.Select(y => y.PlotOrder).ToArray()))
+            .WithMessage("Please ensure all plotpoints are in order");
 
     }
 }
