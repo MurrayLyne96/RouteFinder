@@ -11,3 +11,4 @@ global using RouteFinderAPI.Services.Dto.Users;
 global using RouteFinderAPI.Services.Dto.Routes;
 global using RouteFinderAPI.Services.Dto.Types;
 global using RouteFinderAPI.Services.Dto.Plotpoints;
+global using RouteFinderAPI.Services.Dto.Roles;
