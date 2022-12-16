@@ -9,7 +9,7 @@ public class AuthService : IAuthService
     
     public async Task<UserDto?> Authenticate(string email, string password)
     {
-        var user = await _database.Get<User>().Where(new UserByEmailSpec(email)).SingleOrDefaultAsync();
+        var user = await _database.Get<User>().Where(new UserByEmailSpec(email)).Include(x => x.Role).SingleOrDefaultAsync();
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password)) return null;
 
         return _mapper.Map<UserDto?>(user);

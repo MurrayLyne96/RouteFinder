@@ -1,21 +1,29 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
 namespace RouteFinderAPI.Authentication;
 
-public class AccessAuthenticationHandler: AuthenticationHandler<AuthenticationSchemeOptions>
+public class AuthenticationHandler: AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly IHttpContextAccessor _contextAccessor;
     
-    public AccessAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor accessor) 
+    public AuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor accessor) 
         : base(options, logger, encoder, clock)
     {
         _contextAccessor = accessor;
-        HandleAuthenticateAsync();
     }
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var header = _contextAccessor.HttpContext?.Request.Headers["authorization"].ToString().Replace("Bearer ", string.Empty);
         var handler = new JwtSecurityTokenHandler();
-        var secretKey = Encoding.UTF8.GetBytes("IWASBORNINTHEUSA");
+        var secretKey = Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA");
         
         var validation = new TokenValidationParameters
         {

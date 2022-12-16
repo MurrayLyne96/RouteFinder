@@ -14,7 +14,7 @@ public class PlotpointService : IPlotpointService
         _mapper = mapper;
     }
     
-    public async Task CreatePlotPoint(params PlotpointCreateDto[] model)
+    public async Task CreatePlotPoint(params PlotpointCreateDto[] model) //TODO: Return boolean
     {
         var plotPointEntites = _mapper.Map<Plotpoint[]>(model);
 

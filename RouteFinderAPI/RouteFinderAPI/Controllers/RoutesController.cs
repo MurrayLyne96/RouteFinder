@@ -18,10 +18,11 @@ namespace RouteFinderAPI.Controllers
         
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        public async Task<ActionResult<List<RouteViewModel>>> GetAllRoutes()
+        [Authorize(Roles = "ADM")]
+        public async Task<ActionResult<RouteViewModel[]>> GetAllRoutes()
         {
             var routes = await _routeService.GetAllRoutes();
-            return OkOrNoListContent(_mapper.Map<List<RouteViewModel>>(routes));
+            return OkOrNoListContent(_mapper.Map<RouteViewModel[]>(routes));
         }
 
         [HttpGet]

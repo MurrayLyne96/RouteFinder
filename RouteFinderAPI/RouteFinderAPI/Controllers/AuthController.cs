@@ -30,7 +30,7 @@ namespace RouteFinderAPI.Controllers
         
         private string GenerateToken(UserDto user, int expirationTimeInMinutes)
         {
-            var secretKey = Encoding.UTF8.GetBytes("SomethingReallyRandom");
+            var secretKey = Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA");
             var securityKey = new SymmetricSecurityKey(secretKey);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var expiryTime = DateTime.UtcNow.AddMinutes(expirationTimeInMinutes);
@@ -42,7 +42,7 @@ namespace RouteFinderAPI.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.Role, user.Role.RoleName)
                 }),
                 Expires = expiryTime,
                 SigningCredentials = credentials
