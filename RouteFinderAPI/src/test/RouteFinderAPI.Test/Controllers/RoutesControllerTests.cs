@@ -6,6 +6,7 @@ using RouteFinderAPI.Controllers;
 using RouteFinderAPI.Models.API;
 using RouteFinderAPI.Models.ViewModels;
 using RouteFinderAPI.Services;
+using RouteFinderAPI.Services.Dto.Plotpoints;
 using RouteFinderAPI.Services.Dto.Routes;
 using RouteFinderAPI.Test.Extensions;
 
@@ -100,7 +101,7 @@ public class RoutesControllerTests
         // Assert
         actionResult.AssertResult<RouteDetailViewModel, NoContentResult>();
 
-        await _routeService.Received(1).GetRouteById();
+        await _routeService.Received(1).GetRouteById(Guid.NewGuid());
     }
     
     [Fact]
@@ -120,6 +121,118 @@ public class RoutesControllerTests
         actionResult.AssertResult<Guid, CreatedResult>();
 
         await _routeService.Received(1).CreateRoute(routeCreateDto);
+    }
+    
+    [Fact]
+    public async Task UpdateRoute_WhenRouteUpdated_ReturnsNoContent()
+    {
+        // Arrange
+        var routeUpdateViewModel = new RouteUpdateViewModel();
+        var routeUpdateDto = new RouteUpdateDto();
+        var id = Guid.NewGuid();
+        _routeService.UpdateRouteById(id, routeUpdateDto).Returns(true);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.UpdateRouteById(id, routeUpdateViewModel);
+        
+        // Assert
+        actionResult.AssertResult<NoContentResult>();
+
+        await _routeService.Received(1).UpdateRouteById(id, routeUpdateDto);
+    }
+    
+    [Fact]
+    public async Task UpdateRoute_WhenRouteUpdated_ReturnsNotFound()
+    {
+        // Arrange
+        var routeUpdateViewModel = new RouteUpdateViewModel();
+        var routeUpdateDto = new RouteUpdateDto();
+        var id = Guid.NewGuid();
+        _routeService.UpdateRouteById(id, routeUpdateDto).Returns(false);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.UpdateRouteById(id, routeUpdateViewModel);
+        
+        // Assert
+        actionResult.AssertResult<NotFoundResult>();
+
+        await _routeService.Received(1).UpdateRouteById(id, routeUpdateDto);
+    }
+    
+    [Fact]
+    public async Task DeleteRoute_WhenRouteDeleted_ReturnsNoContent()
+    {
+        var id = Guid.NewGuid();
+        _routeService.DeleteRouteById(id).Returns(true);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.DeleteRouteById(id);
+        
+        // Assert
+        actionResult.AssertResult<NoContentResult>();
+
+        await _routeService.Received(1).DeleteRouteById(id);
+    }
+    
+    [Fact]
+    public async Task DeleteRoute_WhenRouteDeleted_ReturnsNotFound()
+    {
+        var id = Guid.NewGuid();
+        _routeService.DeleteRouteById(id).Returns(true);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.DeleteRouteById(id);
+        
+        // Assert
+        actionResult.AssertResult<NotFoundResult>();
+
+        await _routeService.Received(1).DeleteRouteById(id);
+    }
+    
+    [Fact]
+    public async Task CreatePlotpoint_WhenPlotpointCreated_ReturnsNoContent()
+    {
+        var plotPointUpdateViewModel = new PlotPointCreateModel();
+        var plotPointCreateDto = new PlotpointCreateDto();
+        var routeId = Guid.NewGuid();
+        _plotpointService.CreatePlotPoint(plotPointCreateDto);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.CreatePlotPoint(routeId, plotPointUpdateViewModel);
+        
+        // Assert
+        actionResult.AssertResult<CreatedResult>();
+
+        await _plotpointService.Received(1).CreatePlotPoint(plotPointCreateDto);
+    }
+    
+    [Fact]
+    public async Task UpdatePlotpoint_WhenPlotpointUpdated_ReturnsNoContent()
+    {
+        var plotPointUpdateViewModel = new PlotPointCreateModel();
+        var plotPointUpdateDto = new PlotpointCreateDto();
+        var routeId = Guid.NewGuid();
+        _plotpointService.UpdatePlotPoint(routeId, plotPointUpdateDto).Returns(true);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.UpdatePlotPoint(routeId, Guid.NewGuid(),  plotPointUpdateViewModel);
+        
+        // Assert
+        actionResult.AssertResult<NoContentResult>();
+
+        await _plotpointService.Received(1).UpdatePlotPoint(Guid.NewGuid(), plotPointUpdateDto);
     }
     
     private RoutesController RetrieveController()
