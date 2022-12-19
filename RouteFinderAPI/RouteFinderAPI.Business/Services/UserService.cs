@@ -29,12 +29,13 @@ public class UserService : IUserService
                     .AsNoTracking())
             .SingleOrDefaultAsync();
 
-    public async Task CreateUser(UserCreateDto userModel)
+    public async Task<Guid> CreateUser(UserCreateDto userModel)
     {
         var user = _mapper.Map<User>(userModel);
         user.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
         await _database.AddAsync(user);
         await _database.SaveChangesAsync();
+        return user.Id;
     }
 
     public async Task<RouteDto[]> GetRoutesFromUser(Guid userId) =>

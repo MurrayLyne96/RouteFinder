@@ -19,7 +19,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<UserViewModel[]>> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
-            return OkOrNoListContent(_mapper.Map<UserDto[]>(users));
+            return OkOrNoListContent(_mapper.Map<UserViewModel[]>(users));
         }
 
         [HttpGet]
@@ -46,9 +46,9 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
         {
             var userCreateDto = _mapper.Map<UserCreateDto>(user);
-            await _userService.CreateUser(userCreateDto);
+            var id = await _userService.CreateUser(userCreateDto);
             
-            return Created(this.Url.ToString(), user);
+            return Created(this.Url.ToString(), id.ToString());
         }
 
         [HttpPut]

@@ -1,1 +1,12 @@
+global using AutoMapper;
+global using FluentAssertions;
+global using Microsoft.AspNetCore.Mvc;
+global using NSubstitute;
+global using RouteFinderAPI.Controllers;
+global using RouteFinderAPI.Models.API;
+global using RouteFinderAPI.Models.ViewModels;
+global using RouteFinderAPI.Services;
+global using RouteFinderAPI.Services.Dto.Plotpoints;
+global using RouteFinderAPI.Services.Dto.Routes;
+global using RouteFinderAPI.Test.Extensions;
 global using Xunit;

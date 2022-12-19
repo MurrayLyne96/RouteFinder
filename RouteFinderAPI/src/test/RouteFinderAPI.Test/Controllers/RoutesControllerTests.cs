@@ -1,15 +1,3 @@
-using AutoMapper;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using RouteFinderAPI.Controllers;
-using RouteFinderAPI.Models.API;
-using RouteFinderAPI.Models.ViewModels;
-using RouteFinderAPI.Services;
-using RouteFinderAPI.Services.Dto.Plotpoints;
-using RouteFinderAPI.Services.Dto.Routes;
-using RouteFinderAPI.Test.Extensions;
-
 namespace RouteFinderAPI.Test.Controllers;
 
 public class RoutesControllerTests
@@ -144,7 +132,7 @@ public class RoutesControllerTests
     }
     
     [Fact]
-    public async Task UpdateRoute_WhenRouteUpdated_ReturnsNotFound()
+    public async Task UpdateRoute_WhenRouteNotUpdated_ReturnsNotFound()
     {
         // Arrange
         var routeUpdateViewModel = new RouteUpdateViewModel();
@@ -181,8 +169,9 @@ public class RoutesControllerTests
     }
     
     [Fact]
-    public async Task DeleteRoute_WhenRouteDeleted_ReturnsNotFound()
+    public async Task DeleteRoute_WhenRouteNotDeleted_ReturnsNotFound()
     {
+        // arrange
         var id = Guid.NewGuid();
         _routeService.DeleteRouteById(id).Returns(true);
 
@@ -200,6 +189,7 @@ public class RoutesControllerTests
     [Fact]
     public async Task CreatePlotpoint_WhenPlotpointCreated_ReturnsNoContent()
     {
+        // arrange
         var plotPointUpdateViewModel = new PlotPointCreateModel();
         var plotPointCreateDto = new PlotpointCreateDto();
         var routeId = Guid.NewGuid();
@@ -217,8 +207,9 @@ public class RoutesControllerTests
     }
     
     [Fact]
-    public async Task UpdatePlotpoint_WhenPlotpointUpdated_ReturnsNoContent()
+    public async Task UpdatePlotPoint_WhenPlotPointUpdated_ReturnsNoContent()
     {
+        // Arrange
         var plotPointUpdateViewModel = new PlotPointCreateModel();
         var plotPointUpdateDto = new PlotpointCreateDto();
         var routeId = Guid.NewGuid();
@@ -235,6 +226,62 @@ public class RoutesControllerTests
         await _plotpointService.Received(1).UpdatePlotPoint(Guid.NewGuid(), plotPointUpdateDto);
     }
     
+    [Fact]
+    public async Task UpdatePlotPoint_WhenPlotPointNotUpdated_ReturnsNotFound()
+    {
+        // Arrange
+        var plotPointUpdateViewModel = new PlotPointCreateModel();
+        var plotPointUpdateDto = new PlotpointCreateDto();
+        var routeId = Guid.NewGuid();
+        _plotpointService.UpdatePlotPoint(routeId, plotPointUpdateDto).Returns(false);
+
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.UpdatePlotPoint(routeId, Guid.NewGuid(),  plotPointUpdateViewModel);
+        
+        // Assert
+        actionResult.AssertResult<NotFoundResult>();
+
+        await _plotpointService.Received(1).UpdatePlotPoint(Guid.NewGuid(), plotPointUpdateDto);
+    }
+
+    [Fact]
+    public async Task DeletePlotPoint_WhenPlotPointDeleted_ReturnsNoContent()
+    {
+        // Arrange
+        var routeId = Guid.NewGuid();
+        var plotPointId = Guid.NewGuid();
+        _plotpointService.DeletePlotPoint(plotPointId).Returns(true);
+        var controller = RetrieveController();
+
+        // Act
+        var actionResult = await controller.DeletePlotPoint(routeId, plotPointId);
+        
+        // Assert
+        actionResult.AssertResult<NoContentResult>();
+
+        await _plotpointService.Received(1).DeletePlotPoint(plotPointId);
+    }
+    
+    [Fact]
+    public async Task DeletePlotPoint_WhenPlotPointNotDeleted_ReturnsNotFound()
+    {
+        // Arrange
+        var routeId = Guid.NewGuid();
+        var plotPointId = Guid.NewGuid();
+        _plotpointService.DeletePlotPoint(plotPointId).Returns(false);
+        var controller = RetrieveController();
+
+        // Act
+        var actionResult = await controller.DeletePlotPoint(routeId, plotPointId);
+        
+        // Assert
+        actionResult.AssertResult<NotFoundResult>();
+
+        await _plotpointService.Received(1).DeletePlotPoint(plotPointId);
+    }
+
     private RoutesController RetrieveController()
     {
         return new RoutesController(_routeService, _plotpointService, _mapper);
