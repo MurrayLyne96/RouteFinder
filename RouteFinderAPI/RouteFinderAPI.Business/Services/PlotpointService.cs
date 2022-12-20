@@ -13,14 +13,15 @@ public class PlotpointService : IPlotpointService
         _database = database;
         _mapper = mapper;
     }
-    
-    public async Task CreatePlotPoint(params PlotpointCreateDto[] model) //TODO: Return boolean
+
+    public async Task<bool> CreatePlotPoint(params PlotpointCreateDto[] model)
     {
         var plotPointEntites = _mapper.Map<Plotpoint[]>(model);
 
         await _database.AddAsync(plotPointEntites);
 
         await _database.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> UpdatePlotPoint(Guid plotPointId, PlotpointCreateDto model)

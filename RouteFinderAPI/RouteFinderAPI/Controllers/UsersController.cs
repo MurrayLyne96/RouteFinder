@@ -43,12 +43,12 @@ namespace RouteFinderAPI.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(Guid))]
         [AllowAnonymous]
-        public async Task<ActionResult<Guid>> CreateUser(UserCreateViewModel user)
+        public async Task<ObjectResult> CreateUser(UserCreateViewModel user)
         {
             var userCreateDto = _mapper.Map<UserCreateDto>(user);
             var id = await _userService.CreateUser(userCreateDto);
             
-            return Created(this.Url.ToString(), id.ToString());
+            return StatusCode((int)HttpStatusCode.Created, id.ToString());
         }
 
         [HttpPut]
