@@ -1,3 +1,4 @@
+using System.Net;
 using NSubstitute.ReturnsExtensions;
 using RouteFinderAPI.Services.Dto.Users;
 
@@ -42,11 +43,8 @@ public class UserControllerTests
     public async Task GetAllUsers_WhenUsersNotFound_ReturnNoListContent()
     {
         // Arrange
-        var userDtos = new UserDto[0];
-        var userViewModels = new UserViewModel[0];
-
-        _userService.GetAllUsers().Returns(userDtos);
-        _mapper.Map<UserViewModel[]>(userDtos).Returns(userViewModels);
+        _userService.GetAllUsers().Returns(Array.Empty<UserDto>());
+        _mapper.Map<UserViewModel[]>(Array.Empty<UserDto>()).Returns(Array.Empty<UserViewModel>());
 
         var controller = RetrieveController();
         
@@ -54,12 +52,10 @@ public class UserControllerTests
         var actionResult = await controller.GetAllUsers();
         
         // Assert
-        var result = actionResult.AssertObjectResult<UserViewModel[], NoContentResult>();
-
-        result.Should().BeSameAs(userViewModels);
+        actionResult.AssertResult<UserViewModel[], NoContentResult>();
 
         await _userService.Received(1).GetAllUsers();
-        _mapper.Received(1).Map<UserViewModel[]>(userDtos);
+        _mapper.Received(1).Map<UserViewModel[]>(Array.Empty<UserDto>());
     }
     
     [Fact]
@@ -68,22 +64,23 @@ public class UserControllerTests
         // Arrange
         var userDto = new UserDetailDto();
         var userViewModel = new UserDetailViewModel();
-
-        _userService.GetUserById(Guid.NewGuid()).Returns(userDto);
+        var userId = Guid.NewGuid();
+        
+        _userService.GetUserById(userId).Returns(userDto);
         _mapper.Map<UserDetailViewModel>(userDto).Returns(userViewModel);
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.GetUser(Guid.NewGuid());
+        var actionResult = await controller.GetUser(userId);
         
         // Assert
         var result = actionResult.AssertObjectResult<UserDetailViewModel, OkObjectResult>();
 
         result.Should().BeSameAs(userViewModel);
 
-        await _userService.Received(1).GetUserById(Guid.NewGuid());
-        _mapper.Received(1).Map<UserViewModel[]>(userDto);
+        await _userService.Received(1).GetUserById(userId);
+        _mapper.Received(1).Map<UserDetailViewModel>(userDto);
     }
     
     [Fact]
@@ -92,20 +89,20 @@ public class UserControllerTests
         // Arrange
         var userDto = new UserDetailDto();
         var userViewModel = new UserDetailViewModel();
-
-        _userService.GetUserById(Guid.NewGuid()).ReturnsNull();
+        var userId = Guid.NewGuid();
+        
+        _userService.GetUserById(userId).ReturnsNull();
         _mapper.Map<UserDetailViewModel>(userDto).ReturnsNull();
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.GetUser(Guid.NewGuid());
+        var actionResult = await controller.GetUser(userId);
         
         // Assert
-        var result = actionResult.AssertObjectResult<UserDetailViewModel, NotFoundResult>();
+        actionResult.AssertResult<UserDetailViewModel, NotFoundResult>();
 
-        await _userService.Received(1).GetUserById(Guid.NewGuid());
-        _mapper.Received(1).Map<UserViewModel[]>(userDto);
+        await _userService.Received(1).GetUserById(userId);
     }
 
     [Fact]
@@ -114,21 +111,21 @@ public class UserControllerTests
         // Arrange
         var routeDtos = new RouteDto[] { new RouteDto() };
         var routeViewModels = new RouteViewModel[] { new RouteViewModel() };
-
-        _userService.GetRoutesFromUser(Guid.NewGuid()).Returns(routeDtos);
+        var userId = Guid.NewGuid();
+        _userService.GetRoutesFromUser(userId).Returns(routeDtos);
         _mapper.Map<RouteViewModel[]>(routeDtos).Returns(routeViewModels);
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.GetRoutesFromUser(Guid.NewGuid());
+        var actionResult = await controller.GetRoutesFromUser(userId);
         
         // Assert
         var result = actionResult.AssertObjectResult<RouteViewModel[], OkObjectResult>();
 
         result.Should().BeSameAs(routeViewModels);
 
-        await _userService.Received(1).GetRoutesFromUser(Guid.NewGuid());
+        await _userService.Received(1).GetRoutesFromUser(userId);
         _mapper.Received(1).Map<RouteViewModel[]>(routeDtos);
     }
     
@@ -138,22 +135,19 @@ public class UserControllerTests
         // Arrange
         var routeDtos = new RouteDto[] { new RouteDto() };
         var routeViewModels = new RouteViewModel[] { new RouteViewModel() };
-
+        var userId = Guid.NewGuid();
         _userService.GetRoutesFromUser(Guid.NewGuid()).Returns(routeDtos);
         _mapper.Map<RouteViewModel[]>(routeDtos).Returns(routeViewModels);
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.GetRoutesFromUser(Guid.NewGuid());
+        var actionResult = await controller.GetRoutesFromUser(userId);
         
         // Assert
-        var result = actionResult.AssertObjectResult<RouteViewModel[], OkObjectResult>();
-
-        result.Should().BeSameAs(routeViewModels);
-
-        await _userService.Received(1).GetRoutesFromUser(Guid.NewGuid());
-        _mapper.Received(1).Map<RouteViewModel[]>(routeDtos);
+        actionResult.AssertResult<RouteViewModel[], NoContentResult>();
+        
+        await _userService.Received(1).GetRoutesFromUser(userId);
     }
     
     [Fact]
@@ -163,16 +157,20 @@ public class UserControllerTests
         var userCreateDto = new UserCreateDto();
         var userViewModel = new UserCreateViewModel();
 
-        _userService.CreateUser(userCreateDto).ReturnsNull();
+        _userService.CreateUser(userCreateDto).Returns(Guid.NewGuid());
         _mapper.Map<UserCreateDto>(userViewModel).Returns(userCreateDto);
 
         var controller = RetrieveController();
         
         // Act
         var actionResult = await controller.CreateUser(userViewModel);
+        Guid guidValue;
+        var isGuid = Guid.TryParse(actionResult.Value.ToString(), out guidValue);
         
         // Assert
-        actionResult.AssertObjectResult<Guid, CreatedResult>();
+        actionResult.StatusCode.Should().Be((int)HttpStatusCode.Created);
+
+        isGuid.Should().Be(true);
 
         await _userService.Received(1).CreateUser(userCreateDto);
         _mapper.Received(1).Map<UserCreateDto>(userViewModel);
@@ -184,19 +182,20 @@ public class UserControllerTests
         // Arrange
         var userUpdateDto = new UserUpdateDto();
         var userViewModel = new UserUpdateViewModel();
-
-        _userService.UpdateUser(Guid.NewGuid(), userUpdateDto).Returns(true);
+        var userId = Guid.NewGuid();
+        
+        _userService.UpdateUser(userId, userUpdateDto).Returns(true);
         _mapper.Map<UserUpdateDto>(userViewModel).Returns(userUpdateDto);
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.UpdateUser(Guid.NewGuid(), userViewModel);
+        var actionResult = await controller.UpdateUser(userId, userViewModel);
         
         // Assert
         actionResult.AssertResult<NoContentResult>();
 
-        await _userService.Received(1).UpdateUser(Guid.NewGuid(), userUpdateDto);
+        await _userService.Received(1).UpdateUser(userId, userUpdateDto);
         _mapper.Received(1).Map<UserUpdateDto>(userViewModel);
     }
     
@@ -206,20 +205,55 @@ public class UserControllerTests
         // Arrange
         var userUpdateDto = new UserUpdateDto();
         var userViewModel = new UserUpdateViewModel();
-
-        _userService.UpdateUser(Guid.NewGuid(), userUpdateDto).Returns(false);
+        var userId = Guid.NewGuid();
+        
+        _userService.UpdateUser(userId, userUpdateDto).Returns(false);
         _mapper.Map<UserUpdateDto>(userViewModel).Returns(userUpdateDto);
 
         var controller = RetrieveController();
         
         // Act
-        var actionResult = await controller.UpdateUser(Guid.NewGuid(), userViewModel);
+        var actionResult = await controller.UpdateUser(userId, userViewModel);
         
         // Assert
         actionResult.AssertResult<NotFoundResult>();
 
-        await _userService.Received(1).UpdateUser(Guid.NewGuid(), userUpdateDto);
+        await _userService.Received(1).UpdateUser(userId, userUpdateDto);
         _mapper.Received(1).Map<UserUpdateDto>(userViewModel);
+    }
+    
+    [Fact]
+    public async Task DeleteUser_WhenUserIsDeleted_ReturnNoContentResult()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        _userService.DeleteUser(userId).Returns(true);
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.DeleteUser(userId);
+        
+        // Assert
+        actionResult.AssertResult<NoContentResult>();
+
+        await _userService.Received(1).DeleteUser(userId);
+    }
+    
+    [Fact]
+    public async Task DeleteUser_WhenUserIsNotDeleted_ReturnNotFoundResult()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        _userService.DeleteUser(Guid.NewGuid()).Returns(false);
+        var controller = RetrieveController();
+        
+        // Act
+        var actionResult = await controller.DeleteUser(userId);
+        
+        // Assert
+        actionResult.AssertResult<NotFoundResult>();
+
+        await _userService.Received(1).DeleteUser(userId);
     }
     
     private UsersController RetrieveController()

@@ -1,4 +1,5 @@
 using NSubstitute.ReturnsExtensions;
+using RouteFinderAPI.Services.Dto.Roles;
 using RouteFinderAPI.Services.Dto.Users;
 
 namespace RouteFinderAPI.Test.Controllers;
@@ -17,16 +18,21 @@ public class AuthControllerTests
     {
         // Arrange
         var model = new UserAuthModel();
+        model.Email = "test@test.com";
+        model.Password = "password";
         var user = new UserDto();
-        
+        user.Email = "test@test.com";
+        user.Id = Guid.NewGuid();
+        user.Role = new RoleDto();
+        user.Role.RoleName = "USR";
+
         _authService.Authenticate(model.Email, model.Password).Returns(user);
 
         var controller = RetrieveController();
         
         // Act
         var actionResult = await controller.Authenticate(model);
-        
-        actionResult.AssertResult<TokenModel, OkResult>();
+         actionResult.AssertObjectResult<TokenModel, OkObjectResult>();
 
         await _authService.Received(1).Authenticate(model.Email, model.Password);
     }
