@@ -15,8 +15,7 @@ public class UserService : IUserService
         await _mapper.ProjectTo<UserDto>(
             _database
                     .Get<User>()
-                    .OrderBy(x => x.LastModified)
-                    .AsNoTracking())
+                    .OrderBy(x => x.LastModified))
                 .ToArrayAsync();
 
     public async Task<UserDetailDto?> GetUserById(Guid userId) =>
@@ -24,9 +23,7 @@ public class UserService : IUserService
             _database
                     .Get<User>()
                     .Where(new UserByIdSpec(userId))
-                    .Include(x => x.Routes)
-                    .OrderBy(x => x.LastModified)
-                    .AsNoTracking())
+                    .OrderBy(x => x.LastModified))
             .SingleOrDefaultAsync();
 
     public async Task<Guid> CreateUser(UserCreateDto userModel)
@@ -42,8 +39,7 @@ public class UserService : IUserService
         await _mapper.ProjectTo<RouteDto>(
             _database
                     .Get<MapRoute>()
-                    .Where(new MapRouteByUserIdSpec(userId))
-                    .AsNoTracking())
+                    .Where(new MapRouteByUserIdSpec(userId)))
             .ToArrayAsync();
                 
 
