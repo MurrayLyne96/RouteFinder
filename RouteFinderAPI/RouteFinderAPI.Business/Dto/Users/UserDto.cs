@@ -1,3 +1,5 @@
+using RouteFinderAPI.Services.Dto.Roles;
+
 namespace RouteFinderAPI.Services.Dto.Users;
 
 public class UserDto
@@ -7,5 +9,6 @@ public class UserDto
     public string LastName { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string Email { get; set; }
-    public string Role { get; set; }
+    public Guid RoleId { get; set; }
+    public RoleDto Role { get; set; }
 }

@@ -1,38 +1,37 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.Filters;
+using MimeTypes = System.Net.Mime.MediaTypeNames;
 
 namespace RouteFinderAPI.Middleware;
 //TODO: add libaries for commented out code. Please remove this comment when it is done.
-public class ExceptionFilter
+
+[ExcludeFromCodeCoverage]
+internal class ExceptionFilter : IExceptionFilter
 {
-    [ExcludeFromCodeCoverage]
-    internal class GeneralExceptionFilter : IExceptionFilter
+    private readonly IWebHostEnvironment _hostingEnvironment;
+
+    public ExceptionFilter(IWebHostEnvironment hostingEnvironment) => _hostingEnvironment = hostingEnvironment;
+
+    public void OnException(ExceptionContext context)
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        if (context == null) return;
 
-        public GeneralExceptionFilter(IWebHostEnvironment hostingEnvironment) => _hostingEnvironment = hostingEnvironment;
-
-        public void OnException(ExceptionContext context)
+        var response = context.HttpContext.Response;
+        response.StatusCode = (int)RetrieveStatusCodeForException(context.Exception);
+        response.ContentType = MimeTypes.Application.Json;
+        context.Result = new JsonResult(new
         {
-            if (context == null) return;
+            error = new[] { context.Exception.Message },
+            stackTrace = _hostingEnvironment.IsDevelopment() ? context.Exception.StackTrace : string.Empty,
+        });
+    }
+    
+    private static HttpStatusCode RetrieveStatusCodeForException(System.Exception exception)
+    {
+        if (exception is ArgumentException) return HttpStatusCode.BadRequest;
+        //if (exception is NotFoundException) return HttpStatusCode.NotFound; 
 
-            var response = context.HttpContext.Response;
-            response.StatusCode = (int)RetrieveStatusCodeForException(context.Exception);
-            //response.ContentType = MimeTypes.Application.Json;
-            context.Result = new JsonResult(new
-            {
-                error = new[] { context.Exception.Message },
-                stackTrace = _hostingEnvironment.IsDevelopment() ? context.Exception.StackTrace : string.Empty,
-            });
-        }
-        
-        private static HttpStatusCode RetrieveStatusCodeForException(System.Exception exception)
-        {
-            if (exception is ArgumentException) return HttpStatusCode.BadRequest;
-            //if (exception is NotFoundException) return HttpStatusCode.NotFound; 
-
-            return HttpStatusCode.InternalServerError;
-        }
+        return HttpStatusCode.InternalServerError;
     }
 }

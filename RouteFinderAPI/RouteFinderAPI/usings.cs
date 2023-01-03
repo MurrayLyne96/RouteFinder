@@ -16,4 +16,3 @@ global using RouteFinderAPI.Controllers.Base;
 global using System.Collections;
 global using System.Diagnostics.CodeAnalysis;
 
-

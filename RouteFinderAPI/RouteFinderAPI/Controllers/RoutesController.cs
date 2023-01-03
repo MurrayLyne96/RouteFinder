@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -16,10 +18,11 @@ namespace RouteFinderAPI.Controllers
         
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        public async Task<ActionResult<List<RouteViewModel>>> GetAllRoutes()
+        [Authorize(Roles = "ADM")]
+        public async Task<ActionResult<RouteViewModel[]>> GetAllRoutes()
         {
             var routes = await _routeService.GetAllRoutes();
-            return OkOrNoListContent(_mapper.Map<List<RouteViewModel>>(routes));
+            return OkOrNoListContent(_mapper.Map<RouteViewModel[]>(routes));
         }
 
         [HttpGet]
@@ -28,16 +31,16 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<RouteDetailViewModel>> GetRouteById(Guid routeId)
         {
             var route = await _routeService.GetRouteById(routeId);
-            return OkOrNoNotFound(route);
+            return OkOrNoNotFound(_mapper.Map<RouteDetailViewModel>(route));
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult<Guid>> CreateRoute(RouteCreateViewModel model)
+        public async Task<ActionResult> CreateRoute(RouteCreateViewModel model)
         {
             var routeCreateDto = _mapper.Map<RouteCreateDto>(model);
             var routeId = await _routeService.CreateRoute(routeCreateDto);
-            return Created(this.Url.ToString(), routeId.ToString());
+            return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpPut]
@@ -61,12 +64,12 @@ namespace RouteFinderAPI.Controllers
 
         [HttpPost]
         [Route("{routeId:guid}/plotpoints")]
-        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(PlotPointCreateModel))]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<ActionResult> CreatePlotPoint(Guid routeId, PlotPointCreateModel model)
         {
             var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
             await _plotpointService.CreatePlotPoint(plotpointCreateDto);
-            return Created(this.Url.ToString(), model);
+            return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpPut]

@@ -14,5 +14,7 @@ public class RouteFinderContext : BaseContext, IRouteFinderDatabase
     
     public virtual DbSet<RouteType> Types { get; set; }
     
+    public virtual DbSet<Role> Roles { get; set;  }
+
     public virtual DbSet<Plotpoint> Plotpoints { get; set; }
 }

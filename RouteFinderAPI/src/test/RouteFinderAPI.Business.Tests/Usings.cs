@@ -1,0 +1,13 @@
+global using AutoMapper;
+global using FluentAssertions;
+global using NSubstitute;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using AutoFixture;
+global using MockQueryable.NSubstitute;
+global using RouteFinderAPI.Data.Entities;
+global using RouteFinderAPI.Data.Interfaces;
+global using RouteFinderAPI.Services;
+global using RouteFinderAPI.Services.Dto.Routes;
+global using Xunit;

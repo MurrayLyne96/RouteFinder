@@ -15,8 +15,7 @@ public class UserService : IUserService
         await _mapper.ProjectTo<UserDto>(
             _database
                     .Get<User>()
-                    .OrderBy(x => x.LastModified)
-                    .AsNoTracking())
+                    .OrderBy(x => x.LastModified))
                 .ToArrayAsync();
 
     public async Task<UserDetailDto?> GetUserById(Guid userId) =>
@@ -24,25 +23,23 @@ public class UserService : IUserService
             _database
                     .Get<User>()
                     .Where(new UserByIdSpec(userId))
-                    .Include(x => x.Routes)
-                    .OrderBy(x => x.LastModified)
-                    .AsNoTracking())
+                    .OrderBy(x => x.LastModified))
             .SingleOrDefaultAsync();
 
-    public async Task CreateUser(UserCreateDto userModel)
+    public async Task<Guid> CreateUser(UserCreateDto userModel)
     {
-        var user = new User();
-        _mapper.Map(userModel, user);
+        var user = _mapper.Map<User>(userModel);
+        user.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
         await _database.AddAsync(user);
         await _database.SaveChangesAsync();
+        return user.Id;
     }
 
     public async Task<RouteDto[]> GetRoutesFromUser(Guid userId) =>
         await _mapper.ProjectTo<RouteDto>(
             _database
                     .Get<MapRoute>()
-                    .Where(new MapRouteByUserIdSpec(userId))
-                    .AsNoTracking())
+                    .Where(new MapRouteByUserIdSpec(userId)))
             .ToArrayAsync();
                 
 
@@ -56,7 +53,10 @@ public class UserService : IUserService
         }
         
         _mapper.Map(userModel, userEntity);
-
+        if (!string.IsNullOrWhiteSpace(userModel.Password))
+        {
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+        }
         await _database.SaveChangesAsync();
         return true;
     }
