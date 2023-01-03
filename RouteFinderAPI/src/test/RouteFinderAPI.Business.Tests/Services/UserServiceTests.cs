@@ -53,6 +53,7 @@ public class UserServiceTests
             ToList()
             .AsQueryable()
             .BuildMock();
+            
         var userToRetrieve = users.AsQueryable().First();
         
         var userDto = _fixture.Create<UserDetailDto>();
@@ -100,6 +101,178 @@ public class UserServiceTests
         // Assert
         result.Should().BeNull();
         _mapper.Received(1).ProjectTo<UserDetailDto>(Arg.Is<IQueryable<User>>(x => x.Count() == 0));
+    }
+
+    [Fact]
+    public async Task CreateUser_WhenUserIsCreated_ReturnGuid() {
+        // Arrange
+        var guid = Guid.NewGuid();
+        var user = _fixture.Build<User>().With(x => x.Id, guid).Without(x => x.Password).Create();
+        var userDto = _fixture.Create<UserCreateDto>();
+
+        userDto.Password = "testpassword";
+
+        _mapper.Map<User>(Arg.Any<UserCreateDto>()).Returns(user);
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.CreateUser(userDto);
+        
+        // Assert
+        result.Should().Be(guid);
+        _mapper.Received(1).Map<User>(Arg.Any<UserCreateDto>());
+        await _database.Received(1).AddAsync(Arg.Any<User>());
+        await _database.Received(1).SaveChangesAsync();
+    }
+
+    [Fact]
+    public async Task GetRoutesFromUser_WhenRoutesFound_ReturnRoutes()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var routes = _fixture.Build<MapRoute>()
+        .With(x => x.UserId, userId)
+        .CreateMany<MapRoute>(10)
+        .ToList()
+        .AsQueryable()
+        .BuildMock();
+
+        var routeDtos = _fixture
+        .Build<RouteDto>()
+        .With(x => x.UserId, userId)
+        .CreateMany<RouteDto>(10)
+        .ToList()
+        .AsQueryable()
+        .BuildMock();
+        
+        _database.Get<MapRoute>().Returns(routes);
+
+        _mapper.ProjectTo<RouteDto>(Arg.Any<IQueryable<MapRoute>>()).Returns(routeDtos);
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.GetRoutesFromUser(userId);
+
+        // Assert
+        result.Should().BeEquivalentTo(routeDtos);
+        _mapper.Received(1).ProjectTo<RouteDto>(Arg.Is<IQueryable<MapRoute>>(x => x.Count() == 10));
+    }
+
+    [Fact]
+    public async Task UpdateUser_WhenUserIsUpdated_ReturnTrue()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var user = _fixture.Build<User>().With(x => x.Id, userId).Create();
+
+        var users = _fixture.CreateMany<User>(10).ToList();
+        users.Add(user);
+        var usersQuery = users.AsQueryable().BuildMock();
+
+        var userUpdatedDto = _fixture.Create<UserUpdateDto>();
+
+        _database.Get<User>().Returns(usersQuery);
+
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.UpdateUser(userId, userUpdatedDto);
+
+        // Assert
+        result.Should().Be(true);
+        _mapper.Received(1).Map(Arg.Any<UserUpdateDto>(), Arg.Any<User>());
+        await _database.Received(1).SaveChangesAsync();
+    }
+
+    public async Task UpdateUser_WhenUserIsUpdatedWithNoPassword_ReturnTrue()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var user = _fixture.Build<User>().With(x => x.Id, userId).Create();
+
+        var users = _fixture.CreateMany<User>(10).ToList();
+        users.Add(user);
+        var usersQuery = users.AsQueryable().BuildMock();
+
+        var userUpdatedDto = _fixture.Build<UserUpdateDto>().Without(x => x.Password).Create();
+
+        _database.Get<User>().Returns(usersQuery);
+
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.UpdateUser(userId, userUpdatedDto);
+
+        // Assert
+        result.Should().Be(true);
+        _mapper.Received(1).Map(Arg.Any<UserUpdateDto>(), Arg.Any<User>());
+        await _database.Received(1).SaveChangesAsync();
+    }
+
+    [Fact]
+    public async Task UpdateUser_WhenUserIsNotUpdated_ReturnFalse()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        var users = _fixture.CreateMany<User>(10).ToList();
+        var usersQuery = users.AsQueryable().BuildMock();
+
+        var userUpdatedDto = _fixture.Create<UserUpdateDto>();
+
+        _database.Get<User>().Returns(usersQuery);
+
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.UpdateUser(userId, userUpdatedDto);
+
+        // Assert
+        result.Should().Be(false);
+    }
+
+    [Fact]
+    public async Task DeleteUser_WhenUserIsDeleted_ReturnTrue()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var user = _fixture.Build<User>().With(x => x.Id, userId).Create();
+
+        var users = _fixture.CreateMany<User>(10).ToList();
+        users.Add(user);
+        var usersQuery = users.AsQueryable().BuildMock();
+
+        _database.Get<User>().Returns(usersQuery);
+
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.DeleteUser(userId);
+
+        // Assert
+        result.Should().Be(true);
+        _database.Received(1).Delete(Arg.Any<User>());
+        await _database.Received(1).SaveChangesAsync();
+    }
+
+    [Fact]
+    public async Task DeleteUser_WhenUserIsNotDeleted_ReturnFalse()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        var users = _fixture.CreateMany<User>(10).ToList();
+        var usersQuery = users.AsQueryable().BuildMock();
+
+        _database.Get<User>().Returns(usersQuery);
+
+        var service = RetrieveService();
+
+        // Act
+        var result = await service.DeleteUser(userId);
+
+        // Assert
+        result.Should().Be(false);
     }
     
     
