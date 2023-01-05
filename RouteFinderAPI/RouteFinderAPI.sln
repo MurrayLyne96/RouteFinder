@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Test", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Business.Tests", "src\test\RouteFinderAPI.Business.Tests\RouteFinderAPI.Business.Tests.csproj", "{B60E937B-BF3C-4473-872D-CA5625DA1987}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteFinderAPI.Integration.Tests", "src\test\RouteFinderAPI.Integration.Tests\RouteFinderAPI.Integration.Tests.csproj", "{5329A23C-D9D0-4886-B164-F07916AE6F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,10 +57,15 @@ Global
 		{B60E937B-BF3C-4473-872D-CA5625DA1987}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B60E937B-BF3C-4473-872D-CA5625DA1987}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B60E937B-BF3C-4473-872D-CA5625DA1987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5329A23C-D9D0-4886-B164-F07916AE6F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5329A23C-D9D0-4886-B164-F07916AE6F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5329A23C-D9D0-4886-B164-F07916AE6F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5329A23C-D9D0-4886-B164-F07916AE6F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BD73990B-C22F-4142-A5A8-EF588D2ED30A} = {71188E93-5F33-4867-8D37-3812932CE6C5}
 		{89DF51E0-0F90-4F10-A1D1-5A5DA77A3E99} = {BD73990B-C22F-4142-A5A8-EF588D2ED30A}
 		{B60E937B-BF3C-4473-872D-CA5625DA1987} = {BD73990B-C22F-4142-A5A8-EF588D2ED30A}
+		{5329A23C-D9D0-4886-B164-F07916AE6F28} = {BD73990B-C22F-4142-A5A8-EF588D2ED30A}
 	EndGlobalSection
 EndGlobal
