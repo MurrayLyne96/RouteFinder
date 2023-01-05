@@ -1,4 +1,5 @@
 using RouteFinderAPI.Models.ViewModels.Roles;
+using RouteFinderAPI.Services.Dto.Roles;
 
 namespace RouteFinderAPI.Business.MappingProfile;
 
@@ -6,7 +7,7 @@ public class RoleDtoMappingProfile : AutoMapper.Profile
 {
     public RoleDtoMappingProfile()
     {
-        CreateMap<Role, RoleDto>();
-        CreateMap<RoleDto, Role>();
+        CreateMap<RoleViewModel, RoleDto>();
+        CreateMap<RoleDto, RoleViewModel>();
     }
 }
