@@ -62,7 +62,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-builder.Services.AddScoped<IRouteFinderDatabase, RouteFinderContext>(_ => new RouteFinderContext("Server=localhost,5432;Database=routefinder;User Id=postgres;Password=password;"));
+builder.Services.AddScoped<IRouteFinderDatabase, RouteFinderContext>(_ => new RouteFinderContext("Server=db,5432;Database=routefinder;User Id=postgres;Password=password;"));
 builder.Services.AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<UserCreateViewValidator>());
 builder.Services.AddFluentValidationAutoValidation();
 
