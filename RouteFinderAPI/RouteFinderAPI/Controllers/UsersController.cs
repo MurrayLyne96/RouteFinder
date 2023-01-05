@@ -19,7 +19,8 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<UserViewModel[]>> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
-            return OkOrNoListContent(_mapper.Map<UserViewModel[]>(users));
+            var usersViewModel = users.Select(x => _mapper.Map<UserViewModel>(x)).ToArray();
+            return OkOrNoListContent(usersViewModel);
         }
 
         [HttpGet]
