@@ -7,7 +7,6 @@ public class UserViewModel
     public string LastName { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; } = DateTime.Now;
     public string Email { get; set; } = string.Empty;
-    public Guid RoleId { get; set; }
     public RoleViewModel Role { get; set; }
 }
 
