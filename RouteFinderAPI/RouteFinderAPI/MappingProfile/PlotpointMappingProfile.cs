@@ -7,5 +7,7 @@ public class PlotpointMappingProfile : AutoMapper.Profile
     {
         CreateMap<PlotpointDto, PlotPointViewModel>();
         CreateMap<PlotPointCreateModel, PlotpointCreateDto>();
+        CreateMap<PlotPointCreateModel, PlotpointUpdateDto>();
+
     }
 }

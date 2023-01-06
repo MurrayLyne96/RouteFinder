@@ -77,7 +77,7 @@ namespace RouteFinderAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<ActionResult> UpdatePlotPoint(Guid routeId, Guid plotPointId, PlotPointCreateModel model)
         {
-            var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
+            var plotpointCreateDto = _mapper.Map<PlotpointUpdateDto>(model);
             plotpointCreateDto.MapRouteId = routeId;
             var result = await _plotpointService.UpdatePlotPoint(plotPointId, plotpointCreateDto);
             return NoContentOrNoNotFound(result);

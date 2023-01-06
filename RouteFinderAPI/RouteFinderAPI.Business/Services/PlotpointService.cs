@@ -24,7 +24,7 @@ public class PlotpointService : IPlotpointService
         return true;
     }
 
-    public async Task<bool> UpdatePlotPoint(Guid plotPointId, PlotpointCreateDto model)
+    public async Task<bool> UpdatePlotPoint(Guid plotPointId, PlotpointUpdateDto model)
     {
         var plotPointEntity = await GetSinglePlotpoint(plotPointId);
         
