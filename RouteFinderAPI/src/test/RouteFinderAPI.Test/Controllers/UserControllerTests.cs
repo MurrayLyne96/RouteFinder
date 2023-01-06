@@ -19,11 +19,12 @@ public class UserControllerTests
     public async Task GetAllUsers_WhenUsersFound_ReturnsOkResult()
     {
         // Arrange
+        var usermodel = new UserViewModel();
         var userDtos = new UserDto[] { new UserDto() };
-        var userViewModels = new UserViewModel[] { new UserViewModel() };
+        var userViewModels = new UserViewModel[] { usermodel };
 
         _userService.GetAllUsers().Returns(userDtos);
-        _mapper.Map<UserViewModel[]>(userDtos).Returns(userViewModels);
+        _mapper.Map<UserViewModel>(Arg.Any<UserDto>()).Returns(usermodel);
 
         var controller = RetrieveController();
         
@@ -33,10 +34,8 @@ public class UserControllerTests
         // Assert
         var result = actionResult.AssertObjectResult<UserViewModel[], OkObjectResult>();
 
-        result.Should().BeSameAs(userViewModels);
-
         await _userService.Received(1).GetAllUsers();
-        _mapper.Received(1).Map<UserViewModel[]>(userDtos);
+        _mapper.Received(1).Map<UserViewModel>(Arg.Any<UserDto>());
     }
 
     [Fact]
@@ -55,7 +54,6 @@ public class UserControllerTests
         actionResult.AssertResult<UserViewModel[], NoContentResult>();
 
         await _userService.Received(1).GetAllUsers();
-        _mapper.Received(1).Map<UserViewModel[]>(Array.Empty<UserDto>());
     }
     
     [Fact]

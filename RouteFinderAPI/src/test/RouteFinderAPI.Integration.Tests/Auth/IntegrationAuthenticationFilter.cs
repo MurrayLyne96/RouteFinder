@@ -20,7 +20,7 @@ public class IntegrationAuthenticationFilter: AuthenticationHandler<IntegrationA
     {
         var email = Options.DefaultEmail;
         var name = Options.DefaultName;
-        var claims = new[] { new Claim(ClaimTypes.Upn, email), new Claim(ClaimTypes.Name, name)};
+        var claims = new[] { new Claim(ClaimTypes.Upn, email), new Claim(ClaimTypes.Name, name), new Claim(ClaimTypes.Role, "ADM")};
         var identity = new ClaimsIdentity(claims, TestConstants.DevAuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, TestConstants.DevAuthenticationScheme);

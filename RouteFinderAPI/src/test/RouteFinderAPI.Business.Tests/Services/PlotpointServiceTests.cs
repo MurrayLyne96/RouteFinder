@@ -47,14 +47,14 @@ public class PlotpontServiceTests
         // Arrange
         var guid = Guid.NewGuid();
         var plotpoint = _fixture.Build<Plotpoint>().With(x => x.Id, guid).Create();
-        var plotpointCreateDto = _fixture.Create<PlotpointCreateDto>();
+        var plotpointCreateDto = _fixture.Create<PlotpointUpdateDto>();
 
         var plotpoints = _fixture.CreateMany<Plotpoint>(10).ToList();
         plotpoints.Add(plotpoint);
         var plotPointQuery = plotpoints.AsQueryable().BuildMock();
 
         _database.Get<Plotpoint>().Returns(plotPointQuery);
-        _mapper.Map<Plotpoint>(Arg.Any<PlotpointCreateDto>()).Returns(plotpoint);
+        _mapper.Map<Plotpoint>(Arg.Any<PlotpointUpdateDto>()).Returns(plotpoint);
         _database.SaveChangesAsync().Returns(1);
 
         var service = RetrieveService();
@@ -64,7 +64,7 @@ public class PlotpontServiceTests
 
         // Assert
         result.Should().Be(true);
-        _mapper.Received(1).Map(Arg.Any<PlotpointCreateDto>(), Arg.Any<Plotpoint>());
+        _mapper.Received(1).Map(Arg.Any<PlotpointUpdateDto>(), Arg.Any<Plotpoint>());
         await _database.Received(1).SaveChangesAsync();
     }
 
@@ -73,7 +73,7 @@ public class PlotpontServiceTests
     {
         // Arrange
         var guid = Guid.NewGuid();
-        var plotpointCreateDto = _fixture.Create<PlotpointCreateDto>();
+        var plotpointCreateDto = _fixture.Create<PlotpointUpdateDto>();
 
         var plotpoints = _fixture.CreateMany<Plotpoint>(10).ToList();
         var plotPointQuery = plotpoints.AsQueryable().BuildMock();

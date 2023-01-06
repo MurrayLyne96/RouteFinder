@@ -22,3 +22,5 @@ global using NJsonSchema.Generation;
 global using RouteFinderAPI.Integration.Tests.Base;
 global using RouteFinderAPI.Integration.Tests.TestUtilities;
 global using Microsoft.VisualStudio.TestPlatform.TestHost;
+global using RouteFinderAPI.Models.API;
+global using RouteFinderAPI.Models.ViewModels;

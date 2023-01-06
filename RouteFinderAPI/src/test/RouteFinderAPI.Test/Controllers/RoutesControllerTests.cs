@@ -220,11 +220,11 @@ public class RoutesControllerTests
     {
         // Arrange
         var plotPointUpdateViewModel = new PlotPointCreateModel();
-        var plotPointUpdateDto = new PlotpointCreateDto();
+        var plotPointUpdateDto = new PlotpointUpdateDto();
         var routeId = Guid.NewGuid();
         var plotpointId = Guid.NewGuid();
         _plotpointService.UpdatePlotPoint(plotpointId, plotPointUpdateDto).Returns(true);
-        _mapper.Map<PlotpointCreateDto>(plotPointUpdateViewModel).Returns(plotPointUpdateDto);
+        _mapper.Map<PlotpointUpdateDto>(plotPointUpdateViewModel).Returns(plotPointUpdateDto);
         var controller = RetrieveController();
         
         // Act
@@ -241,11 +241,11 @@ public class RoutesControllerTests
     {
         // Arrange
         var plotPointUpdateViewModel = new PlotPointCreateModel();
-        var plotPointUpdateDto = new PlotpointCreateDto();
+        var plotPointUpdateDto = new PlotpointUpdateDto();
         var routeId = Guid.NewGuid();
         var plotPointId = Guid.NewGuid();
         _plotpointService.UpdatePlotPoint(plotPointId, plotPointUpdateDto).Returns(false);
-        _mapper.Map<PlotpointCreateDto>(plotPointUpdateViewModel).Returns(plotPointUpdateDto);
+        _mapper.Map<PlotpointUpdateDto>(plotPointUpdateViewModel).Returns(plotPointUpdateDto);
 
         var controller = RetrieveController();
         
