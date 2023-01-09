@@ -47,7 +47,7 @@ public class UsersControllerTests
         var userModel = new UserCreateViewModel {
             FirstName = "New",
             LastName = "User",
-            DateOfBirth = DateTime.UtcNow.AddYears(-18),
+            DateOfBirth = DateTime.UtcNow.Date.AddYears(-18),
             Email = "useremail@testemails.com",
             Password = "oneoneoneuhone!",
             RoleId = DatabaseSeed.RoleToTestId
@@ -91,7 +91,7 @@ public class UsersControllerTests
             LastName = "User2",
             Email = "testuser@test.com",
             RoleId = DatabaseSeed.RoleToTestId,
-            DateOfBirth = DateTime.UtcNow.AddYears(-18),
+            DateOfBirth = DateTime.UtcNow.Date.AddYears(-18),
         };
 
         var response = await _httpClient.PutAsJsonAsync($"/api/Users/{DatabaseSeed.UserToTestId}", userUpdateModel);
