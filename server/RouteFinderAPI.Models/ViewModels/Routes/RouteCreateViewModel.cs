@@ -19,7 +19,7 @@ public class RouteCreateViewValidator : AbstractValidator<RouteCreateViewModel>
         RuleFor(x => x.Name).NotEmpty().NotNull();
         RuleFor(x => x.TypeId).NotEmpty().NotNull();
         RuleFor(x => x.UserId).NotEmpty().NotNull();
-        RuleForEach(x => x.PlotPoints).NotEmpty().NotNull();
+        RuleForEach(x => x.PlotPoints).SetValidator(new PlotPointCreateValidator());
         RuleFor(x => x.PlotPoints).Must(x => PlotPointValidator
             .AllPlotPointsUnique(x.Select(y => y.PlotOrder).ToArray()))
             .WithMessage("Please ensure that all plotpoint order values are unqiue");
