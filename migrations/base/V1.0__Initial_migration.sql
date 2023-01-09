@@ -85,7 +85,7 @@ CREATE TABLE route_tags (
     route_id uuid,
     tag_id uuid,
     CONSTRAINT fk_route FOREIGN KEY (route_id)
-        REFERENCES DONOTWORK(id),
+        REFERENCES routes(id),
     CONSTRAINT fk_tag FOREIGN KEY (tag_id)
         REFERENCES tags(id)
 );

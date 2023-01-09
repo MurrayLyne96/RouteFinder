@@ -22,13 +22,13 @@ services:
   server:
     profiles: ["dev"]
     build:
-      context: ./RouteFinderAPI
+      context: ./server
       dockerfile: Dockerfile.local
     environment:
       ASPNETCORE_URLS: "https://+:7241;http://+:7242"
       DbConnectionString: "Server=db,5432;Database=routefinder;User Id=postgres;Password=password;"
     volumes:
-      - ./RouteFinderAPI:/app
+      - ./server:/app
     ports:
       - 7241:7241
       - 7242:7242
