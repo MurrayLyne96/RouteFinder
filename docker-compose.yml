@@ -20,6 +20,7 @@ services:
         depends_on:
           - db
   server:
+    profiles: ["dev"]
     build:
       context: ./RouteFinderAPI
       dockerfile: Dockerfile.local
