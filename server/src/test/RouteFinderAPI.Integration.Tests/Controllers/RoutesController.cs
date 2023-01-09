@@ -1,3 +1,5 @@
+using RouteFinderAPI.Integration.Tests.Models;
+
 namespace RouteFinderAPI.Integration.Tests.Controllers;
 
 [Collection("Integration")]
@@ -53,6 +55,41 @@ public class RoutesControllerTests
     }
 
     [Fact]
+    public async Task CreateRoute_WhenRouteIsInvalid_ReturnsBadRequest()
+    {
+        var routeModel = new RouteCreateViewModel {
+            Name = "",
+            TypeId = 1,
+            UserId = Guid.Empty,
+            PlotPoints = new List<PlotPointCreateModel>{
+                new() {
+                    XCoordinate = 14,
+                    YCoordinate = 14,
+                    Description = "",
+                    PlotOrder = 1,
+                },
+                new() {
+                    XCoordinate = 14,
+                    YCoordinate = 20,
+                    Description = "",
+                    PlotOrder = 1,
+                },
+            }
+        };
+
+        var response = await _httpClient.PostAsJsonAsync("/api/Routes", routeModel);
+        var value = await response.Content.ReadAsStringAsync();
+        var result = value.VerifyDeSerialize<ValidationModel>();
+
+        result.Errors.CheckIfErrorPresent("Name", "'Name' must not be empty.");
+        result.Errors.CheckIfErrorPresent("UserId", "'User Id' must not be empty.");
+        result.Errors.CheckIfErrorPresent("PlotPoints", "Please ensure that all plotpoint order values are unqiue", "Please ensure all plotpoints are in order");
+        result.Errors.CheckIfErrorPresent("PlotPoints[0].Description", "'Description' must not be empty.");
+        result.Errors.CheckIfErrorPresent("PlotPoints[1].Description", "'Description' must not be empty.");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task UpdateRoute_WhenRouteIsUpdated_ReturnsNoContent()
     {
         var routeModel = new RouteCreateViewModel {
@@ -62,6 +99,21 @@ public class RoutesControllerTests
 
         var response = await _httpClient.PutAsJsonAsync($"/api/Routes/{DatabaseSeed.RouteToTestId}", routeModel);
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task UpdateRoute_WhenRouteIsInvalid_ReturnsBadRequest()
+    {
+        var routeModel = new RouteCreateViewModel {
+            Name = "",
+            TypeId = 1,
+        };
+        
+        var response = await _httpClient.PutAsJsonAsync($"/api/Routes/{DatabaseSeed.RouteToTestId}", routeModel);
+        var value = await response.Content.ReadAsStringAsync();
+        var result = value.VerifyDeSerialize<ValidationModel>();
+        result.Errors.CheckIfErrorPresent("Name", "'Name' must not be empty.");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]

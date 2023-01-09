@@ -1,5 +1,5 @@
 using RouteFinderAPI.Models.ViewModels;
-
+using RouteFinderAPI.Integration.Tests.Models;
 namespace RouteFinderAPI.Integration.Tests.Controllers;
 
 [Collection("Integration")]
@@ -47,7 +47,7 @@ public class UsersControllerTests
         var userModel = new UserCreateViewModel {
             FirstName = "New",
             LastName = "User",
-            DateOfBirth = DateTime.UtcNow.AddYears(-18),
+            DateOfBirth = DateTime.UtcNow.Date.AddYears(-18),
             Email = "useremail@testemails.com",
             Password = "oneoneoneuhone!",
             RoleId = DatabaseSeed.RoleToTestId
@@ -58,6 +58,32 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public async Task CreateUser_WhenUserModelIsInvalid_ReturnsErrors()
+    {
+        var userModel = new UserCreateViewModel {
+            FirstName = "",
+            LastName = "",
+            DateOfBirth = DateTime.UtcNow.AddYears(-10),
+            Email = "useremailtestemails.com",
+            Password = "",
+            RoleId = Guid.Empty
+        };
+
+        var response = await _httpClient.PostAsJsonAsync("/api/Users", userModel);
+        var value = await response.Content.ReadAsStringAsync();
+        var result = value.VerifyDeSerialize<ValidationModel>();
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        result.Errors.CheckIfErrorPresent("Email", "'Email' is not a valid email address.");
+        result.Errors.CheckIfErrorPresent("Password", "The length of 'Password' must be at least 6 characters. You entered 0 characters.");
+        result.Errors.CheckIfErrorPresent("FirstName", "'First Name' must not be empty.");
+        result.Errors.CheckIfErrorPresent("LastName", "'Last Name' must not be empty.");
+        result.Errors.CheckIfErrorPresent("RoleId", "'Role Id' must not be empty.");
+        result.Errors.CheckIfErrorPresent("DateOfBirth", $"'Date Of Birth' must be less than or equal to '{DateTime.UtcNow.Date.AddYears(-18).ToString()}'.");
+    }
+
+    [Fact]
     public async Task UpdateUser_WhenUserIsUpdated_ReturnsNoContent()
     {
         var userUpdateModel = new UserUpdateViewModel {
@@ -65,11 +91,35 @@ public class UsersControllerTests
             LastName = "User2",
             Email = "testuser@test.com",
             RoleId = DatabaseSeed.RoleToTestId,
-            DateOfBirth = DateTime.UtcNow.AddYears(-18),
+            DateOfBirth = DateTime.UtcNow.Date.AddYears(-18),
         };
 
         var response = await _httpClient.PutAsJsonAsync($"/api/Users/{DatabaseSeed.UserToTestId}", userUpdateModel);
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task UpdateUser_WhenUserUpdateHasErrors_ReturnsBadRequest()
+    {
+        var userUpdateModel = new UserUpdateViewModel {
+            FirstName = "",
+            LastName = "",
+            Email = "testusertest.com",
+            RoleId = Guid.Empty,
+            DateOfBirth = DateTime.Now,
+        };
+
+        var response = await _httpClient.PutAsJsonAsync($"/api/Users/{DatabaseSeed.UserToTestId}", userUpdateModel);
+        var value = await response.Content.ReadAsStringAsync();
+        var result = value.VerifyDeSerialize<ValidationModel>();
+
+
+        result.Errors.CheckIfErrorPresent("Email", "'Email' is not a valid email address.");
+        result.Errors.CheckIfErrorPresent("FirstName", "'First Name' must not be empty.");
+        result.Errors.CheckIfErrorPresent("LastName", "'Last Name' must not be empty.");
+        result.Errors.CheckIfErrorPresent("RoleId", "'Role Id' must not be empty.");
+        result.Errors.CheckIfErrorPresent("DateOfBirth", $"'Date Of Birth' must be less than or equal to '{DateTime.UtcNow.Date.AddYears(-18).ToString()}'.");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
