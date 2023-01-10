@@ -1,5 +1,1 @@
-Using postgreSQL for the backend on AWS
-
-
-
-
+Using postgreSQL for the backend on AWS.
