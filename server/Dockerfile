@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG NETENV=Release
 WORKDIR /src
 COPY ./ ./
-RUN dotnet restore src/RouteFinderApi/RouteFinderApi.csproj
-RUN dotnet publish src/RouteFinderApi/RouteFinderApi.csproj -c $NETENV -o /app --no-restore
+RUN dotnet restore RouteFinderAPI/RouteFinderAPI.csproj
+RUN dotnet publish RouteFinderAPI/RouteFinderAPI.csproj -c $NETENV -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
