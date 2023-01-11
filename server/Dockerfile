@@ -16,4 +16,4 @@ EXPOSE 5000
 ARG API_DB_URL
 ENV DbConnectionString=$API_DB_URL
 
-ENTRYPOINT ["dotnet", "RouteFinderApi.dll"]
+ENTRYPOINT ["dotnet", "RouteFinderAPI.dll"]
