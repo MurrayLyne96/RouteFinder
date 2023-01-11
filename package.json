@@ -1,0 +1,25 @@
+{
+  "name": "routefinder",
+  "version": "1.0.0",
+  "description": "This is the repository for the RouteFinder CoE project for Unosquare",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MurrayLyne96/RouteFinder.git"
+  },
+  "author": "Murray Lyne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MurrayLyne96/RouteFinder/issues"
+  },
+  "homepage": "https://github.com/MurrayLyne96/RouteFinder#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "browsersync": "^0.0.1-security",
+    "npm-watch": "^0.11.0",
+    "react": "^18.2.0"
+  }
+}
