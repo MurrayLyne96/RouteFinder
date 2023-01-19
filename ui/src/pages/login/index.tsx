@@ -5,7 +5,7 @@ import { ReactDOM } from "react";
 import { TextField, Link, Button, Grid, Typography } from '@mui/material';
 import { IAuthModel } from '../../interfaces/IAuthModel';
 import { FaRunning } from 'react-icons/fa';
-import { headerCss, font52, formGroup, loginButtonsBottom, flexBasis50, alignItemsLeft, alignItemsRight } from '../../css/styling';
+import { headerCss, font52, formGroup, loginButtonsBottom, flexBasis50, alignItemsLeft, justifyItemsRight, centeredItem } from '../../css/styling';
 function Login() : JSX.Element {
     const [auth, setAuth] = React.useState<IAuthModel>({email: '', password: ''})
 
@@ -61,8 +61,8 @@ function Login() : JSX.Element {
                     <div css={[flexBasis50, alignItemsLeft]}>
                         <Button variant="contained">Login</Button>
                     </div>
-                    <div css={[flexBasis50, alignItemsRight]}>
-                        <Link href="register" className="centred-item">Register a new Account</Link>
+                    <div css={[flexBasis50, justifyItemsRight]}>
+                        <Link href="register" css={centeredItem}>Register a new Account</Link>
                     </div>
                 </div>
             </div>

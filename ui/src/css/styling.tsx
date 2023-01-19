@@ -11,6 +11,10 @@ export const font52 = css ({
     fontSize: 52
 });
 
+export const font36 = css ({
+  fontSize: 36
+});
+
 export const formGroup = css ({
     display: 'flex',
     flexDirection: 'column',
@@ -23,7 +27,12 @@ export const alignItemsLeft = css ({
     alignItems: 'start'
 });
 
-export const alignItemsRight = css ({
+export const justifyItemsLeft = css ({
+    display: 'flex',
+    justifyContent: 'left'
+});
+
+export const justifyItemsRight = css ({
     display: 'flex',
     justifyContent: 'end'
 });
@@ -40,6 +49,18 @@ export const flexBasis50 = css ({
 export const centeredItem = css ({
     display: 'flex',
     alignItems: 'center'
+});
+
+export const halfWidth = css ({
+    width: '50%'
+});
+
+export const fullWidth = css ({
+  width: '100%'
+});
+
+export const thirdWidth = css ({
+  width: '33.3%'
 });
 
 export const finderThemeOptions: ThemeOptions = {
