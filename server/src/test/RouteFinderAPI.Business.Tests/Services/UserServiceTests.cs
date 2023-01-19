@@ -107,13 +107,22 @@ public class UserServiceTests
     public async Task CreateUser_WhenUserIsCreated_ReturnGuid() {
         // Arrange
         var guid = Guid.NewGuid();
+        var roleGuid = Guid.NewGuid();
         var user = _fixture.Build<User>().With(x => x.Id, guid).Without(x => x.Password).Create();
         var userDto = _fixture.Create<UserCreateDto>();
-
+        var role = _fixture.Build<Role>().With(x => x.Id, roleGuid).Create();
+        
+        var roles = _fixture.CreateMany<Role>(10).ToList();
+        roles.Add(role);
+        var rolesQuery = roles.AsQueryable().BuildMock();
+        
         userDto.Password = "testpassword";
 
         _mapper.Map<User>(Arg.Any<UserCreateDto>()).Returns(user);
         var service = RetrieveService();
+
+        _database.Get<Role>().Returns(rolesQuery);
+        _database.SaveChangesAsync().Returns(1);
 
         // Act
         var result = await service.CreateUser(userDto);

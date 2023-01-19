@@ -29,6 +29,11 @@ public class UserService : IUserService
     public async Task<Guid> CreateUser(UserCreateDto userModel)
     {
         var user = _mapper.Map<User>(userModel);
+        user.RoleId = await _database.Get<Role>()
+                        .Where(new RoleByRoleNameSpec("USR"))
+                        .Select(x => x.Id)
+                        .SingleOrDefaultAsync();
+
         user.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
         await _database.AddAsync(user);
         await _database.SaveChangesAsync();

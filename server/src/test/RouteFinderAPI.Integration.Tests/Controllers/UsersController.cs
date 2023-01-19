@@ -50,7 +50,6 @@ public class UsersControllerTests
             DateOfBirth = DateTime.UtcNow.Date.AddYears(-18),
             Email = "useremail@testemails.com",
             Password = "oneoneoneuhone!",
-            RoleId = DatabaseSeed.RoleToTestId
         };
 
         var response = await _httpClient.PostAsJsonAsync("/api/Users", userModel);
@@ -66,7 +65,6 @@ public class UsersControllerTests
             DateOfBirth = DateTime.UtcNow.AddYears(-10),
             Email = "useremailtestemails.com",
             Password = "",
-            RoleId = Guid.Empty
         };
 
         var response = await _httpClient.PostAsJsonAsync("/api/Users", userModel);
@@ -79,7 +77,6 @@ public class UsersControllerTests
         result.Errors.CheckIfErrorPresent("Password", "The length of 'Password' must be at least 6 characters. You entered 0 characters.");
         result.Errors.CheckIfErrorPresent("FirstName", "'First Name' must not be empty.");
         result.Errors.CheckIfErrorPresent("LastName", "'Last Name' must not be empty.");
-        result.Errors.CheckIfErrorPresent("RoleId", "'Role Id' must not be empty.");
         result.Errors.CheckIfErrorPresent("DateOfBirth", $"'Date Of Birth' must be less than or equal to '{DateTime.UtcNow.Date.AddYears(-18).ToString()}'.");
     }
 
