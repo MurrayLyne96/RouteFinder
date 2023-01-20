@@ -1,6 +1,7 @@
 using NSubstitute.ReturnsExtensions;
 using RouteFinderAPI.Services.Dto.Plotpoints;
 using RouteFinderAPI.Services.Dto.Users;
+using RouteFinderAPI.Services.Dto.Roles;
 
 namespace RouteFinderAPI.Business.Tests.Services;
 
@@ -25,8 +26,8 @@ public class PlotpontServiceTests
         // Arrange
         var guid = Guid.NewGuid();
         var plotpoint = _fixture.Build<Plotpoint>().With(x => x.Id, guid).Create();
+        
         var plotpointCreateDto = _fixture.Create<PlotpointCreateDto>();
-
 
         _mapper.Map<Plotpoint>(Arg.Any<PlotpointCreateDto>()).Returns(plotpoint);
         var service = RetrieveService();
