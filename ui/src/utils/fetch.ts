@@ -4,7 +4,7 @@ import LoginUtils from "./login";
 import StorageTypes from "../constants/storage_types";
 import toast from "react-hot-toast";
 
-const baseUrl = process.env.REACT_APP_API_URL ?? "http://localhost:4040";
+const baseUrl = process.env.REACT_APP_API_URL ?? "http://localhost:7241";
 const configureUrl = (url: string) => `${baseUrl}/${url}`;
 const refreshUrl = "/authentication/refresh";
 
@@ -25,13 +25,12 @@ fetchIntercept.register({
 
         const token = StorageService.getLocalStorage(StorageTypes.AUTH);
         if (token && !LoginUtils.isTokenExpired(token)) {
-            const bearerToken = url === `${baseUrl}${refreshUrl}` ? token.refreshToken : token.accessToken;
+            const bearerToken = url === `${baseUrl}${refreshUrl}` ? token.refreshToken : token.token;
             config.headers = {
                 ...config.headers,
                 Authorization: `Bearer ${bearerToken}`,
             };
         }
-
         return [url, config];
     },
     response: function (response) {

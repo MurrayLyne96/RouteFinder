@@ -25,6 +25,8 @@ internal class ExceptionFilter : IExceptionFilter
             error = new[] { context.Exception.Message },
             stackTrace = _hostingEnvironment.IsDevelopment() ? context.Exception.StackTrace : string.Empty,
         });
+
+        Console.WriteLine(context.Exception.InnerException);
     }
     
     private static HttpStatusCode RetrieveStatusCodeForException(System.Exception exception)

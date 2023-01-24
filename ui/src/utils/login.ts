@@ -1,11 +1,11 @@
 import jwtDecode from "jwt-decode";
 import Roles from "../constants/roles";
 const isTokenExpired = (token: any) => {
-    if (!token || !token.accessToken || !token.refreshToken) return true;
-
-    const accessJwt = jwtDecode(token.accessToken) as any;
+    if (!token.token) return true;
+    // if (!token || !token.token || !token.refreshToken) return true; TODO: bring this back once mark has gone through how refresh tokens work.
+    const accessJwt = jwtDecode(token.token) as any;
     const currentTime = new Date().getTime() / 1000;
-
+    
     if (currentTime < accessJwt.exp) return false;
 
     const refreshJwt = jwtDecode(token.refreshToken) as any;
@@ -15,39 +15,37 @@ const isTokenExpired = (token: any) => {
     return true;
 };
 
-const hasRole = (accessToken: string, ...roles: Roles[]) => {
+const hasRole = (accessToken: string) => {
     if (!accessToken) return false;
-    const {claims: {role_id}} = jwtDecode(accessToken) as any;
+    const obj = jwtDecode(accessToken) as any;
 
-    return roles.includes(role_id);
+    return Object.values(Roles).includes(obj.role);
+}
+
+const getRole = (accessToken: string) : boolean | string => {
+    if (!accessToken) return false;
+    const obj = jwtDecode(accessToken) as any;
+    return obj.role
 }
 
 const isUser = (accessToken: string) => {
     if (!accessToken) return false;
-    const {claims: {role_id}} = jwtDecode(accessToken) as any;
-    return role_id === Roles.User;
+    const obj = jwtDecode(accessToken) as any;
+    return obj.role === Roles.User;
 };
 
 const isAdmin = (accessToken: string) => {
     if (!accessToken) return false;
-    const {claims: {role_id}} = jwtDecode(accessToken) as any;
-    return role_id === Roles.Admin;
+    const obj = jwtDecode(accessToken) as any;
+    return obj.role === Roles.Admin;
 };
 
 const getEmail = (accessToken: any) => {
     if (!accessToken) return false;
 
-    const {claims: {email}} = jwtDecode(accessToken) as any;
+    const obj = jwtDecode(accessToken) as any;
 
-    return email;
-};
-
-const getUserShortDisplay = (accessToken: any): string => {
-    if (!accessToken) return "";
-
-    const {claims: {first_name, last_name}} = jwtDecode(accessToken) as any;
-
-    return `${first_name.charAt(0).toUpperCase()}${last_name.charAt(0).toUpperCase()}`;
+    return obj.email;
 };
 
 const getUserId = (accessToken: string) => {
@@ -62,8 +60,8 @@ const LoginUtils = {
     isTokenExpired,
     hasRole,
     isAdmin,
+    getRole,
     getEmail,
-    getUserShortDisplay,
     getUserId,
     isUser,
 };

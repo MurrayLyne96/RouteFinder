@@ -22,7 +22,7 @@ public class AuthControllerTests
             Password = "Testuserpassword"
         };
 
-        var response = await _httpClient.PostAsJsonAsync("/auth", model);
+        var response = await _httpClient.PostAsJsonAsync("/api/auth", model);
 
         var value = await response.Content.ReadAsStringAsync();
 
@@ -38,7 +38,7 @@ public class AuthControllerTests
             Password = "Testpassword"
         };
 
-        var response = await _httpClient.PostAsJsonAsync("/auth", model);
+        var response = await _httpClient.PostAsJsonAsync("/api/auth", model);
 
         var value = await response.Content.ReadAsStringAsync();
 

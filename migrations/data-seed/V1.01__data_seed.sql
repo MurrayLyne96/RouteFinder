@@ -1,5 +1,5 @@
 INSERT INTO users(email_address, first_name, last_name, password, role, date_of_birth)
-VALUES('testuser@test.com', 'test', 'user', 'password01', 'ADM', '1996-03-15 00:00:00');
+VALUES('testuser@test.com', 'test', 'user', 'password01', 'USR', '1996-03-15');
 
 INSERT INTO types(name)
 VALUES ('Running');

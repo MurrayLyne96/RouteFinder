@@ -15,7 +15,7 @@ namespace RouteFinderAPI.Controllers
         public AuthController(IAuthService authService) => _authService = authService;
         
         [HttpPost]
-        [Route("/auth")]
+        [Route("")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TokenModel))]
         [AllowAnonymous]
         public async Task<ActionResult<TokenModel>> Authenticate(UserAuthModel model)
