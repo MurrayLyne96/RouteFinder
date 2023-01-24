@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import { ReactDOM } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import logo from './logo.svg';
@@ -15,6 +15,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthContext } from './contexts';
 import { LoginUtils } from './utils';
 import Dashboard from './pages/dashboard';
+import { Layout } from './components';
 
 const UnauthenticatedRoutes = () => {
   return (
@@ -41,14 +42,16 @@ function App() {
   const isAdmin = loggedIn && LoginUtils.isUser(state.token);
   return (
     <>
-      <Routes>
-        {loggedIn && AuthenticatedRoutes()}
-        {!loggedIn && UnauthenticatedRoutes()}
-      </Routes>
       <Toaster></Toaster>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ThemeProvider theme={theme}>
           <Box>
+            <Layout>
+              <Routes>
+                {loggedIn && AuthenticatedRoutes()}
+                {!loggedIn && UnauthenticatedRoutes()}
+              </Routes>
+            </Layout>
           </Box>
         </ThemeProvider>
       </LocalizationProvider>

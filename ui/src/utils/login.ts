@@ -4,13 +4,14 @@ const isTokenExpired = (token: any) => {
     if (!token.token) return true;
     // if (!token || !token.token || !token.refreshToken) return true; TODO: bring this back once mark has gone through how refresh tokens work.
     const accessJwt = jwtDecode(token.token) as any;
+
     const currentTime = new Date().getTime() / 1000;
-    
+
     if (currentTime < accessJwt.exp) return false;
 
-    const refreshJwt = jwtDecode(token.refreshToken) as any;
+    // const refreshJwt = jwtDecode(token.refreshToken) as any;
 
-    if (currentTime < refreshJwt.exp) return false;
+    // if (currentTime < refreshJwt.exp) return false; //TODO: Bring these lines back once refresh token is implemented.
 
     return true;
 };

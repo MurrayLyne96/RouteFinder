@@ -7,12 +7,12 @@ import Storage_types from '../../constants/storage_types';
 import toast from 'react-hot-toast';
 import { ReactDOM } from "react";
 import AuthContext from "../../contexts/authContext"
-import { TextField, Link, Button, Grid, Typography } from '@mui/material';
+import { TextField, Button, Grid, Typography } from '@mui/material';
 import { IAuthModel } from '../../interfaces/IAuthModel';
 import { LoginUtils } from '../../utils';
 import { FaRunning } from 'react-icons/fa';
 import { headerCss, font52, formGroup, loginButtonsBottom, flexBasis50, alignItemsLeft, justifyItemsRight, centeredItem, thirdWidth } from '../../css/styling';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Login() : JSX.Element {
     const [auth, setAuth] = React.useState<IAuthModel>({email: '', password: ''})
@@ -111,7 +111,7 @@ function Login() : JSX.Element {
                         <Button variant="contained" onClick={authentication}>Login</Button>
                     </div>
                     <div css={[flexBasis50, justifyItemsRight]}>
-                        <Link href="register" css={centeredItem}>Register new Account</Link>
+                        <Link to={"register"} css={centeredItem}>Register new Account</Link>
                     </div>
                 </div>
             </div>

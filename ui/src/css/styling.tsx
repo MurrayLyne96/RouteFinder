@@ -63,6 +63,29 @@ export const thirdWidth = css ({
   width: '33.3%'
 });
 
+export const navbarLink = css({
+  color: '#ffffff',
+  '&:after': {
+    color: '#ffffff',
+  }
+});
+
+export const marginRight2 = css({
+  marginRight: '2%'
+});
+
+export const marginRight05 = css({
+  marginRight: '0.5%'
+});
+
+export const marginLeft5 = css({
+  marginLeft: 5
+});
+
+export const marginTop2dot5 = css({
+  marginTop: '2.5%',
+});
+
 export const finderThemeOptions: ThemeOptions = {
     palette: {
       primary: {
