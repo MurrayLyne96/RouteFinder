@@ -82,9 +82,33 @@ export const marginLeft5 = css({
   marginLeft: 5
 });
 
+export const marginLeft1 = css({
+  marginLeft: '1%'
+});
+
+export const marginLeft15 = css({
+  marginLeft: '25%'
+});
+
+export const marginRight1 = css({
+  marginRight: '1%'
+});
+
 export const marginTop2dot5 = css({
   marginTop: '2.5%',
 });
+
+export const marginBottom2 = css({
+  marginBottom: '2%'
+});
+
+export const margin2 = css({
+  margin: '2%'
+});
+
+export const displayInlineFlex = css({
+  display: 'inline-flex'
+})
 
 export const finderThemeOptions: ThemeOptions = {
     palette: {
