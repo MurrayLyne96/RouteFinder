@@ -16,7 +16,8 @@ import { AuthContext } from './contexts';
 import { LoginUtils } from './utils';
 import Dashboard from './pages/dashboard';
 import { Layout } from './components';
-
+import { useNavigate } from 'react-router-dom';
+import { RoutePage, RoutesPage } from './pages';
 const UnauthenticatedRoutes = () => {
   return (
     <>
@@ -30,6 +31,8 @@ const AuthenticatedRoutes = () => {
   return (
   <>
     <Route path="dashboard" element={<Dashboard />} />
+    <Route path="routes" element={<RoutesPage />} />
+    <Route path="routes/:routeId" element={<RoutePage />} />
   </>
   )
 }
@@ -40,6 +43,7 @@ function App() {
   const loggedIn = state.token && !LoginUtils.isTokenExpired(state);
   const isUser = loggedIn && LoginUtils.isAdmin(state.token);
   const isAdmin = loggedIn && LoginUtils.isUser(state.token);
+  const userId = LoginUtils.getUserId(state.token);
   return (
     <>
       <Toaster></Toaster>
