@@ -13,6 +13,14 @@ const RegisterNewUser = async(firstName: string, lastName : string, email : stri
         })
     });
 }
+
+const GetAllRoutesByUserId = async (userId: string) => {
+    return await FetchUtils.fetchInstance(`users/${userId}/routes`, {
+        method: "GET",
+    });
+}
+
 export default {
-    RegisterNewUser: RegisterNewUser
+    RegisterNewUser: RegisterNewUser,
+    GetAllRoutesByUserId: GetAllRoutesByUserId
 }
