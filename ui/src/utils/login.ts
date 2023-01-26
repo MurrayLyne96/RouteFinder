@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import Roles from "../constants/roles";
+import { access } from "fs";
 const isTokenExpired = (token: any) => {
     if (!token.token) return true;
     // if (!token || !token.token || !token.refreshToken) return true; TODO: bring this back once mark has gone through how refresh tokens work.
@@ -35,6 +36,12 @@ const isUser = (accessToken: string) => {
     return obj.role === Roles.User;
 };
 
+const getUserId = (accessToken: string) => {
+    if (!accessToken) return false;
+    const obj = jwtDecode(accessToken) as any;
+    return obj.nameid;
+}
+
 const isAdmin = (accessToken: string) => {
     if (!accessToken) return false;
     const obj = jwtDecode(accessToken) as any;
@@ -47,14 +54,6 @@ const getEmail = (accessToken: any) => {
     const obj = jwtDecode(accessToken) as any;
 
     return obj.email;
-};
-
-const getUserId = (accessToken: string) => {
-    if (!accessToken) return false;
-
-    const {sub} = jwtDecode(accessToken) as any;
-
-    return sub;
 };
 
 const LoginUtils = {
