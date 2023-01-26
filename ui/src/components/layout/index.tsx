@@ -12,12 +12,16 @@ import { FaRunning } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import { fullWidth, navbarLink, marginRight2, marginRight05 } from '../../css/styling';
 import Navigation from '../navigation';
+import { LoginUtils } from '../../utils';
+import { AuthContext } from '../../contexts';
 
 function Layout(props:any) {
+    const {state} = AuthContext.useLogin();
+    const loggedIn = state.token && !LoginUtils.isTokenExpired(state);
     return (
         <>
             <Navigation></Navigation>           
-            <Box marginTop={'80px'}>
+            <Box marginTop={loggedIn ? '100px' : '0'}>
                 {props.children}
             </Box>
         </>

@@ -72,7 +72,7 @@ function Login() : JSX.Element {
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
-            minHeight="100vh"
+            minHeight="98vh"
         >
             <Typography variant='h1' css={[headerCss, font52]}>RouteFinder <FaRunning /></Typography>
             <div css={formGroup}>
