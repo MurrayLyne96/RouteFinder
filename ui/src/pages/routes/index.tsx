@@ -30,6 +30,10 @@ function Routes() {
         navigate(`/routes/${routeId}`);
     }
 
+    const navigateToRouteEditPage = (routeId: string) => {
+        navigate(`/routes/${routeId}/edit`);
+    }
+
     return <>
         <Grid container spacing={6}>
             <Grid item md={3}>
@@ -84,7 +88,7 @@ function Routes() {
                             <Typography>{route.type.name} Route</Typography>
                             <div css={[marginBottom2, marginTop2dot5]}>
                                 <Button onClick={() => navigateToRoutePage(route.id)} variant='contained' sx={{marginRight: '1%'}} size='large'>View</Button>
-                                <Button variant='contained' size='large'>Edit</Button>
+                                <Button onClick={() => navigateToRouteEditPage(route.id)} variant='contained' size='large'>Edit</Button>
                             </div>
                             <Divider></Divider>
                         </div>

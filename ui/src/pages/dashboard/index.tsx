@@ -23,31 +23,36 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
 import { FaSearch } from 'react-icons/fa';
 import { CheckBox } from '@mui/icons-material';
-import { displayInlineFlex, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2 } from '../../css/styling';
+import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex } from '../../css/styling';
 import { RoutesService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { AuthContext } from '../../contexts';
 import { LoginUtils } from '../../utils';
-
+import { useNavigate } from 'react-router-dom';
+import { GOOGLE_API_KEY } from '../../constants/keys';
+import GoogleMapReact from 'google-map-react';
+import { Marker } from '../../components';
+import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
+import toast from 'react-hot-toast';
 const drawerWidth = 500;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-}>(({ theme, open }) => ({
-  flexGrow: 1,
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginLeft: `-${drawerWidth}px`,
-  ...(open && {
+  }>(({ theme, open }) => ({
+    flexGrow: 1,
     transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: 0,
-  }),
-}));
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }));
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -62,21 +67,108 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [routes, setRoutes] = React.useState<IRouteModel[]>([]);
+  const [selectedRoute, setSelectedRoute] = React.useState<IRouteDetailModel>();
+  const [routeMiles, setSelectedRouteMiles] = React.useState<String>('');
+  const [routeMap, setRouteMap] = React.useState<google.maps.Map>();
+  const [DirectionsService, setDirectionsService] = React.useState<google.maps.DirectionsService>();
+  const [DirectionsRenderer, setDirectionsRenderer] = React.useState<google.maps.DirectionsRenderer>();
+  const navigate = useNavigate();
+
+  const defaultProps = {
+    center: {
+      lat: 0,
+      lng: 0
+    },
+    zoom: 11
+  };
+
+  React.useEffect(() => {
+    (async () => {
+      await GetRoutes();
+    })();
+  }, []);
+
+  const handleApiLoaded = async(map: any) => {
+      setRouteMap(map.map);
+      setDirectionsService(new map.maps.DirectionsService());
+      setDirectionsRenderer(new map.maps.DirectionsRenderer());
+  };
+
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
 
-  const routesResponse = async () => {
+  const GetRoutes = async () => {
     var result = await RoutesService.getAllRoutes();
     var json = await result.json();
     setRoutes(json);
   }
 
-  React.useEffect(() => {
-    (async () => {
-      await routesResponse();
-    })();
-  }, []);
+  const navigateToRoutePage = (routeId: string) => {
+      navigate(`/routes/${routeId}`);
+  } 
+
+  const navigateToRouteEditPage = (routeId: string) => {
+      navigate(`/routes/${routeId}/edit`);
+  }
+
+  const navigateToRouteCreatePage = (routeId: string) => {
+    navigate(`/routes/${routeId}/edit`);
+  }
+
+  const ShowMap = async(routeId: string, event: any) => {
+    var response = await RoutesService.getRouteById(routeId);
+    let routeToBeSelected : IRouteDetailModel = await response.json();
+    
+    //If there are only 2 plotpoints, Generate a route using the origin and destination.
+    if (routeToBeSelected.plotPoints.length == 2) {
+      let origin : google.maps.LatLng = new google.maps.LatLng(routeToBeSelected.plotPoints[0].xCoordinate, routeToBeSelected.plotPoints[0].yCoordinate);
+      let destination: google.maps.LatLng = new google.maps.LatLng(routeToBeSelected.plotPoints[1].xCoordinate, routeToBeSelected.plotPoints[1].yCoordinate);
+      
+      await generateRouteWithStartAndFinish(origin, destination);
+      setSelectedRoute(routeToBeSelected);
+
+    } else if (routeToBeSelected.plotPoints.length > 2) {
+      //Otherwise, create waypoints for everything after the first one and before the last one.
+    } else {
+      //invalid route, warn the user.
+      toast.error('This route cannot be loaded as it only has a single startpoint.');
+    }
+  }
+
+  const generateRouteWithStartAndFinish = async(origin: google.maps.LatLng, destination: google.maps.LatLng) => {
+    if (DirectionsService != undefined && DirectionsRenderer != undefined && routeMap != undefined) {
+      var response = await DirectionsService.route({
+          origin: origin,
+          destination: destination,
+          optimizeWaypoints: true,
+          travelMode: google.maps.TravelMode.BICYCLING,
+      });
+
+      DirectionsRenderer.setMap(routeMap);
+      DirectionsRenderer.setDirections(response);
+
+      let distanceLegs = response.routes[0].legs;
+      let totalDistance : number = 0;
+
+      distanceLegs.forEach(function (leg) {
+        totalDistance += leg.distance?.value ?? 0;
+      });
+
+      totalDistance = totalDistance / 1000;
+
+      setSelectedRouteMiles(`Distance: ${totalDistance} km`);
+    }
+  }
+
+  const selectedRouteInfo = () => {
+    return(
+      <div css={routeInfo}>
+        <Typography variant='h4' css={noMargins}>Selected Route: <b>{selectedRoute?.routeName}</b></Typography>
+        <Typography>{routeMiles}</Typography>
+      </div>
+    )
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -149,44 +241,38 @@ export default function PersistentDrawerLeft() {
                 <Typography variant='h4'>Routes</Typography>
             </Box>
             {routes.map((route) => (
-              <Box sx={{marginLeft: '5%'}} key={route.id}>
-                <Typography variant='h3'>{route.routeName}</Typography>
-                <Typography>{route.type.name} Route</Typography>
-                <div css={{displayInlineFlex}}>
-                  <Button variant='contained' sx={{marginRight: '1%'}} size='large'>View</Button>
-                  <Button variant='contained' size='large'>Edit</Button>
-                </div>
-              </Box>
+              <div key={route.id} id={`${route.id}-route-div`}>
+                <Box sx={{marginLeft: '5%'}}>
+                  <Typography variant='h3'>{route.routeName}</Typography>
+                  <Typography>{route.type.name} Route</Typography>
+                  <div css={{displayInlineFlex}}>
+                    <Button variant='contained' sx={{marginRight: '1%'}} size='large' onClick={() => navigateToRoutePage(route.id)}>View</Button>
+                    <Button variant='contained' size='large' sx={{marginRight: '1%'}} onClick={() => navigateToRouteEditPage(route.id)}>Edit</Button>
+                    <Button variant='contained' size='large' onClick={(e) => ShowMap(route.id, e)}>Preview Map</Button>
+                  </div>
+                </Box>
+              </div>
             ))}
             </Grid>
             <Grid item md={7}>
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                    enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                    imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                    Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                    nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                    leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                    feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                    consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-                    eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-                    neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-                    tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-                    sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-                    tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-                    gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-                    et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-                    tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-                    eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-                    posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
+              <div css={dashboardRightSide}>
+                <div css={flex}>
+                  {selectedRoute != undefined && selectedRouteInfo()}
+                  <div css={createNewMapButton}>
+                    <Button variant='contained' size='large'>Create New Route</Button>
+                  </div>
+                </div>
+                <div css={map}>
+                  <GoogleMapReact
+                    bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
+                    defaultCenter={defaultProps.center}
+                    defaultZoom={defaultProps.zoom}
+                    yesIWantToUseGoogleMapApiInternals
+                    onGoogleApiLoaded={(map: any, maps: any) => handleApiLoaded(map)}
+                  >
+                  </GoogleMapReact>
+                </div>
+              </div>
             </Grid>
         </Grid>
       </Main>

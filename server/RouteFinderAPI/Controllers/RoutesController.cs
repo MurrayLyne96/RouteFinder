@@ -67,6 +67,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult> CreatePlotPoint(Guid routeId, PlotPointCreateModel model)
         {
             var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
+            plotpointCreateDto.MapRouteId = routeId;
             await _plotpointService.CreatePlotPoint(plotpointCreateDto);
             return StatusCode((int)HttpStatusCode.Created);
         }

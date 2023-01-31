@@ -17,7 +17,7 @@ import { LoginUtils } from './utils';
 import Dashboard from './pages/dashboard';
 import { Layout } from './components';
 import { useNavigate } from 'react-router-dom';
-import { RoutePage, RoutesPage } from './pages';
+import { EditRoutePage, RoutePage, RoutesPage } from './pages';
 const UnauthenticatedRoutes = () => {
   return (
     <>
@@ -33,6 +33,7 @@ const AuthenticatedRoutes = () => {
     <Route path="dashboard" element={<Dashboard />} />
     <Route path="routes" element={<RoutesPage />} />
     <Route path="routes/:routeId" element={<RoutePage />} />
+    <Route path="routes/:routeId/edit" element={<EditRoutePage />} />
   </>
   )
 }

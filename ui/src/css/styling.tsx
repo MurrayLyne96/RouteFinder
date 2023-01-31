@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { ThemeOptions } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 export const headerCss = css({
     color: "#45818e",
@@ -106,9 +107,49 @@ export const margin2 = css({
   margin: '2%'
 });
 
+export const map = css({
+  height: '80vh',
+  width: '100%'
+});
+
+export const createNewMapButton = css({
+  display: 'flex',
+  alignItems: 'flex-end',
+  justifyContent: 'end',
+  marginBottom: 'auto',
+  flexBasis: '100%',
+  flexDirection: 'column-reverse',
+});
+
+export const routeInfo = css({
+  display: 'flex',
+  alignItems: 'start',
+  justifyContent: 'start',
+  marginBottom: '2%',
+  flexBasis: '100%',
+  flexDirection: 'column'
+});
+
+export const noMargins = css({
+  margin: '0'
+});
+
+export const flex = css({
+  display: 'flex'
+})
+
+export const dashboardRightSide = css({
+  margin: '1.5%'
+});
+
 export const displayInlineFlex = css({
   display: 'inline-flex'
-})
+});
+
+export const highlightedBox = css({
+  borderColor: 'blue',
+  borderWidth: '12px'
+});
 
 export const finderThemeOptions: ThemeOptions = {
     palette: {
