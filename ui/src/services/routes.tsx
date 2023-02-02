@@ -1,6 +1,7 @@
 import {FetchUtils} from "../utils/";
 import { IRouteUpdateModel } from '../interfaces/IRouteUpdateModel';
 import { json } from "stream/consumers";
+import { IRouteCreateModel } from '../interfaces/IRouteCreateModel';
 
 const getAllRoutes = async () => {
     return await FetchUtils.fetchInstance("routes", {
@@ -21,8 +22,16 @@ const updateRoute = async (routeModel: IRouteUpdateModel, routeId: string) => {
     });
 }
 
+const createRoute = async (routeModel: IRouteCreateModel) => {
+    return await FetchUtils.fetchInstance('routes', {
+        method: 'POST',
+        body: JSON.stringify(routeModel)
+    });
+}
+
 export default {
     getAllRoutes,
     getRouteById,
-    updateRoute
+    updateRoute,
+    createRoute
 }
