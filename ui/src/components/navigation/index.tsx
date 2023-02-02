@@ -19,12 +19,15 @@ import { marginLeft5, marginTop2dot5, marginRight1, marginLeft1 } from '../../cs
 import { useNavigate, Link } from 'react-router-dom';
 import { LoginUtils } from '../../utils';
 import { AuthContext } from '../../contexts';
+import { StorageService } from '../../services';
+import toast from 'react-hot-toast';
+import Storage_types from '../../constants/storage_types';
 
 const pages = ['dashboard', 'routes'];
 const settings = ['profile', 'logout'];
 
 function Navigation() {
-    const {state} = AuthContext.useLogin();
+    const {state, dispatch} = AuthContext.useLogin();
     const loggedIn = state.token && !LoginUtils.isTokenExpired(state);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -39,11 +42,22 @@ function Navigation() {
     };
 
     const handleCloseNavMenu = (page: string) => {
-        navigate(`/${page}`);
+        if (page === 'logout') {
+            logout();
+        } else {
+            navigate(`/${page}`);
+        }
     };
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const logout = () => {
+        StorageService.removeLocalStorage(Storage_types.AUTH);
+        dispatch({type: "logout"});
+        navigate('/login');
+        toast.success("Logout Successful!");
     };
     
     return loggedIn ? (
