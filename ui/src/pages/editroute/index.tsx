@@ -55,7 +55,7 @@ function EditRoute() {
                 }
             } else if (route.plotPoints.length > 2) {
                 //Otherwise, create waypoints for everything after the first one and before the last one.
-            } else {
+            } else if (route.plotPoints.length == 1) {
                 //invalid route, warn the user.
                 toast.error('This route cannot be loaded as it only has a single startpoint.');
             }
@@ -102,6 +102,13 @@ function EditRoute() {
         })()
         
     }, []);
+
+    React.useEffect(() => {
+        (async () => {
+            await setMapRoute();
+        })()
+        
+    }, [route, DirectionsRenderer, DirectionsService, DirectionsRenderer, routeMap]);
 
     return (
         <>

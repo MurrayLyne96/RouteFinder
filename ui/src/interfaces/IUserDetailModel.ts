@@ -1,6 +1,6 @@
 import { IRouteModel } from './IRouteModel';
 import { IRoleModel } from './IRoleModel';
-export interface IUserRoutesModel {
+export interface IUserDetailModel {
     id: string;
     firstName: string;
     lastName: string;

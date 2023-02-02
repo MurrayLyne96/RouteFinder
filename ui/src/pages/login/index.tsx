@@ -45,7 +45,7 @@ function Login() : JSX.Element {
 
     const authentication = async () => {
         setLoading(true);
-        const response = await AuthenticationService.authenticate(auth.email, auth.password);
+        let response = await AuthenticationService.authenticate(auth.email, auth.password);
         setLoading(false);
         if (response.status === 200) {
             const loginResult = await response.json();
