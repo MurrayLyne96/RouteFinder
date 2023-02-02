@@ -20,10 +20,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Paper, Select, TextField } from '@mui/material';
 import { FaSearch } from 'react-icons/fa';
 import { CheckBox } from '@mui/icons-material';
-import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex } from '../../css/styling';
+import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5 } from '../../css/styling';
 import { RoutesService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { AuthContext } from '../../contexts';
@@ -34,6 +34,8 @@ import GoogleMapReact from 'google-map-react';
 import { Marker } from '../../components';
 import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
 import toast from 'react-hot-toast';
+import { defaultProps } from '../../constants/settings';
+
 const drawerWidth = 500;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -74,14 +76,6 @@ export default function PersistentDrawerLeft() {
   const [DirectionsRenderer, setDirectionsRenderer] = React.useState<google.maps.DirectionsRenderer>();
   const navigate = useNavigate();
 
-  const defaultProps = {
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 11
-  };
-
   React.useEffect(() => {
     (async () => {
       await GetRoutes();
@@ -112,8 +106,8 @@ export default function PersistentDrawerLeft() {
       navigate(`/routes/${routeId}/edit`);
   }
 
-  const navigateToRouteCreatePage = (routeId: string) => {
-    navigate(`/routes/${routeId}/edit`);
+  const navigateToRouteCreatePage = () => {
+    navigate(`/routes/create`);
   }
 
   const ShowMap = async(routeId: string, event: any) => {
@@ -142,6 +136,7 @@ export default function PersistentDrawerLeft() {
           origin: origin,
           destination: destination,
           optimizeWaypoints: true,
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
           travelMode: google.maps.TravelMode.BICYCLING,
       });
 
@@ -155,9 +150,9 @@ export default function PersistentDrawerLeft() {
         totalDistance += leg.distance?.value ?? 0;
       });
 
-      totalDistance = totalDistance / 1000;
+      let totalDistanceRounded = (totalDistance / 1000).toFixed(2);
 
-      setSelectedRouteMiles(`Distance: ${totalDistance} km`);
+      setSelectedRouteMiles(`Distance: ${totalDistanceRounded} KM`);
     }
   }
 
@@ -188,7 +183,7 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <Divider />
-        <Typography variant='h5' css={margin2}>Search Routes</Typography>
+        <Typography variant='h4' css={margin2}>Search Routes</Typography>
         <div css={margin2}>
             <TextField
                 id="routeSearch"
@@ -234,46 +229,53 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <Grid container spacing={1}>
             <Grid item md={5}>
-            <Box css={{display: 'inline-flex'}}>
-                <IconButton onClick={handleDrawerOpen}>
-                    {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
-                <Typography variant='h4'>Routes</Typography>
-            </Box>
-            {routes.map((route) => (
-              <div key={route.id} id={`${route.id}-route-div`}>
-                <Box sx={{marginLeft: '5%'}}>
-                  <Typography variant='h3'>{route.routeName}</Typography>
-                  <Typography>{route.type.name} Route</Typography>
-                  <div css={{displayInlineFlex}}>
-                    <Button variant='contained' sx={{marginRight: '1%'}} size='large' onClick={() => navigateToRoutePage(route.id)}>View</Button>
-                    <Button variant='contained' size='large' sx={{marginRight: '1%'}} onClick={() => navigateToRouteEditPage(route.id)}>Edit</Button>
-                    <Button variant='contained' size='large' onClick={(e) => ShowMap(route.id, e)}>Preview Map</Button>
-                  </div>
-                </Box>
-              </div>
-            ))}
+              <Paper elevation={3} css={margin2}>
+                <div css={paddingBottom2}>
+                  <Box css={{display: 'inline-flex'}}>
+                      <IconButton onClick={handleDrawerOpen}>
+                          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                      </IconButton>
+                      <Typography variant='h6'>Routes</Typography>
+                  </Box>
+                  {routes.map((route) => (
+                    <div key={route.id} id={`${route.id}-route-div`} css={[marginBottom2]}>
+                      <Box sx={{marginLeft: '5%'}}>
+                        <Typography variant='h5'>{route.routeName}</Typography>
+                        <Typography>{route.type.name} Route</Typography>
+                        <div css={{displayInlineFlex}}>
+                          <Button variant='contained' sx={{marginRight: '1%'}} size='large' onClick={() => navigateToRoutePage(route.id)}>View</Button>
+                          <Button variant='contained' size='large' sx={{marginRight: '1%'}} onClick={() => navigateToRouteEditPage(route.id)}>Edit</Button>
+                          <Button variant='contained' size='large' onClick={(e) => ShowMap(route.id, e)}>Preview Map</Button>
+                        </div>
+                      </Box>
+                    </div>
+                  ))}
+                </div>
+              </Paper>
             </Grid>
             <Grid item md={7}>
-              <div css={dashboardRightSide}>
-                <div css={flex}>
-                  {selectedRoute != undefined && selectedRouteInfo()}
-                  <div css={createNewMapButton}>
-                    <Button variant='contained' size='large'>Create New Route</Button>
+              <Paper elevation={3} css={margin1dot5}>
+                  <div css={[paddingBottom2, paddingTop05]}>
+                    <div css={dashboardRightSide}>
+                      <div css={flex}>
+                        {selectedRoute != undefined && selectedRouteInfo()}
+                        <div css={createNewMapButton}>
+                          <Button variant='contained' size='large' onClick={navigateToRouteCreatePage}>Create New Route</Button>
+                        </div>
+                      </div>
+                      <div css={map}>
+                        <GoogleMapReact
+                          bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
+                          defaultCenter={defaultProps.center}
+                          defaultZoom={defaultProps.zoom}
+                          yesIWantToUseGoogleMapApiInternals
+                          onGoogleApiLoaded={(map: any) => handleApiLoaded(map)}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div css={map}>
-                  <GoogleMapReact
-                    bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
-                    defaultCenter={defaultProps.center}
-                    defaultZoom={defaultProps.zoom}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={(map: any, maps: any) => handleApiLoaded(map)}
-                  >
-                  </GoogleMapReact>
-                </div>
-              </div>
-            </Grid>
+                </Paper>
+             </Grid>
         </Grid>
       </Main>
     </Box>
