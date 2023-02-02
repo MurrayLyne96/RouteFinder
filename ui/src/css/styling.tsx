@@ -23,6 +23,13 @@ export const formGroup = css ({
     marginBottom: '1%',
 });
 
+export const formGroupFullWidth = css ({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    marginBottom: '1%',
+});
+
 export const alignItemsLeft = css ({
     display: 'flex',
     alignItems: 'start'
@@ -103,13 +110,59 @@ export const marginBottom2 = css({
   marginBottom: '2%'
 });
 
+export const marginBottom3dot8 = css({
+  marginBottom: '3.8%'
+});
+
+export const createRouteHeader = css({
+  marginBottom: '0.4%'
+});
+
+export const createRouteSubHeadings = css({
+  marginTop: '3%'
+});
+
 export const margin2 = css({
   margin: '2%'
 });
 
+export const margin3 = css({
+  margin: '3%'
+});
+
+export const margin1dot5 = css({
+  margin: '1.5%'
+});
+
+export const paddingBottom2 = css({
+  paddingBottom: '2%'
+});
+
+export const padding2 = css({
+  padding: '2%'
+});
+
+
+export const paddingTop05 = css({
+  paddingTop: '0.5%'
+});
+
 export const map = css({
   height: '80vh',
-  width: '100%'
+  width: '100%',
+  marginTop: '1%'
+});
+
+export const createMap = css({
+  height: '70vh',
+  width: '100%',
+  marginTop: '1%'
+});
+
+export const viewMap = css({
+  height: '70vh',
+  width: '100%',
+  marginTop: '1%'
 });
 
 export const createNewMapButton = css({
