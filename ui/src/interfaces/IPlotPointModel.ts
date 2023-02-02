@@ -3,6 +3,6 @@ export interface IPlotPointModel {
     xCoordinate: number;
     yCoordinate: number;
     description: string;
-    order: number;
+    plotOrder: number;
 
 }
