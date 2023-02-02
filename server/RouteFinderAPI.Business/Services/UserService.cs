@@ -57,10 +57,15 @@ public class UserService : IUserService
             return false;
         }
         
+        var oldPassword = userEntity.Password;
+
         _mapper.Map(userModel, userEntity);
+
         if (!string.IsNullOrWhiteSpace(userModel.Password))
         {
             userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+        } else {
+            userEntity.Password = oldPassword;
         }
         await _database.SaveChangesAsync();
         return true;
