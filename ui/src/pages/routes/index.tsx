@@ -9,11 +9,15 @@ import { useEffect, useState } from 'react';
 import { UserService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { useNavigate } from 'react-router-dom';
+import { ROUTE_TYPES } from '../../constants/identifiers';
 
 function Routes() {
     const {state} = AuthContext.useLogin();
     const [userRoutes, setUserRoutes] = useState<IRouteModel[]>([]);
     const userId = LoginUtils.getUserId(state.token);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [routeTypeFilters, setRouteTypeFilters] = useState<number>(ROUTE_TYPES.ALL);
+    const [allRoutes, setAllRoutes] = useState<IRouteModel[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,9 +26,37 @@ function Routes() {
             if (response.status === 200) {
                 var json = await response.json();
                 setUserRoutes(json);
+                setAllRoutes(json);
             }
         })();
     }, []);
+
+    useEffect(() => {
+        filterRoutes();
+    }, [searchQuery, routeTypeFilters]);
+
+    const filterRoutes = () => {
+        if (allRoutes != undefined && searchQuery != undefined && userId != undefined) {
+          if (searchQuery == '') {
+            setUserRoutes(allRoutes);
+            let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? allRoutes : allRoutes.filter(item => item.typeId == routeTypeFilters);
+            setUserRoutes(filteredRoutesByType);
+          
+          } else {
+            let filteredRoutes = allRoutes.filter(item => item.routeName.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+            if (filteredRoutes != undefined) {
+                setUserRoutes(filteredRoutes);
+                let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? filteredRoutes : filteredRoutes.filter(item => item.typeId == routeTypeFilters);
+                setUserRoutes(filteredRoutesByType);
+            } else {
+                setUserRoutes(allRoutes);
+                let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? allRoutes : allRoutes.filter(item => item.typeId == routeTypeFilters);
+                setUserRoutes(filteredRoutesByType);
+            }
+          }
+        }
+      }
 
     const navigateToRoutePage = (routeId: string) => {
         navigate(`/routes/${routeId}`);
@@ -45,6 +77,8 @@ function Routes() {
                             label="Search"
                             type="search"
                             fullWidth
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             variant="filled"
                             InputProps={{
                                 startAdornment: (
@@ -57,24 +91,11 @@ function Routes() {
                     </div>
                     <Typography css={margin2} variant='h6'>Route Type Filters</Typography>
                     <div css={margin2}>
-                        <Select value={3} id='type-select' fullWidth>
-                            <MenuItem value={1}>Cycling</MenuItem>
-                            <MenuItem value={2}>Running</MenuItem>
-                            <MenuItem value={3}>All</MenuItem>
+                        <Select value={routeTypeFilters} onChange={(e) => setRouteTypeFilters(Number(e.target.value))} id='type-select' fullWidth>
+                            <MenuItem value={ROUTE_TYPES.CYCLING}>Cycling</MenuItem>
+                            <MenuItem value={ROUTE_TYPES.RUNNING}>Running</MenuItem>
+                            <MenuItem value={ROUTE_TYPES.ALL}>All</MenuItem>
                         </Select>
-                    </div>
-                    <Typography variant='h6' css={margin2}>Distance Filters</Typography>
-                    <div css={margin2}>
-                        <TextField fullWidth label='Minimum Length'></TextField>
-                    </div>
-                    <div css={margin2}>
-                        <TextField fullWidth label='Maximum Length'></TextField>
-                    </div>
-                    <div css={margin2}>
-                        <TextField fullWidth label='Minimum Elevation'></TextField>
-                    </div>
-                    <div css={margin2}>
-                        <TextField fullWidth label='Maximum Elevation'></TextField>
                     </div>
                 </Paper>
             </Grid>
