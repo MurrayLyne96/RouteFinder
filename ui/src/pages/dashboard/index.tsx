@@ -35,6 +35,7 @@ import { Marker } from '../../components';
 import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
 import toast from 'react-hot-toast';
 import { defaultProps } from '../../constants/settings';
+import { ROUTE_TYPES } from '../../constants/identifiers';
 
 const drawerWidth = 500;
 
@@ -68,13 +69,22 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
   const [routes, setRoutes] = React.useState<IRouteModel[]>([]);
+  const [allRoutes, setAllRoutes] = React.useState<IRouteModel[]>([]);
   const [selectedRoute, setSelectedRoute] = React.useState<IRouteDetailModel>();
   const [routeMiles, setSelectedRouteMiles] = React.useState<String>('');
+
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [userRoutesOnly, setUserRoutesOnly] = React.useState<boolean>(false);
+  const [routeTypeFilters, setRouteTypeFilters] = React.useState<number>(ROUTE_TYPES.ALL);
+
   const [routeMap, setRouteMap] = React.useState<google.maps.Map>();
   const [DirectionsService, setDirectionsService] = React.useState<google.maps.DirectionsService>();
   const [DirectionsRenderer, setDirectionsRenderer] = React.useState<google.maps.DirectionsRenderer>();
   const navigate = useNavigate();
+  const {state} = AuthContext.useLogin();
+  const userId = LoginUtils.getUserId(state.token);
 
   React.useEffect(() => {
     (async () => {
@@ -82,11 +92,48 @@ export default function PersistentDrawerLeft() {
     })();
   }, []);
 
+  React.useEffect(() => {
+    filterRoutes();
+  }, [searchQuery, userRoutesOnly, routeTypeFilters]);
+
   const handleApiLoaded = async(map: any) => {
       setRouteMap(map.map);
       setDirectionsService(new map.maps.DirectionsService());
       setDirectionsRenderer(new map.maps.DirectionsRenderer());
   };
+
+  const filterRoutes = () => {
+    if (allRoutes != undefined && searchQuery != undefined && userRoutesOnly != undefined && userId != undefined) {
+      if (searchQuery == '') {
+        setRoutes(allRoutes);
+        let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? allRoutes : allRoutes.filter(item => item.typeId == routeTypeFilters);
+        checkUserOnlyRoutes(filteredRoutesByType);
+      
+      } else {
+        let filteredRoutes = allRoutes.filter(item => item.routeName.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        if (filteredRoutes != undefined) {
+          setRoutes(filteredRoutes);
+          let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? filteredRoutes : filteredRoutes.filter(item => item.typeId == routeTypeFilters);
+          checkUserOnlyRoutes(filteredRoutesByType);
+        } else {
+          setRoutes(allRoutes);
+          let filteredRoutesByType = routeTypeFilters == ROUTE_TYPES.ALL ? allRoutes : allRoutes.filter(item => item.typeId == routeTypeFilters);
+          checkUserOnlyRoutes(filteredRoutesByType);
+        }
+
+      }
+    }
+  }
+
+  const checkUserOnlyRoutes = (routes : IRouteModel[]) => {
+    if (userRoutesOnly) {
+      let filteredRoutes = routes.filter(item => item.userId === userId);
+      setRoutes(filteredRoutes);
+    } else {
+      setRoutes(routes);
+    }
+  }
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -96,14 +143,15 @@ export default function PersistentDrawerLeft() {
     var result = await RoutesService.getAllRoutes();
     var json = await result.json();
     setRoutes(json);
+    setAllRoutes(json);
   }
 
   const navigateToRoutePage = (routeId: string) => {
-      navigate(`/routes/${routeId}`);
+    navigate(`/routes/${routeId}`);
   } 
 
   const navigateToRouteEditPage = (routeId: string) => {
-      navigate(`/routes/${routeId}/edit`);
+    navigate(`/routes/${routeId}/edit`);
   }
 
   const navigateToRouteCreatePage = () => {
@@ -165,6 +213,11 @@ export default function PersistentDrawerLeft() {
     )
   }
 
+  const handleCheckBoxChange = (e: any) => {
+    let value : boolean = e.target.value;
+    setUserRoutesOnly(value);
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -190,6 +243,8 @@ export default function PersistentDrawerLeft() {
                 label="Search"
                 type="search"
                 fullWidth
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 variant="filled"
                 InputProps={{
                     startAdornment: (
@@ -201,28 +256,15 @@ export default function PersistentDrawerLeft() {
             />
         </div>
         <div css={margin2}>
-            <FormControlLabel control={<Checkbox/>} label="Select my own routes only"></FormControlLabel>
+            <FormControlLabel control={<Checkbox value={userRoutesOnly} onChange={(e) => handleCheckBoxChange(e)}/>} label="Select my own routes only"></FormControlLabel>
         </div>
         <Typography css={margin2} variant='h6'>Route Type Filters</Typography>
         <div css={margin2}>
-          <Select value={3} id='type-select' fullWidth>
-              <MenuItem value={1}>Cycling</MenuItem>
-              <MenuItem value={2}>Running</MenuItem>
-              <MenuItem value={3}>All</MenuItem>
+          <Select value={routeTypeFilters} onChange={(e) => setRouteTypeFilters(Number(e.target.value))} id='type-select' fullWidth>
+              <MenuItem value={ROUTE_TYPES.CYCLING}>Cycling</MenuItem>
+              <MenuItem value={ROUTE_TYPES.RUNNING}>Running</MenuItem>
+              <MenuItem value={ROUTE_TYPES.ALL}>All</MenuItem>
           </Select>
-        </div>
-        <Typography variant='h6' css={margin2}>Distance Filters</Typography>
-        <div css={margin2}>
-            <TextField fullWidth label='Minimum Length'></TextField>
-        </div>
-        <div css={margin2}>
-            <TextField fullWidth label='Maximum Length'></TextField>
-        </div>
-        <div css={margin2}>
-            <TextField fullWidth label='Minimum Elevation'></TextField>
-        </div>
-        <div css={margin2}>
-            <TextField fullWidth label='Maximum Elevation'></TextField>
         </div>
       </Drawer>
 
