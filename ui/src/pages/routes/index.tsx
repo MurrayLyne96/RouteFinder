@@ -55,9 +55,6 @@ function Routes() {
                             }}
                         />
                     </div>
-                    <div css={margin2}>
-                        <FormControlLabel control={<Checkbox/>} label="Select my own routes only"></FormControlLabel>
-                    </div>
                     <Typography css={margin2} variant='h6'>Route Type Filters</Typography>
                     <div css={margin2}>
                         <Select value={3} id='type-select' fullWidth>
