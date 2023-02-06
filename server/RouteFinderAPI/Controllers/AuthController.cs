@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-
+using RouteFinderAPI.Authentication;
+using RouteFinderAPI.Common.Constants;
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -24,13 +25,27 @@ namespace RouteFinderAPI.Controllers
             if (user == null) return Unauthorized();
             return Ok(new TokenModel()
             {
-                Token = GenerateToken(user, 600)
+                Token = GenerateToken(user, 600, TokenConstants.TOKEN_TYPE.ACCESS),
+                RefreshToken = GenerateToken(user, 60000, TokenConstants.TOKEN_TYPE.REFRESH)
             });
         }
-        
-        private string GenerateToken(UserDto user, int expirationTimeInMinutes)
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<ActionResult<TokenModel>> Refresh([FromServices] IAuthorizedAccountProvider authorizedAccountProvider)
         {
-            var secretKey = Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA");
+            var account = await authorizedAccountProvider.GetLoggedInAccount();
+            if (account is null) return Unauthorized();
+            
+            return new TokenModel
+            {
+                Token = GenerateToken(account, 600, TokenConstants.TOKEN_TYPE.ACCESS), RefreshToken = GenerateToken(account, 18000, TokenConstants.TOKEN_TYPE.REFRESH)
+            };
+        }
+
+        private string GenerateToken(UserDto user, int expirationTimeInMinutes, TokenConstants.TOKEN_TYPE tokenType)
+        {
+            var secretKey = tokenType == TokenConstants.TOKEN_TYPE.ACCESS ? Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA") : Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUK");
             var securityKey = new SymmetricSecurityKey(secretKey);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var expiryTime = DateTime.UtcNow.AddMinutes(expirationTimeInMinutes);

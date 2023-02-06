@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const baseUrl = process.env.REACT_APP_API_URL ?? "http://localhost:7241";
 const configureUrl = (url: string) => `${baseUrl}/${url}`;
-const refreshUrl = "/authentication/refresh";
+const refreshUrl = "/auth/refresh";
 
 let isRefreshing = false;
 
