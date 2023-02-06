@@ -73,7 +73,7 @@ function CreateRoute() : EmotionJSX.Element {
             let destinationLng = destinationResponse.results[0].geometry.location.lng();
             destinationLatLng = new google.maps.LatLng(destinationLat, destinationLng);
 
-            let response = await MapService.generateRouteWithStartAndFinish(originLatLng, destinationLatLng, DirectionsService, DirectionsRenderer, routeMap);
+            let response = await MapService.generateRouteWithStartAndFinish(originLatLng, destinationLatLng, DirectionsService, DirectionsRenderer, routeMap, route.typeId);
 
             if (response != undefined) {
                 DirectionsRenderer.setMap(routeMap);

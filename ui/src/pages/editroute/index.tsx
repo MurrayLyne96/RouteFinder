@@ -48,7 +48,7 @@ function EditRoute() {
                 let origin : google.maps.LatLng = new google.maps.LatLng(route.plotPoints[0].xCoordinate, route.plotPoints[0].yCoordinate);
                 let destination: google.maps.LatLng = new google.maps.LatLng(route.plotPoints[1].xCoordinate, route.plotPoints[1].yCoordinate);
                 
-                var response = await MapService.generateRouteWithStartAndFinish(origin, destination, DirectionsService, DirectionsRenderer, routeMap);
+                var response = await MapService.generateRouteWithStartAndFinish(origin, destination, DirectionsService, DirectionsRenderer, routeMap, route.typeId);
                 if (response != undefined) {
                     DirectionsRenderer.setMap(routeMap);
                     DirectionsRenderer.setDirections(response);

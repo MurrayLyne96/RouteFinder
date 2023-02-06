@@ -59,7 +59,7 @@ function Route() {
                 let origin : google.maps.LatLng = new google.maps.LatLng(route.plotPoints[0].xCoordinate, route.plotPoints[0].yCoordinate);
                 let destination: google.maps.LatLng = new google.maps.LatLng(route.plotPoints[1].xCoordinate, route.plotPoints[1].yCoordinate);
                 
-                var response = await MapService.generateRouteWithStartAndFinish(origin, destination, DirectionsService, DirectionsRenderer, routeMap);
+                var response = await MapService.generateRouteWithStartAndFinish(origin, destination, DirectionsService, DirectionsRenderer, routeMap, route.typeId);
                 if (response != undefined) {
                     DirectionsRenderer.setMap(routeMap);
                     DirectionsRenderer.setDirections(response);
@@ -166,7 +166,7 @@ function Route() {
                         <Typography variant='h4'><Link to={"/routes"}><FaBackspace/></Link></Typography>
                         <Typography variant='h3'>{route?.routeName}</Typography>
                         <Typography>{route?.type.name} Route</Typography>
-                        <Button variant='contained' size='large' onClick={() => navigateToRouteEditPage(route?.id)}>Edit</Button>
+                        {route?.userId == userId && ShowEditButton(route)}
                         <Typography variant='h5' css={marginTop2dot5}>Route Details</Typography>
                         <Typography variant='h6'>Distance</Typography>
                         <Typography>{routeInfo?.totalDistance} KM</Typography>
