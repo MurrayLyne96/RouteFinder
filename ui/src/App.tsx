@@ -15,28 +15,30 @@ import { Toaster } from 'react-hot-toast';
 import { AuthContext } from './contexts';
 import { LoginUtils } from './utils';
 import Dashboard from './pages/dashboard';
-import { Layout } from './components';
+import { AuthRoute, Layout } from './components';
 import { useNavigate } from 'react-router-dom';
 import { CreateRoutePage, EditRoutePage, ProfilePage, RoutePage, RoutesPage } from './pages';
 const UnauthenticatedRoutes = () => {
   return (
-    <>
+    <Routes>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-    </>
+    </Routes>
   )
 }
 
 const AuthenticatedRoutes = () => {
   return (
-  <>
-    <Route path="dashboard" element={<Dashboard />} />
-    <Route path="routes" element={<RoutesPage />} />
-    <Route path="routes/:routeId" element={<RoutePage />} />
-    <Route path="routes/:routeId/edit" element={<EditRoutePage />} />
-    <Route path="routes/create" element={<CreateRoutePage />} />
-    <Route path="profile" element={<ProfilePage />} />
-  </>
+    <AuthRoute>
+      <Routes>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="routes" element={<RoutesPage />} />
+        <Route path="routes/:routeId" element={<RoutePage />} />
+        <Route path="routes/:routeId/edit" element={<EditRoutePage />} />
+        <Route path="routes/create" element={<CreateRoutePage />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Routes>
+    </AuthRoute>
   )
 }
 
@@ -54,10 +56,8 @@ function App() {
         <ThemeProvider theme={theme}>
           <Box>
             <Layout>
-              <Routes>
-                {loggedIn && AuthenticatedRoutes()}
-                {!loggedIn && UnauthenticatedRoutes()}
-              </Routes>
+              {AuthenticatedRoutes()}
+              {!loggedIn && UnauthenticatedRoutes()}
             </Layout>
           </Box>
         </ThemeProvider>
