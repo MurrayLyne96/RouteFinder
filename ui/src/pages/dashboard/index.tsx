@@ -24,7 +24,7 @@ import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, Me
 import { FaSearch } from 'react-icons/fa';
 import { CheckBox } from '@mui/icons-material';
 import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5 } from '../../css/styling';
-import { RoutesService } from '../../services';
+import { MapService, RoutesService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { AuthContext } from '../../contexts';
 import { LoginUtils } from '../../utils';
@@ -36,6 +36,7 @@ import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
 import toast from 'react-hot-toast';
 import { defaultProps } from '../../constants/settings';
 import { ROUTE_TYPES } from '../../constants/identifiers';
+import EditButton from '../../components/editbutton/index';
 
 const drawerWidth = 500;
 
@@ -66,7 +67,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft() {
+export default function Dashboard() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -150,10 +151,6 @@ export default function PersistentDrawerLeft() {
     navigate(`/routes/${routeId}`);
   } 
 
-  const navigateToRouteEditPage = (routeId: string) => {
-    navigate(`/routes/${routeId}/edit`);
-  }
-
   const navigateToRouteCreatePage = () => {
     navigate(`/routes/create`);
   }
@@ -167,7 +164,7 @@ export default function PersistentDrawerLeft() {
       let origin : google.maps.LatLng = new google.maps.LatLng(routeToBeSelected.plotPoints[0].xCoordinate, routeToBeSelected.plotPoints[0].yCoordinate);
       let destination: google.maps.LatLng = new google.maps.LatLng(routeToBeSelected.plotPoints[1].xCoordinate, routeToBeSelected.plotPoints[1].yCoordinate);
       
-      await generateRouteWithStartAndFinish(origin, destination);
+      await generateRouteWithStartAndFinish(origin, destination, routeToBeSelected);
       setSelectedRoute(routeToBeSelected);
 
     } else if (routeToBeSelected.plotPoints.length > 2) {
@@ -178,29 +175,24 @@ export default function PersistentDrawerLeft() {
     }
   }
 
-  const generateRouteWithStartAndFinish = async(origin: google.maps.LatLng, destination: google.maps.LatLng) => {
+  const generateRouteWithStartAndFinish = async(origin: google.maps.LatLng, destination: google.maps.LatLng, route: IRouteDetailModel) => {
     if (DirectionsService != undefined && DirectionsRenderer != undefined && routeMap != undefined) {
-      var response = await DirectionsService.route({
-          origin: origin,
-          destination: destination,
-          optimizeWaypoints: true,
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
-          travelMode: google.maps.TravelMode.BICYCLING,
-      });
+      var response = await MapService.generateRouteWithStartAndFinish(origin, destination, DirectionsService, DirectionsRenderer, routeMap, route.typeId)
+      if (response != undefined) {
+        DirectionsRenderer.setMap(routeMap);
+        DirectionsRenderer.setDirections(response);
 
-      DirectionsRenderer.setMap(routeMap);
-      DirectionsRenderer.setDirections(response);
+        let distanceLegs = response.routes[0].legs;
+        let totalDistance : number = 0;
 
-      let distanceLegs = response.routes[0].legs;
-      let totalDistance : number = 0;
+        distanceLegs.forEach(function (leg) {
+          totalDistance += leg.distance?.value ?? 0;
+        });
 
-      distanceLegs.forEach(function (leg) {
-        totalDistance += leg.distance?.value ?? 0;
-      });
+        let totalDistanceRounded = (totalDistance / 1000).toFixed(2);
 
-      let totalDistanceRounded = (totalDistance / 1000).toFixed(2);
-
-      setSelectedRouteMiles(`Distance: ${totalDistanceRounded} KM`);
+        setSelectedRouteMiles(`Distance: ${totalDistanceRounded} KM`);
+      }
     }
   }
 
@@ -211,6 +203,10 @@ export default function PersistentDrawerLeft() {
         <Typography>{routeMiles}</Typography>
       </div>
     )
+  }
+
+  const ShowEditButton = (model: IRouteModel) => {
+    return(<EditButton route={model}></EditButton>)
   }
 
   const handleCheckBoxChange = (e: any) => {
@@ -286,7 +282,7 @@ export default function PersistentDrawerLeft() {
                         <Typography>{route.type.name} Route</Typography>
                         <div css={{displayInlineFlex}}>
                           <Button variant='contained' sx={{marginRight: '1%'}} size='large' onClick={() => navigateToRoutePage(route.id)}>View</Button>
-                          <Button variant='contained' size='large' sx={{marginRight: '1%'}} onClick={() => navigateToRouteEditPage(route.id)}>Edit</Button>
+                          {route.userId == userId && ShowEditButton(route)}
                           <Button variant='contained' size='large' onClick={(e) => ShowMap(route.id, e)}>Preview Map</Button>
                         </div>
                       </Box>

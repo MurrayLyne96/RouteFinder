@@ -10,6 +10,7 @@ import { UserService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_TYPES } from '../../constants/identifiers';
+import { EditButton } from '../../components';
 
 function Routes() {
     const {state} = AuthContext.useLogin();
@@ -34,6 +35,10 @@ function Routes() {
     useEffect(() => {
         filterRoutes();
     }, [searchQuery, routeTypeFilters]);
+
+    const ShowEditButton = (model: IRouteModel) => {
+        return(<EditButton route={model}></EditButton>)
+    }
 
     const filterRoutes = () => {
         if (allRoutes != undefined && searchQuery != undefined && userId != undefined) {
@@ -109,7 +114,7 @@ function Routes() {
                                 <Typography>{route.type.name} Route</Typography>
                                 <div css={[marginBottom2, marginTop2dot5]}>
                                     <Button onClick={() => navigateToRoutePage(route.id)} variant='contained' sx={{marginRight: '1%'}} size='large'>View</Button>
-                                    <Button onClick={() => navigateToRouteEditPage(route.id)} variant='contained' size='large'>Edit</Button>
+                                    {route.userId == userId && ShowEditButton(route)}
                                 </div>
                                 <Divider></Divider>
                             </div>

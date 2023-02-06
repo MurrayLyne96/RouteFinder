@@ -15,6 +15,10 @@ import GoogleMapReact from 'google-map-react';
 import toast from 'react-hot-toast';
 import { IRouteInfoModel } from '../../interfaces/IRouteInfoModel';
 import dayjs from 'dayjs';
+import { EditButton } from '../../components';
+import { AuthContext } from '../../contexts';
+import { IRouteModel } from '../../interfaces/IRouteModel';
+import { LoginUtils } from '../../utils';
 
 function Route() {
     const navigate = useNavigate();
@@ -33,12 +37,20 @@ function Route() {
             highestElevation: ''
         }
     );
+    const {state} = AuthContext.useLogin();
+    const userId = LoginUtils.getUserId(state.token);
 
     const navigateToRouteEditPage = (routeId: string | undefined) => {
         if (routeId != undefined) {
             navigate(`/routes/${routeId}/edit`);
         }
     }
+
+    const ShowEditButton = (model: IRouteModel | undefined) => {
+        if (model != undefined) {
+            return(<EditButton route={model}></EditButton>)
+        }
+      }
 
     const handleApiLoaded = async(map: any) => {
         setRouteMap(map.map);
