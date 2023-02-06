@@ -7,7 +7,7 @@ CREATE TABLE users (
     last_name varchar,
     password varchar,
     role varchar,
-    date_of_birth timestamp,
+    date_of_birth date,
     created timestamp DEFAULT CURRENT_TIMESTAMP,
     last_modified timestamp DEFAULT CURRENT_TIMESTAMP
 );

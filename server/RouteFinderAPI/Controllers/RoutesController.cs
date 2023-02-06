@@ -18,7 +18,6 @@ namespace RouteFinderAPI.Controllers
         
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<RouteViewModel>))]
-        [Authorize(Roles = "ADM")]
         public async Task<ActionResult<RouteViewModel[]>> GetAllRoutes()
         {
             var routes = await _routeService.GetAllRoutes();
@@ -68,6 +67,7 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult> CreatePlotPoint(Guid routeId, PlotPointCreateModel model)
         {
             var plotpointCreateDto = _mapper.Map<PlotpointCreateDto>(model);
+            plotpointCreateDto.MapRouteId = routeId;
             await _plotpointService.CreatePlotPoint(plotpointCreateDto);
             return StatusCode((int)HttpStatusCode.Created);
         }

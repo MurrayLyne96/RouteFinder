@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { ThemeOptions } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 export const headerCss = css({
     color: "#45818e",
@@ -19,6 +20,13 @@ export const formGroup = css ({
     display: 'flex',
     flexDirection: 'column',
     width: '20%',
+    marginBottom: '1%',
+});
+
+export const formGroupFullWidth = css ({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
     marginBottom: '1%',
 });
 
@@ -61,6 +69,139 @@ export const fullWidth = css ({
 
 export const thirdWidth = css ({
   width: '33.3%'
+});
+
+export const navbarLink = css({
+  color: '#ffffff',
+  '&:after': {
+    color: '#ffffff',
+  }
+});
+
+export const marginRight2 = css({
+  marginRight: '2%'
+});
+
+export const marginRight05 = css({
+  marginRight: '0.5%'
+});
+
+export const marginLeft5 = css({
+  marginLeft: 5
+});
+
+export const marginLeft1 = css({
+  marginLeft: '1%'
+});
+
+export const marginLeft15 = css({
+  marginLeft: '25%'
+});
+
+export const marginRight1 = css({
+  marginRight: '1%'
+});
+
+export const marginTop2dot5 = css({
+  marginTop: '2.5%',
+});
+
+export const marginBottom2 = css({
+  marginBottom: '2%'
+});
+
+export const marginBottom3dot8 = css({
+  marginBottom: '3.8%'
+});
+
+export const createRouteHeader = css({
+  marginBottom: '0.4%'
+});
+
+export const createRouteSubHeadings = css({
+  marginTop: '3%'
+});
+
+export const margin2 = css({
+  margin: '2%'
+});
+
+export const margin3 = css({
+  margin: '3%'
+});
+
+export const margin1dot5 = css({
+  margin: '1.5%'
+});
+
+export const paddingBottom2 = css({
+  paddingBottom: '2%'
+});
+
+export const padding2 = css({
+  padding: '2%'
+});
+
+
+export const paddingTop05 = css({
+  paddingTop: '0.5%'
+});
+
+export const map = css({
+  height: '80vh',
+  width: '100%',
+  marginTop: '1%'
+});
+
+export const createMap = css({
+  height: '70vh',
+  width: '100%',
+  marginTop: '1%'
+});
+
+export const viewMap = css({
+  height: '70vh',
+  width: '100%',
+  marginTop: '1%'
+});
+
+export const createNewMapButton = css({
+  display: 'flex',
+  alignItems: 'flex-end',
+  justifyContent: 'end',
+  marginBottom: 'auto',
+  flexBasis: '100%',
+  flexDirection: 'column-reverse',
+});
+
+export const routeInfo = css({
+  display: 'flex',
+  alignItems: 'start',
+  justifyContent: 'start',
+  marginBottom: '2%',
+  flexBasis: '100%',
+  flexDirection: 'column'
+});
+
+export const noMargins = css({
+  margin: '0'
+});
+
+export const flex = css({
+  display: 'flex'
+})
+
+export const dashboardRightSide = css({
+  margin: '1.5%'
+});
+
+export const displayInlineFlex = css({
+  display: 'inline-flex'
+});
+
+export const highlightedBox = css({
+  borderColor: 'blue',
+  borderWidth: '12px'
 });
 
 export const finderThemeOptions: ThemeOptions = {

@@ -9,6 +9,8 @@ global using RouteFinderAPI.Models.ViewModels;
 global using RouteFinderAPI.Services.Dto.Routes;
 global using RouteFinderAPI.Services.Dto.Types;
 global using RouteFinderAPI.Services.Dto.Users;
+global using RouteFinderAPI.Extensions;
+global using RouteFinderAPI;
 global using System.Net;
 global using AutoMapper;
 global using RouteFinderAPI.Services;

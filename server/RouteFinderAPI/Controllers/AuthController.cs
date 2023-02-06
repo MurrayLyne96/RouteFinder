@@ -15,7 +15,7 @@ namespace RouteFinderAPI.Controllers
         public AuthController(IAuthService authService) => _authService = authService;
         
         [HttpPost]
-        [Route("/auth")]
+        [Route("")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TokenModel))]
         [AllowAnonymous]
         public async Task<ActionResult<TokenModel>> Authenticate(UserAuthModel model)
@@ -42,7 +42,7 @@ namespace RouteFinderAPI.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role.RoleName)
+                    new Claim(ClaimTypes.Role, user.Role.RoleName),
                 }),
                 Expires = expiryTime,
                 SigningCredentials = credentials

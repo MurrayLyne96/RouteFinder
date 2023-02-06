@@ -68,6 +68,7 @@ namespace RouteFinderAPI.Data.Contexts
             {
                 optionsBuilder.UseNpgsql(_connectionString);
             }
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 }

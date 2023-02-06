@@ -62,7 +62,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-builder.Services.AddScoped<IRouteFinderDatabase, RouteFinderContext>(_ => new RouteFinderContext("Server=db,5432;Database=routefinder;User Id=postgres;Password=password;"));
+builder.Services.AddScoped<IRouteFinderDatabase, RouteFinderContext>(_ => new RouteFinderContext(EnvironmentVariables.DbConnectionString));
 builder.Services.AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<UserCreateViewValidator>());
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -89,6 +89,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors(
+    o => o
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin()
+);
 
 app.MapControllers().RequireAuthorization();
 
