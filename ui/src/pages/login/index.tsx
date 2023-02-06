@@ -111,7 +111,7 @@ function Login() : JSX.Element {
                         <Button variant="contained" onClick={authentication}>Login</Button>
                     </div>
                     <div css={[flexBasis50, justifyItemsRight]}>
-                        <Link to={"register"} css={centeredItem}>Register new Account</Link>
+                        <Link to={"/register"} css={centeredItem}>Register new Account</Link>
                     </div>
                 </div>
             </div>
