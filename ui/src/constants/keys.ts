@@ -1,1 +1,3 @@
-export const GOOGLE_API_KEY = 'AIzaSyA7MwoJfItyL5_Y5d48Py0Un6DT_5s-Aks' //TODO: MAKE THIS ENVIRONMENT BASED ONLY BEFORE MERGING!
+import configData from "../config.json"
+
+export const GOOGLE_API_KEY = configData.GOOGLE_API_KEY;
