@@ -1,4 +1,5 @@
 using NSubstitute.ReturnsExtensions;
+using RouteFinderAPI.Authentication;
 using RouteFinderAPI.Services.Dto.Roles;
 using RouteFinderAPI.Services.Dto.Users;
 
@@ -7,10 +8,12 @@ namespace RouteFinderAPI.Test.Controllers;
 public class AuthControllerTests
 {
     private readonly IAuthService _authService;
+    private readonly IAuthorizedAccountProvider _authProvider;
 
     public AuthControllerTests()
     {
         _authService = Substitute.For<IAuthService>();
+        _authProvider = Substitute.For<IAuthorizedAccountProvider>();
     }
 
     [Fact]
@@ -58,6 +61,6 @@ public class AuthControllerTests
     
     private AuthController RetrieveController()
     {
-        return new AuthController(_authService);
+        return new AuthController(_authService, _authProvider);
     }
 }
