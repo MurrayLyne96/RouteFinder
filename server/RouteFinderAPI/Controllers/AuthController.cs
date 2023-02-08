@@ -40,20 +40,27 @@ namespace RouteFinderAPI.Controllers
         public async Task<ActionResult<TokenModel>> Refresh(TokenModel model)
         {
             var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(model.Token);
-            
-            var id = jwtSecurityToken.Claims
-                .Where(x => x.Type == "nameid")
-                .Select(x => x.Value)
-                .FirstOrDefault();
-            
-            var account = await _authorizedAccountProvider.GetLoggedInAccount(id);
-            if (account is null) return Unauthorized();
-            
-            return new TokenModel
+            var jwtSecurityToken = handler.ReadJwtToken(model.RefreshToken);
+            if (jwtSecurityToken.ValidTo < DateTime.UtcNow)
             {
-                Token = GenerateToken(account, 600, TokenConstants.TOKEN_TYPE.ACCESS), RefreshToken = GenerateToken(account, 18000, TokenConstants.TOKEN_TYPE.REFRESH)
-            };
+                var id = jwtSecurityToken.Claims
+                    .Where(x => x.Type == "nameid")
+                    .Select(x => x.Value)
+                    .FirstOrDefault();
+
+                var account = await _authorizedAccountProvider.GetLoggedInAccount(id);
+                if (account is null) return Unauthorized();
+
+                return new TokenModel
+                {
+                    Token = GenerateToken(account, 600, TokenConstants.TOKEN_TYPE.ACCESS),
+                    RefreshToken = GenerateToken(account, 18000, TokenConstants.TOKEN_TYPE.REFRESH)
+                };
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         private string GenerateToken(UserDto user, int expirationTimeInMinutes, TokenConstants.TOKEN_TYPE tokenType)
