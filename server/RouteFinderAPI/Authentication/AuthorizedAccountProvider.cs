@@ -6,23 +6,19 @@ public class AuthorizedAccountProvider : IAuthorizedAccountProvider
 {
     private UserDto? _account;
     private readonly IUserService _userService;
-    private readonly IHttpContextAccessor _contextAccessor;
     
     public AuthorizedAccountProvider(IUserService userService, IHttpContextAccessor contextAccessor)
     {
         _userService = userService;
-        _contextAccessor = contextAccessor;
     }
     
-    public async Task<UserDto> GetLoggedInAccount()
+    public async Task<UserDto> GetLoggedInAccount(string id)
     {
         if (_account is not null) return _account;
 
-        var identifier = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(id)) return null;
 
-        if (string.IsNullOrWhiteSpace(identifier)) return null;
-
-        _account = await _userService.GetLoggedInUserById(Guid.Parse(identifier));
+        _account = await _userService.GetLoggedInUserById(Guid.Parse(id));
 
         return _account;
     }
@@ -30,5 +26,5 @@ public class AuthorizedAccountProvider : IAuthorizedAccountProvider
 
 public interface IAuthorizedAccountProvider
 {
-    Task<UserDto> GetLoggedInAccount();
+    Task<UserDto> GetLoggedInAccount(string id);
 }

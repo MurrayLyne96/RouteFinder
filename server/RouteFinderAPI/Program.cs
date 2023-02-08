@@ -72,6 +72,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IPlotpointService, PlotpointService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthorizedAccountProvider, AuthorizedAccountProvider>();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typeof(Program).Assembly,

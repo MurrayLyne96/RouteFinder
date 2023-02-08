@@ -13,7 +13,11 @@ namespace RouteFinderAPI.Controllers
     public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService) => _authService = authService;
+        private readonly IAuthorizedAccountProvider _authorizedAccountProvider;
+        public AuthController(IAuthService authService, IAuthorizedAccountProvider authorizedAccountProvider) {
+            _authService = authService;
+            _authorizedAccountProvider = authorizedAccountProvider;
+        }
         
         [HttpPost]
         [Route("")]
@@ -32,9 +36,18 @@ namespace RouteFinderAPI.Controllers
 
         [HttpPost]
         [Route("refresh")]
-        public async Task<ActionResult<TokenModel>> Refresh([FromServices] IAuthorizedAccountProvider authorizedAccountProvider)
+        [AllowAnonymous]
+        public async Task<ActionResult<TokenModel>> Refresh(TokenModel model)
         {
-            var account = await authorizedAccountProvider.GetLoggedInAccount();
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(model.Token);
+            
+            var id = jwtSecurityToken.Claims
+                .Where(x => x.Type == "nameid")
+                .Select(x => x.Value)
+                .FirstOrDefault();
+            
+            var account = await _authorizedAccountProvider.GetLoggedInAccount(id);
             if (account is null) return Unauthorized();
             
             return new TokenModel
