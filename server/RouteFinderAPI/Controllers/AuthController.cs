@@ -41,7 +41,7 @@ namespace RouteFinderAPI.Controllers
         {
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(model.RefreshToken);
-            if (jwtSecurityToken.ValidTo < DateTime.UtcNow)
+            if (jwtSecurityToken.ValidTo >= DateTime.UtcNow)
             {
                 var id = jwtSecurityToken.Claims
                     .Where(x => x.Type == "nameid")
