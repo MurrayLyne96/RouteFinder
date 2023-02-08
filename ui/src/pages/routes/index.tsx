@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { jsx, css, Global, ClassNames } from '@emotion/react';
-import { Checkbox, FormControlLabel, Grid, InputAdornment, MenuItem, Select, TextField, Typography, Box, Divider, Button, Paper } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid, InputAdornment, MenuItem, Select, TextField, Typography, Box, Divider, Button, Paper, Card } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { displayInlineFlex, margin2, marginBottom2, marginTop2dot5, padding2, paddingBottom2 } from '../../css/styling';
 import { AuthContext } from '../../contexts';
@@ -109,15 +109,14 @@ function Routes() {
                     <Box sx={{height: '800px', overflowY: 'auto'}}>
                         <Typography variant='h3'>My Routes</Typography>
                         {userRoutes.map((route) => (
-                            <div key={route.id}>
+                            <Card elevation={5} key={route.id} id={`${route.id}-route-div`} css={[margin2, padding2]}>
                                 <Typography variant='h4'>{route.routeName}</Typography>
                                 <Typography>{route.type.name} Route</Typography>
                                 <div css={[marginBottom2, marginTop2dot5]}>
                                     <Button onClick={() => navigateToRoutePage(route.id)} variant='contained' sx={{marginRight: '1%'}} size='large'>View</Button>
                                     {route.userId == userId && ShowEditButton(route)}
                                 </div>
-                                <Divider></Divider>
-                            </div>
+                            </Card>
                         ))}
                     </Box>
                 </Paper>

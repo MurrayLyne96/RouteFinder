@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-
+using RouteFinderAPI.Authentication;
+using RouteFinderAPI.Common.Constants;
 namespace RouteFinderAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -12,7 +13,11 @@ namespace RouteFinderAPI.Controllers
     public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService) => _authService = authService;
+        private readonly IAuthorizedAccountProvider _authorizedAccountProvider;
+        public AuthController(IAuthService authService, IAuthorizedAccountProvider authorizedAccountProvider) {
+            _authService = authService;
+            _authorizedAccountProvider = authorizedAccountProvider;
+        }
         
         [HttpPost]
         [Route("")]
@@ -24,13 +29,43 @@ namespace RouteFinderAPI.Controllers
             if (user == null) return Unauthorized();
             return Ok(new TokenModel()
             {
-                Token = GenerateToken(user, 600)
+                Token = GenerateToken(user, 600, TokenConstants.TOKEN_TYPE.ACCESS),
+                RefreshToken = GenerateToken(user, 60000, TokenConstants.TOKEN_TYPE.REFRESH)
             });
         }
-        
-        private string GenerateToken(UserDto user, int expirationTimeInMinutes)
+
+        [HttpPost]
+        [Route("refresh")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TokenModel>> Refresh(TokenModel model)
         {
-            var secretKey = Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA");
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(model.RefreshToken);
+            if (jwtSecurityToken.ValidTo >= DateTime.UtcNow)
+            {
+                var id = jwtSecurityToken.Claims
+                    .Where(x => x.Type == "nameid")
+                    .Select(x => x.Value)
+                    .FirstOrDefault();
+
+                var account = await _authorizedAccountProvider.GetLoggedInAccount(id);
+                if (account is null) return Unauthorized();
+
+                return new TokenModel
+                {
+                    Token = GenerateToken(account, 600, TokenConstants.TOKEN_TYPE.ACCESS),
+                    RefreshToken = GenerateToken(account, 18000, TokenConstants.TOKEN_TYPE.REFRESH)
+                };
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        private string GenerateToken(UserDto user, int expirationTimeInMinutes, TokenConstants.TOKEN_TYPE tokenType)
+        {
+            var secretKey = tokenType == TokenConstants.TOKEN_TYPE.ACCESS ? Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA") : Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUK");
             var securityKey = new SymmetricSecurityKey(secretKey);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var expiryTime = DateTime.UtcNow.AddMinutes(expirationTimeInMinutes);

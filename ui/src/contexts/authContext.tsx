@@ -18,7 +18,7 @@ function authReducer(state: any, action: any) {
             return {
                 ...state,
                 token: action.token,
-                //refreshToken: action.refreshToken, TODO: BRING THIS BACK ONCE WE'VE IMPLEMENTED THE REFRESH TOKEN.
+                refreshToken: action.refreshToken,
             };
         }
         case "logout": {

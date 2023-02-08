@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { RoutesService } from '../../services';
 import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
-import { Button, Grid, Paper, Typography } from '@mui/material';
+import { Button, Card, Grid, Paper, Typography } from '@mui/material';
 import { FaBackspace } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GOOGLE_API_KEY } from '../../constants/keys';
@@ -175,21 +175,25 @@ function Route() {
             <Grid container spacing={2}>
                 <Grid item md={4}>
                     <Paper css={[margin3, padding2]}>
-                        <Typography variant='h4'><Link to={"/routes"}><FaBackspace/></Link></Typography>
-                        <Typography variant='h3'>{route?.routeName}</Typography>
-                        <Typography>{route?.type.name} Route</Typography>
-                        {route?.userId == userId && ShowEditButton(route)}
-                        <Typography variant='h5' css={marginTop2dot5}>Route Details</Typography>
-                        <Typography variant='h6'>Distance</Typography>
-                        <Typography>{routeInfo?.totalDistance} KM</Typography>
-                        <Typography variant='h6'>Total Elevation Change</Typography>
-                        <Typography>{routeInfo?.totalElevation}</Typography>
-                        <Typography variant='h6'>Highest Elevation</Typography>
-                        <Typography>{routeInfo?.highestElevation}</Typography>
-                        <Typography variant='h6'>Lowest Elevation</Typography>
-                        <Typography>{routeInfo?.lowestElevation}</Typography>
-                        <Typography variant='h6'>Estimated time to complete</Typography>
-                        <Typography>{routeInfo?.timeToComplete}</Typography>
+                        <Card elevation={5} css={[margin2, padding2]}>
+                            <Typography variant='h4'><Link to={"/routes"}><FaBackspace/></Link></Typography>
+                            <Typography variant='h3'>{route?.routeName}</Typography>
+                            <Typography>{route?.type.name} Route</Typography>
+                            {route?.userId == userId && ShowEditButton(route)}
+                        </Card>
+                        <Card elevation={5} css={[margin2, padding2]}>
+                            <Typography variant='h5' css={marginTop2dot5}>Route Details</Typography>
+                            <Typography variant='h6'>Distance</Typography>
+                            <Typography>{routeInfo?.totalDistance} KM</Typography>
+                            <Typography variant='h6'>Total Elevation Change</Typography>
+                            <Typography>{routeInfo?.totalElevation}</Typography>
+                            <Typography variant='h6'>Highest Elevation</Typography>
+                            <Typography>{routeInfo?.highestElevation}</Typography>
+                            <Typography variant='h6'>Lowest Elevation</Typography>
+                            <Typography>{routeInfo?.lowestElevation}</Typography>
+                            <Typography variant='h6'>Estimated time to complete</Typography>
+                            <Typography>{routeInfo?.timeToComplete}</Typography>
+                        </Card>
                     </Paper>
                 </Grid>
                 <Grid item md={8}>

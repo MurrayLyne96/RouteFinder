@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RouteFinderAPI.Common.Constants;
 
 namespace RouteFinderAPI.Authentication;
 
@@ -23,7 +24,8 @@ public class AuthenticationHandler: AuthenticationHandler<AuthenticationSchemeOp
     {
         var header = _contextAccessor.HttpContext?.Request.Headers["authorization"].ToString().Replace("Bearer ", string.Empty);
         var handler = new JwtSecurityTokenHandler();
-        var secretKey = Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA");
+        var tokenType = RetrieveTokenType();
+        var secretKey = tokenType == TokenConstants.TOKEN_TYPE.ACCESS ? Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUSA") : Encoding.UTF8.GetBytes("JWTIWASBORNINTHEUK");
         
         var validation = new TokenValidationParameters
         {
@@ -47,6 +49,22 @@ public class AuthenticationHandler: AuthenticationHandler<AuthenticationSchemeOp
             return Task.FromResult(AuthenticateResult.Fail("Authentication Failed"));
             
         }
+    }
 
+    private TokenConstants.TOKEN_TYPE RetrieveTokenType()
+    {
+        var routeValues = _contextAccessor.HttpContext?.Request.RouteValues;
+        if (routeValues.ContainsKey("controller") && routeValues.ContainsKey("action"))
+        {
+            var controllerName = routeValues["controller"].ToString();
+            var actionName = routeValues["action"].ToString();
+            return controllerName == "Auth" && actionName == "refresh"
+                ? TokenConstants.TOKEN_TYPE.REFRESH
+                : TokenConstants.TOKEN_TYPE.ACCESS;
+        }
+        else
+        {
+            return TokenConstants.TOKEN_TYPE.ACCESS;
+        }
     }
 }
