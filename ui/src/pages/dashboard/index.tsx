@@ -20,10 +20,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Paper, Select, TextField } from '@mui/material';
+import { Button, Card, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Paper, Select, TextField } from '@mui/material';
 import { FaSearch } from 'react-icons/fa';
 import { CheckBox } from '@mui/icons-material';
-import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5 } from '../../css/styling';
+import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5, padding2 } from '../../css/styling';
 import { MapService, RoutesService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { AuthContext } from '../../contexts';
@@ -267,7 +267,7 @@ export default function Dashboard() {
       <Main open={open}>
         <Grid container spacing={1}>
             <Grid item md={5}>
-              <Paper elevation={3} css={margin2}>
+              <Paper elevation={3} css={[margin2, padding2]}>
                 <div css={paddingBottom2}>
                   <Box css={{display: 'inline-flex'}}>
                       <IconButton onClick={handleDrawerOpen}>
@@ -276,7 +276,7 @@ export default function Dashboard() {
                       <Typography variant='h6'>Routes</Typography>
                   </Box>
                   {routes.map((route) => (
-                    <div key={route.id} id={`${route.id}-route-div`} css={[marginBottom2]}>
+                    <Card elevation={5} key={route.id} id={`${route.id}-route-div`} css={[margin2, padding2]}>
                       <Box sx={{marginLeft: '5%'}}>
                         <Typography variant='h5'>{route.routeName}</Typography>
                         <Typography>{route.type.name} Route</Typography>
@@ -286,7 +286,7 @@ export default function Dashboard() {
                           <Button variant='contained' size='large' onClick={(e) => ShowMap(route.id, e)}>Preview Map</Button>
                         </div>
                       </Box>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               </Paper>
