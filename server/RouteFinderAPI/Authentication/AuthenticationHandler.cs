@@ -51,10 +51,20 @@ public class AuthenticationHandler: AuthenticationHandler<AuthenticationSchemeOp
         }
     }
 
-    private TokenConstants.TOKEN_TYPE RetrieveTokenType() {
-        var routeValues = _contextAccessor.HttpContext.Request.RouteValues;
-        var controllerName = routeValues["controller"].ToString();
-        var actionName = routeValues["action"].ToString();
-        return controllerName == "Auth" && actionName == "refresh" ? TokenConstants.TOKEN_TYPE.REFRESH : TokenConstants.TOKEN_TYPE.ACCESS;
+    private TokenConstants.TOKEN_TYPE RetrieveTokenType()
+    {
+        var routeValues = _contextAccessor.HttpContext?.Request.RouteValues;
+        if (routeValues.ContainsKey("controller") && routeValues.ContainsKey("action"))
+        {
+            var controllerName = routeValues["controller"].ToString();
+            var actionName = routeValues["action"].ToString();
+            return controllerName == "Auth" && actionName == "refresh"
+                ? TokenConstants.TOKEN_TYPE.REFRESH
+                : TokenConstants.TOKEN_TYPE.ACCESS;
+        }
+        else
+        {
+            return TokenConstants.TOKEN_TYPE.ACCESS;
+        }
     }
 }

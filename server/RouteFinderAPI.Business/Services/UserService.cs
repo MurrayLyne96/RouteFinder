@@ -26,15 +26,13 @@ public class UserService : IUserService
                     .OrderBy(x => x.LastModified))
             .SingleOrDefaultAsync();
 
-    public async Task<UserDto> GetLoggedInUserById(Guid userId)
-    {
-        await _mapper.ProjectTo<UserDto?>(
+    public async Task<UserDto?> GetLoggedInUserById(Guid userId) =>
+         await _mapper.ProjectTo<UserDto?>(
                 _database
                     .Get<User>()
                     .Where(new UserByIdSpec(userId))
                     .OrderBy(x => x.LastModified))
             .SingleOrDefaultAsync();
-    }
 
     public async Task<Guid> CreateUser(UserCreateDto userModel)
     {
