@@ -26,7 +26,7 @@ fetchIntercept.register({
         }
 
         const token = StorageService.getLocalStorage(StorageTypes.AUTH);
-        console.log(GOOGLE_API_KEY);
+        console.log(process.env);
         if (token && !LoginUtils.isTokenExpired(token)) {
             const bearerToken = url === `${baseUrl}${refreshUrl}` ? token.refreshToken : token.token;
             config.headers = {
