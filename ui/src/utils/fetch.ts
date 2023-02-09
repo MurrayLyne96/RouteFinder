@@ -5,6 +5,7 @@ import StorageTypes from "../constants/storage_types";
 import toast from "react-hot-toast";
 import { ITokenModel } from '../interfaces/ITokenModel';
 import { AuthContext } from "../contexts";
+import { GOOGLE_API_KEY } from "../constants/keys";
 
 const baseUrl = process.env.REACT_APP_API_URL ?? "http://localhost:7241";
 const configureUrl = (url: string) => `${baseUrl}/${url}`;
@@ -25,6 +26,7 @@ fetchIntercept.register({
         }
 
         const token = StorageService.getLocalStorage(StorageTypes.AUTH);
+        console.log(GOOGLE_API_KEY);
         if (token && !LoginUtils.isTokenExpired(token)) {
             const bearerToken = url === `${baseUrl}${refreshUrl}` ? token.refreshToken : token.token;
             config.headers = {
