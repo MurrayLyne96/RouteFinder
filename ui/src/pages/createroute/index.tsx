@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { jsx, css, Global, ClassNames } from '@emotion/react'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import { Box, Button, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Paper, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { dashboardRightSide, map, marginBottom2, formGroup, formGroupFullWidth, marginBottom3dot8, createRouteHeader, createMap, createRouteSubHeadings } from '../../css/styling';
+import { dashboardRightSide, map, marginBottom2, formGroup, formGroupFullWidth, marginBottom3dot8, createRouteHeader, createMap, createRouteSubHeadings, margin2, padding2, margin1dot5 } from '../../css/styling';
 import React from 'react';
 import { IRouteDetailModel } from '../../interfaces/IRouteDetailModel';
 import { GOOGLE_API_KEY } from '../../constants/keys';
@@ -132,40 +132,46 @@ function CreateRoute() : EmotionJSX.Element {
             <Typography variant='h3' css={createRouteHeader}>Create Route</Typography>
             <Grid container spacing={1}>
                 <Grid item md={3}>
-                    <Typography variant='h4' css={createRouteSubHeadings}>Route Details</Typography>
-                    <div css={formGroupFullWidth}>
-                        <TextField margin='dense' value={route.name} onChange={(e) => handleNameChange(e)} label='Route Name'></TextField>
-                    </div>
-                    <InputLabel id="type-select">Route Type</InputLabel>
-                    <Select value={route?.typeId != undefined ? route?.typeId : 1} id='type-select' css={marginBottom2} fullWidth onChange={handleTypeChange} margin='dense'>
-                        <MenuItem value={1}>Running</MenuItem>
-                        <MenuItem value={2}>Cycling</MenuItem>
-                    </Select>
-                    <Button variant='contained' size='large' onClick={saveRoute}>Save Route</Button>
+                    <Paper elevation={3} css={[margin2, padding2]}>
+                        <Typography variant='h4' css={createRouteSubHeadings}>Route Details</Typography>
+                        <div css={formGroupFullWidth}>
+                            <TextField margin='dense' value={route.name} onChange={(e) => handleNameChange(e)} label='Route Name'></TextField>
+                        </div>
+                        <InputLabel id="type-select">Route Type</InputLabel>
+                        <Select value={route?.typeId != undefined ? route?.typeId : 1} id='type-select' css={marginBottom2} fullWidth onChange={handleTypeChange} margin='dense'>
+                            <MenuItem value={1}>Running</MenuItem>
+                            <MenuItem value={2}>Cycling</MenuItem>
+                        </Select>
+                        <Button variant='contained' size='large' onClick={saveRoute}>Save Route</Button>
+                    </Paper>
                 </Grid>
                 <Grid item md={3}>
-                    <Typography variant='h4' css={createRouteSubHeadings}>Route Generation</Typography>
-                    <div css={[formGroupFullWidth, marginBottom3dot8]}>
-                        <TextField margin='dense' value={startLocation} onChange={(e) => setStartLocation(e.target.value)} label='Start Location' placeholder='Address, location etc'></TextField>
-                    </div>
-                    <div css={formGroupFullWidth}>
-                        <TextField margin='dense' value={endLocation} onChange={(e) => setEndLocation(e.target.value)} label='End Location' placeholder='Address, location etc'></TextField>
-                    </div>
-                    <Button variant='contained' size='large' onClick={generateRoute}>Generate Route</Button>
+                    <Paper elevation={3} css={[margin2, padding2]}>
+                        <Typography variant='h4' css={createRouteSubHeadings}>Route Generation</Typography>
+                        <div css={[formGroupFullWidth, marginBottom3dot8]}>
+                            <TextField margin='dense' value={startLocation} onChange={(e) => setStartLocation(e.target.value)} label='Start Location' placeholder='Address, location etc'></TextField>
+                        </div>
+                        <div css={formGroupFullWidth}>
+                            <TextField margin='dense' value={endLocation} onChange={(e) => setEndLocation(e.target.value)} label='End Location' placeholder='Address, location etc'></TextField>
+                        </div>
+                        <Button variant='contained' size='large' onClick={generateRoute}>Generate Route</Button>
+                    </Paper>
                 </Grid>
                 <Grid item md={6}>
-                    <div css={dashboardRightSide}>
-                        <Typography variant='h4'>Preview</Typography>
-                        <div css={createMap}>
-                        <GoogleMapReact
-                            bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
-                            defaultCenter={defaultProps.center}
-                            defaultZoom={defaultProps.zoom}
-                            yesIWantToUseGoogleMapApiInternals
-                            onGoogleApiLoaded={(map: any) => handleApiLoaded(map)}
-                        />
+                    <Paper elevation={3} css={[margin1dot5, padding2]}>
+                        <div css={dashboardRightSide}>
+                            <Typography variant='h4'>Preview</Typography>
+                            <div css={createMap}>
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
+                                defaultCenter={defaultProps.center}
+                                defaultZoom={defaultProps.zoom}
+                                yesIWantToUseGoogleMapApiInternals
+                                onGoogleApiLoaded={(map: any) => handleApiLoaded(map)}
+                            />
+                            </div>
                         </div>
-                    </div>
+                    </Paper>
                 </Grid>
             </Grid>
         </Box>
