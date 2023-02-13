@@ -35,4 +35,4 @@ jobs:
           CI: false
         run: npm i && npm run-script build
       - name: updated app to s3
-        run: aws s3 sync build s3://routefinderbucket/
+        run: aws s3 sync build s3://goroutefinderonline.co.uk/
