@@ -2,7 +2,7 @@
 import { jsx, css, Global, ClassNames } from '@emotion/react'
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
-import { margin2, padding2, thirdWidth, formGroup, marginBottom2 } from '../../css/styling';
+import { margin2, padding2, thirdWidth, formGroup, marginBottom2, formGroupWidth } from '../../css/styling';
 import { useState } from 'react';
 import { AuthContext } from '../../contexts';
 import { IRouteModel } from '../../interfaces/IRouteModel';
@@ -86,10 +86,10 @@ function Profile() : EmotionJSX.Element {
             <Box>
                 <Paper elevation={3} css={[margin2, padding2]}>
                     <Typography variant='h3' css={marginBottom2}>Account Details</Typography>
-                    <div css={[formGroup, thirdWidth]}>
+                    <div css={[formGroup, formGroupWidth]}>
                         <TextField label='First Name' value={user.firstName} onChange={(e) => handleFirstNameChange(e)}></TextField>
                     </div>
-                    <div css={[formGroup, thirdWidth]}>
+                    <div css={[formGroup, formGroupWidth]}>
                         <TextField label='Last Name' value={user.lastName} onChange={(e) => handleLastNameChange(e)}></TextField>
                     </div>
                     <Typography>Email Address: {user.email}</Typography>
