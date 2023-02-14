@@ -113,7 +113,7 @@ function EditRoute() {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item md={4}>
+                <Grid item md={4} sm={12} xs={12}>
                     <Paper elevation={3} css={[margin3, padding2]}>
                         <Typography variant='h4'><Link to={"/routes"}><FaBackspace/></Link></Typography>
                         <Typography variant='h3'>Edit Route</Typography>
@@ -128,7 +128,7 @@ function EditRoute() {
                         <Button variant='contained' onClick={updateRoute} size='large'>Save</Button>
                     </Paper>
                 </Grid>
-                <Grid item md={8}>
+                <Grid item md={8} sm={12} xs={12}>
                     <Paper elevation={3} css={margin1dot5}>
                         <div css={[paddingBottom2, paddingTop05]}>
                             <div css={dashboardRightSide}>

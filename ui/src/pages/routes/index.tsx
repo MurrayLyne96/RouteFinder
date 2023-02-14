@@ -73,8 +73,8 @@ function Routes() {
 
     return <>
         <Grid container spacing={6}>
-            <Grid item md={3}>
-                <Paper elevation={3} css={padding2}>
+            <Grid item md={3} sm={12} xs={12}>
+                <Paper elevation={3} css={[padding2, margin2]}>
                     <Typography variant='h5' css={margin2}>Search Routes</Typography>
                     <div css={margin2}>
                         <TextField

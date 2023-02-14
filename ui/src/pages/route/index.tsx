@@ -173,7 +173,7 @@ function Route() {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item md={4}>
+                <Grid item md={4} sm={12} xs={12}>
                     <Paper css={[margin3, padding2]}>
                         <Card elevation={5} css={[margin2, padding2]}>
                             <Typography variant='h4'><Link to={"/routes"}><FaBackspace/></Link></Typography>
@@ -196,7 +196,7 @@ function Route() {
                         </Card>
                     </Paper>
                 </Grid>
-                <Grid item md={8}>
+                <Grid item md={8} sm={12} xs={12}>
                     <Paper elevation={3} css={[margin1dot5, padding2]}>
                         <div css={[paddingBottom2, paddingTop05]}>
                             <div css={flex}>

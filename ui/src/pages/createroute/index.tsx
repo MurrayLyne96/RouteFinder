@@ -131,7 +131,7 @@ function CreateRoute() : EmotionJSX.Element {
         <Box>
             <Typography variant='h3' css={createRouteHeader}>Create Route</Typography>
             <Grid container spacing={1}>
-                <Grid item md={3}>
+                <Grid item lg={3} md={12} sm={12} xs={12}>
                     <Paper elevation={3} css={[margin2, padding2]}>
                         <Typography variant='h4' css={createRouteSubHeadings}>Route Details</Typography>
                         <div css={formGroupFullWidth}>
@@ -145,7 +145,7 @@ function CreateRoute() : EmotionJSX.Element {
                         <Button variant='contained' size='large' onClick={saveRoute}>Save Route</Button>
                     </Paper>
                 </Grid>
-                <Grid item md={3}>
+                <Grid item lg={3} md={12} sm={12} xs={12}>
                     <Paper elevation={3} css={[margin2, padding2]}>
                         <Typography variant='h4' css={createRouteSubHeadings}>Route Generation</Typography>
                         <div css={[formGroupFullWidth, marginBottom3dot8]}>
@@ -157,7 +157,7 @@ function CreateRoute() : EmotionJSX.Element {
                         <Button variant='contained' size='large' onClick={generateRoute}>Generate Route</Button>
                     </Paper>
                 </Grid>
-                <Grid item md={6}>
+                <Grid item lg={6} md={12} sm={12} xs={12}>
                     <Paper elevation={3} css={[margin1dot5, padding2]}>
                         <div css={dashboardRightSide}>
                             <Typography variant='h4'>Preview</Typography>
