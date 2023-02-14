@@ -67,10 +67,6 @@ function Routes() {
         navigate(`/routes/${routeId}`);
     }
 
-    const navigateToRouteEditPage = (routeId: string) => {
-        navigate(`/routes/${routeId}/edit`);
-    }
-
     return <>
         <Grid container spacing={6}>
             <Grid item md={3} sm={12} xs={12}>
