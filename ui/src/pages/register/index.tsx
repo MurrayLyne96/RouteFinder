@@ -4,7 +4,7 @@ import React from "react";
 import dayjs, { Dayjs } from 'dayjs'
 import { FaRunning } from 'react-icons/fa';
 import { Grid, TextField, Typography, Button } from '@mui/material';
-import { headerCss, alignItemsLeft, justifyItemsLeft, font52, formGroup, halfWidth, fullWidth, thirdWidth, font36 } from '../../css/styling';
+import { headerCss, alignItemsLeft, justifyItemsLeft, font52, formGroup, halfWidth, fullWidth, thirdWidth, font36, formGroupWidth } from '../../css/styling';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { IUserCreateModel } from '../../interfaces/IUserCreateModel';
 import { UserService } from '../../services';
@@ -54,7 +54,6 @@ function Register() : JSX.Element {
     }
 
     const createAccount = async () => {
-        //2023-01-23T10:48:08.787Z
         let dateOfBirthFormatted = userModel.dateOfBirth.format("YYYY-MM-DD");
         console.log(dateOfBirthFormatted);
         if (userModel.password === repeatPassword) {
@@ -78,7 +77,7 @@ function Register() : JSX.Element {
             minHeight='35vh'
         >
             <Typography css={[headerCss, font52]} variant='h1'>RouteFinder <FaRunning /></Typography>  
-            <div css={thirdWidth}>
+            <div css={formGroupWidth}>
                 <Typography css={font36} variant='h2'>Create Account</Typography>
                 
                 <div css={[formGroup, fullWidth]}>
