@@ -2,7 +2,7 @@
 import { jsx, css, Global, ClassNames } from '@emotion/react';
 import { Checkbox, FormControlLabel, Grid, InputAdornment, MenuItem, Select, TextField, Typography, Box, Divider, Button, Paper, Card } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { displayInlineFlex, margin2, marginBottom2, marginTop2dot5, padding2, paddingBottom2 } from '../../css/styling';
+import { displayInlineFlex, margin1dot5, margin2, marginBottom2, marginTop2dot5, padding2, paddingBottom2, marginRight2, fullWidth } from '../../css/styling';
 import { AuthContext } from '../../contexts';
 import { LoginUtils } from '../../utils';
 import { useEffect, useState } from 'react';
@@ -67,14 +67,10 @@ function Routes() {
         navigate(`/routes/${routeId}`);
     }
 
-    const navigateToRouteEditPage = (routeId: string) => {
-        navigate(`/routes/${routeId}/edit`);
-    }
-
     return <>
         <Grid container spacing={6}>
-            <Grid item md={3}>
-                <Paper elevation={3} css={padding2}>
+            <Grid item md={3} sm={12} xs={12}>
+                <Paper elevation={3} css={[padding2, margin2]}>
                     <Typography variant='h5' css={margin2}>Search Routes</Typography>
                     <div css={margin2}>
                         <TextField
@@ -104,8 +100,8 @@ function Routes() {
                     </div>
                 </Paper>
             </Grid>
-            <Grid item md={8}>
-                <Paper elevation={3} css={padding2}>
+            <Grid item md={9} sm={12}>
+                <Paper elevation={3} css={[padding2, marginRight2]}>
                     <Box sx={{height: '800px', overflowY: 'auto'}}>
                         <Typography variant='h3'>My Routes</Typography>
                         {userRoutes.map((route) => (

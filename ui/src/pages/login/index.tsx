@@ -11,7 +11,7 @@ import { TextField, Button, Grid, Typography } from '@mui/material';
 import { IAuthModel } from '../../interfaces/IAuthModel';
 import { LoginUtils } from '../../utils';
 import { FaRunning } from 'react-icons/fa';
-import { headerCss, font52, formGroup, loginButtonsBottom, flexBasis50, alignItemsLeft, justifyItemsRight, centeredItem, thirdWidth } from '../../css/styling';
+import { headerCss, font52, formGroup, loginButtonsBottom, flexBasis50, alignItemsLeft, justifyItemsRight, centeredItem, thirdWidth, formGroupWidth } from '../../css/styling';
 import { useNavigate, Link } from 'react-router-dom';
 
 function Login() : JSX.Element {
@@ -75,7 +75,7 @@ function Login() : JSX.Element {
             minHeight="98vh"
         >
             <Typography variant='h1' css={[headerCss, font52]}>RouteFinder <FaRunning /></Typography>
-            <div css={formGroup}>
+            <div css={[formGroup, formGroupWidth]}>
                 <TextField 
                     value={auth.email}
                     onChange={handleEmailChange}
@@ -90,7 +90,7 @@ function Login() : JSX.Element {
                 />
                 <Typography variant='body2'>We'll never share your email with anyone else.</Typography>
             </div>
-            <div css={formGroup}>
+            <div css={[formGroup, formGroupWidth]}>
                 <TextField 
                     autoFocus 
                     label="Password"
@@ -105,7 +105,7 @@ function Login() : JSX.Element {
                     className="form-control mb-2"
                 />
             </div>
-            <div css={formGroup}>
+            <div css={[formGroup, formGroupWidth]}>
                 <div css={loginButtonsBottom}>
                     <div css={[flexBasis50, alignItemsLeft]}>
                         <Button variant="contained" onClick={authentication}>Login</Button>

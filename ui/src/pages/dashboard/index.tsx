@@ -23,7 +23,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Button, Card, Checkbox, FormControlLabel, FormGroup, Grid, InputAdornment, MenuItem, Paper, Select, TextField } from '@mui/material';
 import { FaSearch } from 'react-icons/fa';
 import { CheckBox } from '@mui/icons-material';
-import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5, padding2 } from '../../css/styling';
+import { createNewMapButton, displayInlineFlex, map, margin2, marginBottom2, marginLeft1, marginLeft15, marginLeft5, marginRight2, dashboardRightSide, routeInfo, noMargins, flex, marginBottom3dot8, paddingBottom2, paddingTop05, margin1dot5, padding2, fullWidth } from '../../css/styling';
 import { MapService, RoutesService } from '../../services';
 import { IRouteModel } from '../../interfaces/IRouteModel';
 import { AuthContext } from '../../contexts';
@@ -84,8 +84,15 @@ export default function Dashboard() {
   const [DirectionsService, setDirectionsService] = React.useState<google.maps.DirectionsService>();
   const [DirectionsRenderer, setDirectionsRenderer] = React.useState<google.maps.DirectionsRenderer>();
   const navigate = useNavigate();
+
   const {state} = AuthContext.useLogin();
   const userId = LoginUtils.getUserId(state.token);
+
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -214,24 +221,18 @@ export default function Dashboard() {
     setUserRoutesOnly(value);
   }
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            marginTop: '71.5px'
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <Divider />
+  const drawer = (
+    <div>
+      <Divider />
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, ml: 1, display: { md: 'none', sm: 'block', xs: 'block' } }}
+        >
+          <MenuIcon />
+        </IconButton>
         <Typography variant='h4' css={margin2}>Search Routes</Typography>
         <div css={margin2}>
             <TextField
@@ -262,17 +263,57 @@ export default function Dashboard() {
               <MenuItem value={ROUTE_TYPES.ALL}>All</MenuItem>
           </Select>
         </div>
-      </Drawer>
+    </div>
+  );
 
-      <Main open={open}>
-        <Grid container spacing={1}>
-            <Grid item md={5}>
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <Box
+        component="nav"
+        sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'none', md: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, top: '72px' },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box component='main' sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+        <Grid container>
+            <Grid item lg={5} md={12} css={fullWidth}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: 'none', sm: 'block', xs: 'block' } }}
+              >
+                <MenuIcon />
+              </IconButton>
               <Paper elevation={3} css={[margin2, padding2]}>
                 <div css={paddingBottom2}>
                   <Box css={{display: 'inline-flex'}}>
-                      <IconButton onClick={handleDrawerOpen}>
-                          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                      </IconButton>
                       <Typography variant='h6'>Routes</Typography>
                   </Box>
                   {routes.map((route) => (
@@ -291,7 +332,7 @@ export default function Dashboard() {
                 </div>
               </Paper>
             </Grid>
-            <Grid item md={7}>
+            <Grid item lg={7} md={12} css={fullWidth}>
               <Paper elevation={3} css={margin1dot5}>
                   <div css={[paddingBottom2, paddingTop05]}>
                     <div css={dashboardRightSide}>
@@ -315,7 +356,7 @@ export default function Dashboard() {
                 </Paper>
              </Grid>
         </Grid>
-      </Main>
+      </Box>
     </Box>
   );
 }
