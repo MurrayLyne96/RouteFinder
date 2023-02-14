@@ -100,8 +100,8 @@ function Routes() {
                     </div>
                 </Paper>
             </Grid>
-            <Grid item md={8}>
-                <Paper elevation={3} css={padding2}>
+            <Grid item md={9} sm={12}>
+                <Paper elevation={3} css={[padding2, marginRight2]}>
                     <Box sx={{height: '800px', overflowY: 'auto'}}>
                         <Typography variant='h3'>My Routes</Typography>
                         {userRoutes.map((route) => (
