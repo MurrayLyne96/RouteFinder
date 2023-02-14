@@ -42,14 +42,18 @@ function Navigation() {
     };
 
     const handleCloseNavMenu = (page: string) => {
-        if (page === 'logout') {
-            logout();
-        } else {
+        if (pages.includes(page)) {
             navigate(`/${page}`);
         }
+        setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (page: string) => {
+        if (page === 'logout') {
+            logout();
+        } else if (settings.includes(page)) {
+            navigate(`/${page}`);
+        }
         setAnchorElUser(null);
     };
 
@@ -110,12 +114,11 @@ function Navigation() {
                         >
                         {pages.map((page) => (
                             <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
-                            <Typography textAlign="center">{page}</Typography>
+                                <Typography textAlign="center">{page}</Typography>
                             </MenuItem>
                         ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -125,14 +128,13 @@ function Navigation() {
                         mr: 2,
                         display: { xs: 'flex', md: 'none' },
                         flexGrow: 1,
-                        fontFamily: 'monospace',
                         fontWeight: 700,
-                        letterSpacing: '.3rem',
                         color: 'inherit',
                         textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        RouteFinder
+                        <div css={[marginTop2dot5, marginLeft5]}><FaRunning scale={10}/></div>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
@@ -169,7 +171,7 @@ function Navigation() {
                         onClose={handleCloseUserMenu}
                         >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                             <Button onClick={() => handleCloseNavMenu(setting)}>{setting}</Button>
                             </MenuItem>
                         ))}
