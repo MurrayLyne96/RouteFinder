@@ -2,7 +2,7 @@
 import { jsx, css, Global, ClassNames } from '@emotion/react';
 import { Checkbox, FormControlLabel, Grid, InputAdornment, MenuItem, Select, TextField, Typography, Box, Divider, Button, Paper, Card } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { displayInlineFlex, margin2, marginBottom2, marginTop2dot5, padding2, paddingBottom2 } from '../../css/styling';
+import { displayInlineFlex, margin1dot5, margin2, marginBottom2, marginTop2dot5, padding2, paddingBottom2, marginRight2, fullWidth } from '../../css/styling';
 import { AuthContext } from '../../contexts';
 import { LoginUtils } from '../../utils';
 import { useEffect, useState } from 'react';
