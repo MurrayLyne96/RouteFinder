@@ -1,6 +1,14 @@
 import { css } from "@emotion/react";
+import facepaint from 'facepaint'
 import { ThemeOptions } from "@mui/material";
 import { blue } from "@mui/material/colors";
+
+const mq = facepaint([
+  '@media(min-width: 420px)',
+  '@media(min-width: 920px)',
+  '@media(min-width: 1320px)',
+  '@media(min-width: 1420px)'
+]);
 
 export const headerCss = css({
     color: "#45818e",
@@ -16,10 +24,13 @@ export const font36 = css ({
   fontSize: 36
 });
 
+export const formGroupWidth = css(mq({
+  width: ['100%', '85%', '50%', '30%'],
+}));
+
 export const formGroup = css ({
     display: 'flex',
     flexDirection: 'column',
-    width: '20%',
     marginBottom: '1%',
 });
 
