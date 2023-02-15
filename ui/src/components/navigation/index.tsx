@@ -23,7 +23,7 @@ import { StorageService } from '../../services';
 import toast from 'react-hot-toast';
 import Storage_types from '../../constants/storage_types';
 
-const pages = ['dashboard', 'routes'];
+const pages = ['/', 'routes'];
 const settings = ['profile', 'logout'];
 
 function Navigation() {
