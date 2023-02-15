@@ -23,7 +23,7 @@ import { StorageService } from '../../services';
 import toast from 'react-hot-toast';
 import Storage_types from '../../constants/storage_types';
 
-const pages = ['/', 'routes'];
+const pages = ['dashboard', 'routes'];
 const settings = ['profile', 'logout'];
 
 function Navigation() {
@@ -43,7 +43,11 @@ function Navigation() {
 
     const handleCloseNavMenu = (page: string) => {
         if (pages.includes(page)) {
-            navigate(`/${page}`);
+            if (page == 'dashboard') {
+                navigate('/')
+            } else {
+                navigate(`/${page}`);
+            }
         }
         setAnchorElNav(null);
     };
