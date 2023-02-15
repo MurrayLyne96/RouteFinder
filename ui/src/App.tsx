@@ -31,7 +31,7 @@ const AuthenticatedRoutes = () => {
   return (
     <AuthRoute>
       <Routes>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="" element={<Dashboard />} />
         <Route path="routes" element={<RoutesPage />} />
         <Route path="routes/:routeId" element={<RoutePage />} />
         <Route path="routes/:routeId/edit" element={<EditRoutePage />} />

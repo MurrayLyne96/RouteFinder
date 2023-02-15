@@ -43,7 +43,11 @@ function Navigation() {
 
     const handleCloseNavMenu = (page: string) => {
         if (pages.includes(page)) {
-            navigate(`/${page}`);
+            if (page == 'dashboard') {
+                navigate('/')
+            } else {
+                navigate(`/${page}`);
+            }
         }
         setAnchorElNav(null);
     };
