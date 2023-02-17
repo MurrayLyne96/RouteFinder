@@ -31,7 +31,7 @@ jobs:
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: someapp-Infrastructure-${{ steps.extract_branch.outputs.branch }}
-        template: ./iac/someapp_template.yml
+        template: ./iac/RouteFinder_template.yml
         capabilities: CAPABILITY_NAMED_IAM
         no-fail-on-empty-changeset: "1"
-        parameter-overrides: file://${{ github.workspace }}/iac/someapp-parameters-${{ steps.extract_branch.outputs.branch }}.json
+        parameter-overrides: file://${{ github.workspace }}/iac/RouteFinder-parameters-${{ steps.extract_branch.outputs.branch }}.json
