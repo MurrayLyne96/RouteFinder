@@ -1,0 +1,27 @@
+name: Execute K6 Tests
+
+on:
+  pull_request:
+
+jobs:
+  load_execution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make Directory for results
+        run: mkdir -p LoadTestResults
+      - name: Start application
+        run: |
+          npm i --prefix ./api && (npm start --prefix ./api&)
+      - name: Run k6 local test
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: loadTest.js
+          flags: --vus 50 --duration 10s --out json=./LoadTestResults/loadOutput.json
+      - name: Output the run Details
+        uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: LoadOutput
+          path: ./LoadTestResults
