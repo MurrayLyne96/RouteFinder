@@ -17,7 +17,7 @@ jobs:
       - name: Run k6 local test
         uses: grafana/k6-action@v0.2.0
         with:
-          filename: loadTest.js
+          filename: basic-load-test-production.js
           flags: --vus 50 --duration 10s --out json=./LoadTestResults/loadOutput.json
       - name: Output the run Details
         uses: actions/upload-artifact@v3
