@@ -14,22 +14,33 @@
 import http from "k6/http";
 import { group, check, sleep } from "k6";
 
-const BASE_URL = "/";
+const BASE_URL = "https://routefinder-service-1.n1ujnf2e69gi8.eu-west-1.cs.amazonlightsail.com";
 // Sleep duration between successive requests.
 // You might want to edit the value of this variable or remove calls to the sleep function on the script.
 const SLEEP_DURATION = 0.1;
+let authToken = '';
+let refreshToken = '';
 // Global variables should be initialized.
 
 export default function() {
-    group("/api/Auth/refresh", () => {
+    group("/api/Auth", () => {
 
         // Request No. 1
         {
-            let url = BASE_URL + `/api/Auth/refresh`;
-            // TODO: edit the parameters of the request body.
-            let body = {"token": "string", "refreshToken": "string"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let url = BASE_URL + `/api/Auth`;
+            let body = {"email": "testuser6@test.com", "password": "Password01"};
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
             let request = http.post(url, JSON.stringify(body), params);
+
+            authToken = request.json().token;
+            refreshToken = request.json().refreshToken;
 
             check(request, {
                 "Success": (r) => r.status === 200
@@ -37,14 +48,20 @@ export default function() {
         }
     });
 
-    group("/api/Auth", () => {
+    group("/api/Auth/refresh", () => {
 
         // Request No. 1
         {
-            let url = BASE_URL + `/api/Auth`;
-            // TODO: edit the parameters of the request body.
-            let body = {"email": "string", "password": "string"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let url = BASE_URL + `/api/Auth/refresh`;
+            let body = {"token": authToken, "refreshToken": refreshToken};
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
             let request = http.post(url, JSON.stringify(body), params);
 
             check(request, {
@@ -54,12 +71,20 @@ export default function() {
     });
 
     group("/api/Routes/{routeId}", () => {
-        let routeId = 'TODO_EDIT_THE_ROUTEID'; // specify value as there is no example value for this parameter in OpenAPI spec
+        let routeId = '585bf282-72f7-431a-8ef1-76227d7b6a4c';
 
         // Request No. 1
         {
             let url = BASE_URL + `/api/Routes/${routeId}`;
-            let request = http.get(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.get(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 200
@@ -71,7 +96,15 @@ export default function() {
         // Request No. 2
         {
             let url = BASE_URL + `/api/Routes/${routeId}`;
-            let request = http.del(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.del(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 204
@@ -80,15 +113,22 @@ export default function() {
     });
 
     group("/api/Routes/{routeId}/plotpoints/{plotPointId}", () => {
-        let routeId = 'TODO_EDIT_THE_ROUTEID'; // specify value as there is no example value for this parameter in OpenAPI spec
-        let plotPointId = 'TODO_EDIT_THE_PLOTPOINTID'; // specify value as there is no example value for this parameter in OpenAPI spec
+        let routeId = '585bf282-72f7-431a-8ef1-76227d7b6a4c';
+        let plotPointId = '1';
 
         // Request No. 1
         {
             let url = BASE_URL + `/api/Routes/${routeId}/plotpoints/${plotPointId}`;
             // TODO: edit the parameters of the request body.
-            let body = {"xCoordinate": "double", "yCoordinate": "double", "description": "string", "plotOrder": "integer"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let body = {"xCoordinate": "20", "yCoordinate": "20", "description": "test", "plotOrder": "0"};
+            
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
             let request = http.put(url, JSON.stringify(body), params);
 
             check(request, {
@@ -101,7 +141,15 @@ export default function() {
         // Request No. 2
         {
             let url = BASE_URL + `/api/Routes/${routeId}/plotpoints/${plotPointId}`;
-            let request = http.del(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.del(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 204
@@ -110,12 +158,20 @@ export default function() {
     });
 
     group("/api/Users/{userId}", () => {
-        let userId = 'TODO_EDIT_THE_USERID'; // specify value as there is no example value for this parameter in OpenAPI spec
+        let userId = 'e95c0767-bac6-4597-a3c5-590dc1694493';
 
         // Request No. 1
         {
             let url = BASE_URL + `/api/Users/${userId}`;
-            let request = http.get(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.get(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 200
@@ -140,7 +196,15 @@ export default function() {
         // Request No. 1
         {
             let url = BASE_URL + `/api/Users`;
-            let request = http.get(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.get(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 200
@@ -153,8 +217,15 @@ export default function() {
         {
             let url = BASE_URL + `/api/Users`;
             // TODO: edit the parameters of the request body.
-            let body = {"firstName": "string", "lastName": "string", "dateOfBirth": "date", "email": "string", "password": "string"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let body = {"firstName": "test", "lastName": "test", "dateOfBirth": "15/03/1996", "email": "testaccount@test.com", "password": "Password01"};
+
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
             let request = http.post(url, JSON.stringify(body), params);
 
             check(request, {
@@ -164,14 +235,21 @@ export default function() {
     });
 
     group("/api/Routes/{routeId}/plotpoints", () => {
-        let routeId = 'TODO_EDIT_THE_ROUTEID'; // specify value as there is no example value for this parameter in OpenAPI spec
+        let routeId = '585bf282-72f7-431a-8ef1-76227d7b6a4c'; // specify value as there is no example value for this parameter in OpenAPI spec
 
         // Request No. 1
         {
             let url = BASE_URL + `/api/Routes/${routeId}/plotpoints`;
             // TODO: edit the parameters of the request body.
-            let body = {"xCoordinate": "double", "yCoordinate": "double", "description": "string", "plotOrder": "integer"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let body = {"xCoordinate": "20", "yCoordinate": "20", "description": "test", "plotOrder": "3"};
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
             let request = http.post(url, JSON.stringify(body), params);
 
             check(request, {
@@ -196,10 +274,16 @@ export default function() {
 
         // Request No. 2
         {
+            let userId = 'e95c0767-bac6-4597-a3c5-590dc1694493';
             let url = BASE_URL + `/api/Routes`;
             // TODO: edit the parameters of the request body.
-            let body = {"name": "string", "typeId": "integer", "userId": "uuid", "plotPoints": "list"};
-            let params = {headers: {"Content-Type": "application/json", "Accept": "application/json"}};
+            let body = {"name": "test route load testing", "typeId": "1", "userId": userId};
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
             let request = http.post(url, JSON.stringify(body), params);
 
             check(request, {
@@ -209,12 +293,20 @@ export default function() {
     });
 
     group("/api/Users/{userId}/routes", () => {
-        let userId = 'TODO_EDIT_THE_USERID'; // specify value as there is no example value for this parameter in OpenAPI spec
+        let userId = 'e95c0767-bac6-4597-a3c5-590dc1694493'; // specify value as there is no example value for this parameter in OpenAPI spec
 
         // Request No. 1
         {
             let url = BASE_URL + `/api/Users/${userId}/routes`;
-            let request = http.get(url);
+
+            let params = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+            };
+
+            let request = http.get(url, params);
 
             check(request, {
                 "Success": (r) => r.status === 200
