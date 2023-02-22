@@ -1,4 +1,3 @@
-@@ -1,485 +1,15 @@
 # RouteFinder
 This is the repository for the RouteFinder CoE project for Unosquare
 
