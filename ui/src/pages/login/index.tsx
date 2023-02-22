@@ -51,7 +51,6 @@ function Login() : JSX.Element {
             const loginResult = await response.json();
             let hasRole = LoginUtils.hasRole(loginResult.token);
             if (hasRole) {
-
                 StorageService.setLocalStorage(loginResult, Storage_types.AUTH);
                 StorageService.setLocalStorage(auth.email, Storage_types.EMAIL);
                 
@@ -60,7 +59,7 @@ function Login() : JSX.Element {
                     ...loginResult,
                 });
             }
-            navigate('/dashboard');
+            navigate('/');
         } else {
             toast.error("Invalid authentication details");
         }
